@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 메인 배경 - 진한 블루 -->
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M0,0h108v108h-108z"/>
+
+    <!-- 그라데이션 효과용 상단 밝은 부분 -->
+    <path
+        android:fillColor="#2196F3"
+        android:fillAlpha="0.3"
+        android:pathData="M0,0 L108,0 L108,60 C108,60 80,70 54,70 C28,70 0,60 0,60 Z"/>
+
+    <!-- 미세한 패턴 - 동전 모양 장식 (좌상단) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.05"
+        android:pathData="M15,15 m-8,0 a8,8 0,1 1,16 0 a8,8 0,1 1,-16 0"/>
+
+    <!-- 미세한 패턴 - 동전 모양 장식 (우하단) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.05"
+        android:pathData="M93,93 m-8,0 a8,8 0,1 1,16 0 a8,8 0,1 1,-16 0"/>
+</vector>

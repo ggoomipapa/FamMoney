@@ -1,0 +1,166 @@
+============================================
+Firebase/Firestore 설정 가이드
+============================================
+
+1. Firebase 프로젝트 생성
+   - https://console.firebase.google.com 접속
+   - "프로젝트 추가" 클릭
+   - 프로젝트 이름: SelectMoney (또는 원하는 이름)
+   - Google Analytics 설정 (선택사항)
+
+2. Android 앱 등록
+   - Firebase 콘솔에서 "Android 앱 추가" 클릭
+   - 패키지 이름: com.ezcorp.selectmoney
+   - 앱 닉네임: 셀렉트머니
+   - SHA-1 인증서: (필수! Google 로그인에 필요)
+
+   SHA-1 인증서 생성:
+   - Android Studio > Gradle > Tasks > android > signingReport
+   - 또는 터미널에서:
+     keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+
+3. google-services.json 다운로드
+   - Firebase 콘솔에서 google-services.json 다운로드
+   - 파일을 app/ 폴더에 복사
+   - 경로: SelectMoney/app/google-services.json
+
+4. Firebase Authentication 설정
+   - Firebase 콘솔 > Authentication
+   - "시작하기" 클릭
+   - Sign-in method 탭에서 활성화:
+     * 익명 (Anonymous) - 필수
+     * Google - 필수 (SHA-1 등록 필요)
+
+5. Firestore 데이터베이스 생성
+   - Firebase 콘솔 > Firestore Database
+   - "데이터베이스 만들기" 클릭
+   - 테스트 모드로 시작 (개발용)
+   - 위치: asia-northeast3 (서울) 권장
+
+6. Cloud Messaging (FCM) 설정
+   - Firebase 콘솔 > Cloud Messaging
+   - 별도 설정 불필요 (자동 활성화)
+
+7. Firestore 보안 규칙 설정 (프로덕션용)
+   규칙 > 편집에서 아래 내용 입력:
+
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /users/{userId} {
+         allow read, write: if request.auth != null;
+       }
+       match /groups/{groupId} {
+         allow read, write: if request.auth != null;
+       }
+       match /transactions/{transactionId} {
+         allow read, write: if request.auth != null;
+       }
+     }
+   }
+
+8. Firestore 인덱스 (필요시 자동 생성됨)
+   - transactions 컬렉션:
+     - groupId + transactionDate (내림차순)
+     - groupId + userId + transactionDate (내림차순)
+   - users 컬렉션:
+     - groupId + receiveGroupNotifications
+
+============================================
+Firestore 데이터 구조
+============================================
+
+/users/{userId}
+  - authUid: string (Firebase Auth UID)
+  - name: string
+  - email: string (nullable)
+  - groupId: string
+  - selectedBankIds: array<string>
+  - isOwner: boolean
+  - isAnonymous: boolean
+  - fcmToken: string (nullable)
+  - notifyGroupOnTransaction: boolean (default: true)
+  - receiveGroupNotifications: boolean (default: true)
+  - deviceId: string
+  - createdAt: timestamp
+
+/groups/{groupId}
+  - name: string
+  - inviteCode: string (6자리)
+  - ownerUserId: string
+  - memberIds: array<string>
+  - createdAt: timestamp
+
+/transactions/{transactionId}
+  - groupId: string
+  - userId: string
+  - userName: string
+  - type: string (INCOME/EXPENSE)
+  - amount: number
+  - bankId: string
+  - bankName: string
+  - description: string
+  - category: string
+  - memo: string
+  - source: string (NOTIFICATION/MANUAL_TEXT_INPUT/MANUAL_ENTRY)
+  - originalText: string
+  - createdAt: timestamp
+  - transactionDate: timestamp
+  - isConfirmed: boolean
+
+============================================
+인증 정책
+============================================
+
+1. 기본 상태: 익명 로그인 (Anonymous)
+   - 앱 설치 후 즉시 사용 가능
+   - 개인 가계부 기능 모두 사용 가능
+
+2. 로그인 필요 기능:
+   - 가계부 공유 (초대 코드로 참여)
+   - 기기 변경 시 데이터 유지
+   - 여러 기기에서 동일 가계부 사용
+
+3. 계정 연결:
+   - 익명 → Google 계정 연결 시 데이터 유지
+   - linkWithCredential 방식 사용
+
+============================================
+그룹 알림 설정
+============================================
+
+사용자별 설정 가능:
+- notifyGroupOnTransaction: 내 거래를 그룹에 알림
+- receiveGroupNotifications: 그룹 거래 알림 수신
+
+FCM을 통해 푸시 알림 전송
+
+============================================
+빌드 및 실행
+============================================
+
+1. Android Studio에서 프로젝트 열기
+2. google-services.json 파일 확인 (app/ 폴더)
+3. Gradle Sync 실행
+4. 에뮬레이터 또는 실제 기기에서 실행
+
+============================================
+알림 접근 권한 설정 (필수)
+============================================
+
+앱 설치 후:
+1. 설정 > 알림 > 알림 접근 권한
+2. 셀렉트머니 앱 허용
+
+또는 앱 내 설정에서 "알림 접근 권한" 클릭
+
+============================================
+strings.xml 추가 필요
+============================================
+
+res/values/strings.xml에 추가:
+<string name="default_web_client_id">YOUR_WEB_CLIENT_ID</string>
+
+YOUR_WEB_CLIENT_ID는 Firebase 콘솔 > 프로젝트 설정 >
+일반 > 웹 API 키 또는 google-services.json의
+client > oauth_client > client_id (type 3) 값

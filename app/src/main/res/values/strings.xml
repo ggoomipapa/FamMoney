@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">팸머니</string>
+    <string name="app_slogan">가족과 함께하는 똑똑한 가계부</string>
+
+    <!-- 구독 플랜 -->
+    <string name="plan_free">무료</string>
+    <string name="plan_connect">팸머니 커넥트</string>
+    <string name="plan_connect_plus">팸머니 커넥트+</string>
+    <string name="plan_forever">팸머니 포에버</string>
+
+    <!-- Google Sign-In Web Client ID - google-services.json에서 자동 생성됨 -->
+    <!-- Firebase 프로젝트 설정 후 아래 값을 실제 값으로 교체하세요 -->
+    <string name="default_web_client_id">837016879548-dkdp8k3sqlpcuhh5go72pe8r74cc9hok.apps.googleusercontent.com</string>
+</resources>

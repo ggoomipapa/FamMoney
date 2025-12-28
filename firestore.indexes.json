@@ -1,0 +1,69 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "transactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "groupId", "order": "ASCENDING" },
+        { "fieldPath": "transactionDate", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "transactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "transactionDate", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "transactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "groupId", "order": "ASCENDING" },
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "transactionDate", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "children",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "groupId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "childIncomes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "groupId", "order": "ASCENDING" },
+        { "fieldPath": "incomeDate", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "childIncomes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "childId", "order": "ASCENDING" },
+        { "fieldPath": "incomeDate", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "childExpenses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "groupId", "order": "ASCENDING" },
+        { "fieldPath": "expenseDate", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "childExpenses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "childId", "order": "ASCENDING" },
+        { "fieldPath": "expenseDate", "order": "DESCENDING" }
+      ]
+    }
+  ]
+}

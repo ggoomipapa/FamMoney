@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 임시로 모든 컬렉션 접근 허용 (SHA-1 등록 후 원래대로 복구 필요)
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

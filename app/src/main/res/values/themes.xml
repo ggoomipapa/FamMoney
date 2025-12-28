@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SelectMoney" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:navigationBarColor">@color/white</item>
+    </style>
+
+    <!-- FamMoney 테마 (별칭) -->
+    <style name="Theme.FamMoney" parent="Theme.SelectMoney" />
+</resources>

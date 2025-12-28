@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 메인 그룹: Safe Zone 내 배치 -->
+    <group
+        android:scaleX="0.55"
+        android:scaleY="0.55"
+        android:translateX="24"
+        android:translateY="24">
+
+        <!-- 지갑 본체 (라운드 사각형) -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M20,25 L88,25 C93,25 98,30 98,35 L98,78 C98,83 93,88 88,88 L20,88 C15,88 10,83 10,78 L10,35 C10,30 15,25 20,25 Z"/>
+
+        <!-- 지갑 잠금 부분 -->
+        <path
+            android:fillColor="#1565C0"
+            android:pathData="M75,25 L88,25 C93,25 98,30 98,35 L98,50 L75,50 C70,50 66,46 66,41 L66,34 C66,29 70,25 75,25 Z"/>
+
+        <!-- 동전 원 -->
+        <path
+            android:fillColor="#FFD54F"
+            android:pathData="M54,56.5 m-20,0 a20,20 0,1 1,40 0 a20,20 0,1 1,-40 0"/>
+
+        <!-- 동전 내부 링 -->
+        <path
+            android:fillColor="#FFCA28"
+            android:pathData="M54,56.5 m-14,0 a14,14 0,1 1,28 0 a14,14 0,1 1,-28 0"/>
+
+        <!-- F 글자 (FamMoney) -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M47,47 L61,47 L61,51 L51,51 L51,54 L59,54 L59,58 L51,58 L51,66 L47,66 L47,47 Z"/>
+
+        <!-- 하트 (작게 - 우측 하단) - 가족/소중함 상징 -->
+        <path
+            android:fillColor="#FF8A80"
+            android:pathData="M82,70 C82,68 84,66 86,66 C88,66 90,68 90,70 C90,68 92,66 94,66 C96,66 98,68 98,70 C98,75 90,80 90,80 C90,80 82,75 82,70 Z"/>
+
+        <!-- 지갑 상단 선 디테일 -->
+        <path
+            android:fillColor="#E3F2FD"
+            android:pathData="M20,32 L60,32 L60,36 L20,36 Z"/>
+    </group>
+</vector>

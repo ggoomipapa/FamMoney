@@ -1,0 +1,98 @@
+============================================
+SelectMoney 앱 작업 진행상황
+============================================
+작성일: 2024-12-24
+
+## 완료된 작업
+
+### 1. 프로젝트 구조 생성 완료
+- 패키지명: com.ezcorp.selectmoney
+- 앱 이름: 셀렉트머니
+
+### 2. 주요 기능 구현 완료
+- 은행 알림 파싱 (NotificationListenerService)
+- BankConfig 기반 8개 은행 지원 (KB, 신한, 카카오, 우리, 하나, NH, IBK, 토스)
+- 수동 텍스트 입력 기능
+- 수동 직접 입력 기능
+- 100만원 이상 금액 확인 팝업
+- 월별 수입/지출 요약
+
+### 3. 인증 시스템 구현 완료
+- Firebase Anonymous Login (기본)
+- Google Sign-In (공유 기능용)
+- 익명 → Google 계정 연결 (데이터 유지)
+
+### 4. Firestore 데이터베이스 구조 설계 완료
+- /users/{userId}
+- /groups/{groupId}
+- /transactions/{transactionId}
+
+### 5. 그룹 공유 기능 구현 완료
+- 그룹 생성/참여 (초대 코드 방식)
+- 그룹 알림 설정 (내 거래 알림 보내기/받기 토글)
+- FCM 푸시 알림
+
+### 6. 빌드 문제 해결 완료
+- Gradle 9.0 → 8.4 다운그레이드
+- kapt → KSP 전환 (JDK 21 호환성)
+- ExperimentalMaterial3Api 어노테이션 추가
+- HorizontalDivider → Divider 변경
+
+### 7. 빌드 성공 확인
+- 터미널에서 gradlew build 성공 (BUILD SUCCESSFUL)
+- APK 생성 확인됨
+
+============================================
+현재 문제
+============================================
+Android Studio에서 Gradle 캐시 파일 잠금 오류 발생
+→ 컴퓨터 재부팅으로 해결 예정
+
+============================================
+재부팅 후 해야 할 일
+============================================
+
+### 1. Android Studio에서 빌드 확인
+- 프로젝트 열기
+- Build > Rebuild Project 실행
+- 정상 빌드 확인
+
+### 2. SHA-1 인증서 확인
+- Android Studio > View > Tool Windows > Gradle
+- SelectMoney > app > Tasks > android > signingReport 더블클릭
+- 출력창에서 SHA1 값 복사
+
+### 3. Firebase 프로젝트 생성
+- https://console.firebase.google.com 접속
+- 프로젝트 추가: SelectMoney
+- Android 앱 추가:
+  - 패키지명: com.ezcorp.selectmoney
+  - SHA-1: 위에서 복사한 값 입력
+- google-services.json 다운로드 → app/ 폴더에 복사
+
+### 4. Firebase 서비스 활성화
+- Authentication > 익명(Anonymous) 활성화
+- Authentication > Google 활성화
+- Firestore Database > 데이터베이스 만들기 > 테스트 모드
+  - 위치: asia-northeast3 (서울)
+
+### 5. strings.xml 수정
+- google-services.json 파일에서 oauth_client 중 type: 3인 client_id 찾기
+- app/src/main/res/values/strings.xml 열기
+- YOUR_WEB_CLIENT_ID_HERE를 해당 값으로 교체
+
+### 6. 앱 실행 테스트
+- 에뮬레이터 또는 실제 기기에서 실행
+- 알림 접근 권한 설정 확인
+
+============================================
+주요 파일 위치
+============================================
+- build.gradle.kts (루트): 플러그인 정의
+- app/build.gradle.kts: 앱 의존성
+- gradle.properties: JVM 옵션 (JDK 21 호환성)
+- gradle/wrapper/gradle-wrapper.properties: Gradle 8.4
+- app/google-services.json: Firebase 설정 (생성 필요)
+- FIREBASE_SETUP.txt: Firebase 설정 상세 가이드
+
+============================================

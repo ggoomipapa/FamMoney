@@ -1,0 +1,11 @@
+{
+  "firestore": {
+    "indexes": "firestore.indexes.json",
+    "rules": "firestore.rules"
+  },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs20",
+    "region": "asia-northeast3"
+  }
+}
