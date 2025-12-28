@@ -74,7 +74,21 @@ class GeminiService @Inject constructor() {
     private var generativeModel: GenerativeModel? = null
 
     /**
-     * API 키 설정
+     * Remote Config에서 API 키를 가져와 자동 초기화
+     * Application 시작 시 또는 Remote Config fetch 후 호출
+     */
+    fun initializeFromRemoteConfig(): Boolean {
+        val apiKey = com.ezcorp.fammoney.util.AIFeatureConfig.getGeminiApiKey()
+        if (apiKey.isBlank()) {
+            generativeModel = null
+            return false
+        }
+        initialize(apiKey)
+        return true
+    }
+
+    /**
+     * API 키 설정 (내부용 또는 테스트용)
      */
     fun initialize(apiKey: String) {
         if (apiKey.isBlank()) {

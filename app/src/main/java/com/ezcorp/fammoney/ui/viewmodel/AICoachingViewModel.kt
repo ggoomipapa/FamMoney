@@ -15,6 +15,7 @@ import javax.inject.Inject
 data class AICoachingUiState(
     val isLoading: Boolean = false,
     val isApiKeySet: Boolean = false,
+    val isPremiumUser: Boolean = false,  // 구독자 여부
     val error: String? = null,
     val totalIncome: Long = 0L,
     val totalExpense: Long = 0L,
@@ -43,21 +44,43 @@ class AICoachingViewModel @Inject constructor(
     private var monthlyDataCache: List<MonthlyFinancialData> = emptyList()
 
     init {
-        loadApiKey()
+        initializeAI()
         loadCurrentMonthData()
     }
 
-    private fun loadApiKey() {
+    /**
+     * Remote Config에서 API 키를 가져와 AI 서비스 초기화
+     * 구독자만 AI 기능 사용 가능
+     */
+    private fun initializeAI() {
         viewModelScope.launch {
-            userPreferences.geminiApiKeyFlow.collect { apiKey ->
-                if (apiKey.isNotBlank()) {
-                    geminiService.initialize(apiKey)
-                    _uiState.update { it.copy(isApiKeySet = true) }
-                } else {
-                    _uiState.update { it.copy(isApiKeySet = false) }
-                }
+            // Remote Config에서 최신 설정 가져오기
+            com.ezcorp.fammoney.util.AIFeatureConfig.fetchAndActivate()
+
+            // API 키로 GeminiService 초기화
+            val isInitialized = geminiService.initializeFromRemoteConfig()
+
+            // 디버그 빌드에서는 항상 프리미엄 취급
+            val isPremium = com.ezcorp.fammoney.util.DebugConfig.isDebugBuild ||
+                            checkSubscriptionStatus()
+
+            _uiState.update {
+                it.copy(
+                    isApiKeySet = isInitialized,
+                    isPremiumUser = isPremium
+                )
             }
         }
+    }
+
+    /**
+     * 구독 상태 확인 (그룹의 subscriptionType 체크)
+     */
+    private suspend fun checkSubscriptionStatus(): Boolean {
+        val groupId = userPreferences.getGroupId() ?: return false
+        // TODO: UserRepository에서 그룹의 subscriptionType 확인
+        // 현재는 디버그 모드에서 true 반환
+        return false
     }
 
     /**

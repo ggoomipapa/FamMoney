@@ -84,70 +84,9 @@ fun SettingsScreen(
     var initialBalanceInput by remember { mutableStateOf("") }
     var joinError by remember { mutableStateOf<String?>(null) }
 
-    // AI 코칭 API 키 설정
-    var showApiKeyDialog by remember { mutableStateOf(false) }
-    var apiKeyInput by remember { mutableStateOf("") }
-    var showApiKey by remember { mutableStateOf(false) }
-    val geminiApiKey by mainViewModel.geminiApiKeyFlow.collectAsState(initial = "")
-
-    // API 키 설정 다이얼로그
-    if (showApiKeyDialog) {
-        AlertDialog(
-            onDismissRequest = { showApiKeyDialog = false },
-            title = { Text("Gemini API 키 설정") },
-            text = {
-                Column {
-                    Text(
-                        text = "AI 코칭 기능을 사용하려면 Google Gemini API 키가 필요합니다.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "API 키는 Google AI Studio에서 무료로 발급받을 수 있습니다.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedTextField(
-                        value = apiKeyInput,
-                        onValueChange = { apiKeyInput = it },
-                        label = { Text("API 키") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        visualTransformation = if (showApiKey)
-                            VisualTransformation.None
-                        else
-                            PasswordVisualTransformation(),
-                        trailingIcon = {
-                            IconButton(onClick = { showApiKey = !showApiKey }) {
-                                Icon(
-                                    if (showApiKey) Icons.Default.VisibilityOff
-                                    else Icons.Default.Visibility,
-                                    contentDescription = if (showApiKey) "숨기기" else "보기"
-                                )
-                            }
-                        }
-                    )
-                }
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        mainViewModel.saveGeminiApiKey(apiKeyInput)
-                        showApiKeyDialog = false
-                    }
-                ) {
-                    Text("저장")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showApiKeyDialog = false }) {
-                    Text("취소")
-                }
-            }
-        )
-    }
+    // AI 코칭 상태 (구독자만 사용 가능)
+    val isAIAvailable = remember { com.ezcorp.fammoney.util.AIFeatureConfig.hasApiKey() }
+    val isPremiumUser = remember { com.ezcorp.fammoney.util.DebugConfig.isDebugBuild } // 실제로는 구독 상태 체크
 
     // 그룹 이름 수정 다이얼로그
     if (showEditGroupNameDialog) {
@@ -1582,11 +1521,7 @@ fun SettingsScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    onClick = {
-                        apiKeyInput = geminiApiKey
-                        showApiKeyDialog = true
-                    }
+                        .padding(horizontal = 16.dp)
                 ) {
                     Row(
                         modifier = Modifier
@@ -1599,30 +1534,39 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                Icons.Default.Key,
+                                Icons.Default.Psychology,
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                tint = if (isAIAvailable && isPremiumUser)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
                                 Text(
-                                    text = "Gemini API 키",
+                                    text = "AI 코칭",
                                     style = MaterialTheme.typography.bodyLarge
                                 )
                                 Text(
-                                    text = if (geminiApiKey.isNotBlank()) "설정됨" else "설정 필요",
+                                    text = when {
+                                        !isAIAvailable -> "서비스 준비 중"
+                                        isPremiumUser -> "사용 가능"
+                                        else -> "구독 필요"
+                                    },
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = if (geminiApiKey.isNotBlank())
-                                        MaterialTheme.colorScheme.primary
-                                    else
-                                        MaterialTheme.colorScheme.error
+                                    color = when {
+                                        !isAIAvailable -> MaterialTheme.colorScheme.onSurfaceVariant
+                                        isPremiumUser -> MaterialTheme.colorScheme.primary
+                                        else -> MaterialTheme.colorScheme.error
+                                    }
                                 )
                             }
                         }
-                        Icon(
-                            Icons.Default.ChevronRight,
-                            contentDescription = null
-                        )
+                        if (!isPremiumUser && isAIAvailable) {
+                            TextButton(onClick = onNavigateToSubscription) {
+                                Text("구독하기")
+                            }
+                        }
                     }
                 }
             }
