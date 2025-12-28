@@ -1,4 +1,4 @@
-package com.ezcorp.fammoney.service
+﻿package com.ezcorp.fammoney.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -103,7 +103,7 @@ class TransactionNotificationListenerService : NotificationListenerService() {
             var category = ""
 
             // AIë¡?ê°ë§¹ì ëª?ì¶ì¶ ?ë (?ê·?ì¼ë¡?ëª?ì°¾ì? ê²½ì°)
-            if (merchantName.isBlank() && aiFeatureService.isAIEnabled()) {
+            if (merchantName.isBlank()) {
                 val extractResult = aiFeatureService.extractMerchantName(notificationText)
                 extractResult.onSuccess { name ->
                     if (name.isNotBlank()) {
@@ -113,14 +113,14 @@ class TransactionNotificationListenerService : NotificationListenerService() {
             }
 
             // AI ?ë ì¹´íê³ ë¦¬ ë¶ë¥ (ì§ì¶?ê±°ë??ê²½ì°)
-            if (parsed.type == TransactionType.EXPENSE && merchantName.isNotBlank() && aiFeatureService.isAIEnabled()) {
+            if (parsed.type == TransactionType.EXPENSE && merchantName.isNotBlank()) {
                 val categoryResult = aiFeatureService.autoCategorize(
                     merchantName = merchantName,
                     amount = parsed.amount,
                     description = parsed.description
                 )
                 categoryResult.onSuccess { result ->
-                    if (result.confidence >= 0.7f) {
+                    if (result.confidence >= 0.5f) {
                         category = result.category
                     }
                 }
@@ -459,3 +459,4 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
         const val EXTRA_SHOW_SAVINGS_GOAL = "show_savings_goal"
     }
 }
+

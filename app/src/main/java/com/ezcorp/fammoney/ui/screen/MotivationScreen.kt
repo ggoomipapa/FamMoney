@@ -1,4 +1,4 @@
-package com.ezcorp.fammoney.ui.screen
+﻿package com.ezcorp.fammoney.ui.screen
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -40,10 +40,10 @@ fun MotivationScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("?ì ?±ì¥") },
+                title = { Text("재정 건강") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "?¤ë¡")
+                        Icon(Icons.Default.ArrowBack, "뒤로")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -106,7 +106,7 @@ fun MotivationScreen(
             // ?ì  ?¹ì
             item {
                 Text(
-                    text = "? ?ë??ë°°ì",
+                    text = "🏆 획득한 배지",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -127,14 +127,14 @@ fun MotivationScreen(
                                 .padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("?¯", fontSize = 48.sp)
+                            Text("🎯", fontSize = 48.sp)
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "?ì§ ?ë??ë°°ì?ê° ?ì´",
+                                text = "아직 획득한 배지가 없어요",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                             Text(
-                                text = "?ìë¥??¬ì±?ë©´ ì²?ë°°ì?ë¥?ë°ì ???ì´",
+                                text = "흑자를 달성하면 첫 배지를 받을 수 있어요",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -154,7 +154,7 @@ fun MotivationScreen(
             // ì§í ì¤ì¸ ?ì 
             item {
                 Text(
-                    text = "? ì§í ì¤ì¸ ?ì ",
+                    text = "🎯 진행 중인 업적",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -264,14 +264,14 @@ fun LevelCard(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     StatItem(
-                        label = "?°ì ?ì",
-                        value = "${consecutiveSurplusMonths}ê°ì",
-                        icon = "?¥"
+                        label = "연속 흑자",
+                        value = "${consecutiveSurplusMonths}개월",
+                        icon = "🔥"
                     )
                     StatItem(
-                        label = "?ì¶ë¥ ",
+                        label = "저축률",
                         value = "${savingsRate}%",
-                        icon = "?°"
+                        icon = "💰"
                     )
                 }
 
@@ -285,7 +285,7 @@ Column {
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "?¤ì ?ë²¨ê¹ì",
+                                text = "다음 레벨까지",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = Color.White.copy(alpha = 0.8f)
                             )
@@ -363,7 +363,7 @@ fun MonthSummaryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "?´ë² ???ì",
+                    text = "이번 달 결산",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -376,10 +376,10 @@ fun MonthSummaryCard(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("?¥", fontSize = 14.sp)
+                            Text("🔥", fontSize = 14.sp)
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "${consecutiveMonths}ê°ì ?°ì",
+                                text = "${consecutiveMonths}개월 연속",
                                 style = MaterialTheme.typography.labelMedium,
                                 color = Color(0xFFE65100)
                             )
@@ -501,7 +501,7 @@ fun InvestmentRecommendationCard(
             ) {
                 Icon(Icons.Default.AutoAwesome, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("AI ì½ì¹­?ì ???ìë³´ê¸°")
+                Text("AI 코칭에서 더 알아보기")
             }
         }
     }
@@ -608,29 +608,29 @@ fun NextStepCard(
 ) {
     val (stepTitle, stepDescription, stepIcon) = when {
         currentBalance < 0 -> Triple(
-            "ì²??ì ?¬ì±?ê¸°",
-            "ì§ì¶ì ì¡°ê¸ë§?ì¤ì´ë©??ìë¥??¬ì±?????ì´",
-            "?¯"
+            "첫 흑자 달성하기",
+            "지출을 조금만 줄이면 흑자를 달성할 수 있어요!",
+            "🎯"
         )
         savingsRate < 10 -> Triple(
-            "?ì¶ë¥  10% ?¬ì±?ê¸°",
-            "?ì??10%ë¥??ì¶í´ë³´ì¸?? ?ì? ?ì????ë³?ë? ë§ë¤?´ì!",
-            "?°"
+            "저축률 10% 달성하기",
+            "수입의 10%를 저축해보세요. 작은 습관이 큰 변화를 만들어요!",
+            "💰"
         )
         consecutiveMonths < 3 -> Triple(
-            "3ê°ì ?°ì ?ì ?ì ",
-            "ê¾¸ì??¨ì´ ?µê???ë§ë¤?´ì. ${3 - consecutiveMonths}ê°ìë§",
-            "?¥"
+            "3개월 연속 흑자 달성",
+            "꾸준함이 습관을 만들어요. ${3 - consecutiveMonths}개월 남았어요!",
+            "🔥"
         )
         savingsRate < 20 -> Triple(
-            "?ì¶ë¥  20% ?¬ì±?ê¸°",
-            "?¬ì  ?ë¬¸ê°?¤ì´ ì¶ì²?ë ?´ì?ì¸ ?ì¶ë¥ ?´ì",
-            "?"
+            "저축률 20% 달성하기",
+            "투자 전문가들이 추천하는 이상적인 저축률이에요!",
+            "📊"
         )
         else -> Triple(
-            "?¬ì ?ì?ê¸°",
-            "?ì ?ì¸ ?ì¶??µê????ê²¼?´ì. ?´ì  ?¬ìë¡??ì°??ë¶ë ¤ë³´ì¸",
-            "?"
+            "투자 시작하기",
+            "안정적인 저축 습관이 생겼어요. 이제 투자로 자산을 불려보세요!",
+            "📈"
         )
     }
 
@@ -654,7 +654,7 @@ fun NextStepCard(
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "?¤ì ëª©í",
+                    text = "다음 목표",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
                 )
@@ -677,43 +677,45 @@ fun NextStepCard(
 private fun getEncouragementMessage(balance: Long, consecutiveMonths: Int): Triple<String, String, String> {
     return when {
         balance < 0 && consecutiveMonths == 0 -> Triple(
-            "?ë´?¸ì!",
-            "ì§ì¶ì ì¡°ê¸ë§?ì¤ì´ë©??ì ?í??ê°?¥í´?? ?ì? ë³?ë????ì?´ë³´?¸ì!",
-            "?ª"
+            "힘내세요!",
+            "지출을 조금만 줄이면 흑자 달성이 가능해요! 작은 변화부터 시작해보세요!",
+            "💪"
         )
         balance >= 0 && consecutiveMonths == 1 -> Triple(
-            "ì¶í?´ì! ?",
-            "ì²??ì ?¬ì±! ???ì´?¤ë? ? ì??ë©´ ëª©í??ë¹ ë¥´ê²??ë¬?????ì´",
-            "?"
+            "축하해요! 🎉",
+            "첫 흑자 달성! 이 페이스를 유지하면 목표에 빠르게 도달할 수 있어요!",
+            "🎊"
         )
         consecutiveMonths >= 12 -> Triple(
-            "?¬ì  ë§ì¤?? ?",
-            "1???´ë´ ?ì?¼ë ?ë§ ??¨í´?? ?´ì  ?¬ìë¡??ì°??ë¶ë ¤ë³´ë ê±??´ë",
-            "?"
+            "투자 마스터! 🏆",
+            "1년 내내 흑자를 달성했어요! 이제 투자로 자산을 불려보는 건 어때요?",
+            "👑"
         )
         consecutiveMonths >= 6 -> Triple(
-            "ê¾¸ì??¨ì ?? ?",
-            "ë°ë ?°ì ?ì! ??ê´ë¦¬ê? ?´ì  ?µê????ì?¤ì!",
-            "")
+            "꾸준함의 힘! 🌟",
+            "반년 연속 흑자! 재정관리가 이제 습관이 되었어요!",
+            "⭐"
+        )
         consecutiveMonths >= 3 -> Triple(
-            "?µê????ì´ê°?? ?¿",
-            "3ê°ì ?°ì ?±ê³µ! ì¢ì? ?µê????ë¦¬?¡ê³  ?ì´",
-            "?±"
+            "습관이 되어가요! 🌱",
+            "3개월 연속 성공! 좋은 습관을 만들어가고 있어요!",
+            "🌳"
         )
         balance > 500000 -> Triple(
-            "??¨í´?? ",
-            "?´ë² ??${"%,d".format(balance)}?ì ëª¨ì?´ì! ëª©í ?ì¶ì ?ì ?´ë³´?¸ì!",
-            "?°"
+            "잘하고 있어요! 💚",
+            "이번 달 ${"%,d".format(balance)}원을 모았어요! 목표 저축에 추가해보세요!",
+            "💰"
         )
         balance > 0 -> Triple(
-            "?íê³??ì´?? â­",
-            "?ì ? ì? ì¤? ??ëª¨ë©???ê³ì ?´ì´ê°?¸ì!",
-            "?"
+            "잘하고 있어요! ⭐",
+            "작은 금액이라도 모으면 커져요. 계속 이어가세요!",
+            "✨"
         )
         else -> Triple(
-            "?¤ì ?ì?´ì!",
-            "?ë²????ì??ì?? ?¤ì ?ìë¡??ìê°????ì´",
-            "?ª"
+            "다시 시작해요!",
+            "실패는 성공의 어머니! 다시 새로운 마음으로 시작해봐요!",
+            "💪"
         )
     }
 }
+

@@ -48,7 +48,7 @@ fun FinancialGuideScreen(
                             else -> onNavigateBack()
                         }
                     }) {
-                        Icon(Icons.Default.ArrowBack, "?¤ë¡")
+                        Icon(Icons.Default.ArrowBack, "뒤로")
                     }
                 }
             )
@@ -101,15 +101,15 @@ fun GuideHomeContent(
                 Column(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    Text("?", fontSize = 32.sp)
+                    Text("좋아요", fontSize = 32.sp)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "ê¸ìµ ?í ?ì  ?ë³µ",
+                        text = "금융 상품 정보 도움",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "CMA, ?ê¸, ETF ??ê¼??ì????ê¸ìµ ì§?ì ?½ê² ?ë ¤?ë ¤",
+                        text = "CMA, 적금, ETF 등 기초 금융 지식 배우기",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                     )
@@ -117,10 +117,10 @@ fun GuideHomeContent(
             }
         }
 
-        // ì¹´íê³ ë¦¬
+        // 가이드 목록
         item {
             Text(
-                text = "ì¹´íê³ ë¦¬",
+                text = "카테고리",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -156,11 +156,11 @@ fun GuideHomeContent(
             }
         }
 
-        // ?¸ê¸° ê°?´ë
+        // 금융 가이드
         item {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "?¸ê¸° ê°?´ë",
+                text = "금융 가이드",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -269,7 +269,7 @@ fun GuideCategoryContent(
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "${guides.size}ê°ì ê°?´ë",
+                            text = "${guides.size}개의 가이드",
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
@@ -379,10 +379,10 @@ if (guide.tips.isNotEmpty()) {
                             .padding(16.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("?¡", fontSize = 20.sp)
+                            Text("싫어요", fontSize = 20.sp)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "ê¿",
+                                text = "꿀",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
@@ -405,11 +405,11 @@ if (guide.tips.isNotEmpty()) {
             }
         }
 
-        // ê´??ë§í¬
+        // 관련 상품
         if (guide.relatedLinks.isNotEmpty()) {
             item {
                 Text(
-                    text = "ê´??ë§í¬",
+                    text = "관??링크",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )

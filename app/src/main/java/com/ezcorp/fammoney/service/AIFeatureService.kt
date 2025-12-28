@@ -10,11 +10,14 @@ import javax.inject.Singleton
  * AI 기능 서비스
  * 커넥트 AI 구독용 기능을 제공
  * Firebase Remote Config를 통해 무료/유료 기능을 동적으로 관리
+ *
+ * 참고: 카테고리 분류와 가맹점명 추출은 AI 없이 로컬에서 처리
  */
 @Singleton
 class AIFeatureService @Inject constructor(
     private val geminiService: GeminiService,
-    private val billingRepository: BillingRepository
+    private val billingRepository: BillingRepository,
+    private val localCategorizationService: LocalCategorizationService
 ) {
     /**
      * AI 기능 자체 사용 가능 여부 확인
@@ -79,39 +82,44 @@ class AIFeatureService @Inject constructor(
      */
     fun getPaidFeatures(): Set<String> = AIFeatureConfig.getPaidFeatures()
 
-    // ========== AI 기능 래퍼 메서드들 ==========
-    // 각 메서드는 Remote Config에서 설정된 무료/유료 여부에 따라 접근 제어
+    // ========== 로컬 처리 기능 (AI 사용 안함) ==========
 
     /**
-     * AI 자동 카테고리 분류
+     * 카테고리 분류 (로컬 키워드 매칭 - AI 사용 안함)
+     * API 비용 없이 항상 사용 가능
      */
-    suspend fun autoCategorize(
+    fun autoCategorize(
         merchantName: String,
         amount: Long,
         description: String = ""
     ): Result<AutoCategoryResult> {
-        val featureId = AIFeatureConfig.Features.AUTO_CATEGORIZE
-        if (!canUseFeature(featureId)) {
-            return Result.failure(Exception(getFeatureDisabledReason(featureId)))
+        return try {
+            val result = localCategorizationService.categorize(merchantName, amount)
+            Result.success(result)
+        } catch (e: Exception) {
+            Result.success(AutoCategoryResult("OTHER", 0.2f, "분류 실패"))
         }
-        return geminiService.autoCategorize(merchantName, amount, description)
     }
 
     /**
-     * AI 가맹점명 추출
+     * 가맹점명 추출 (로컬 정규식 - AI 사용 안함)
+     * API 비용 없이 항상 사용 가능
      */
-    suspend fun extractMerchantName(
+    fun extractMerchantName(
         notificationText: String
     ): Result<String> {
-        val featureId = AIFeatureConfig.Features.MERCHANT_EXTRACT
-        if (!canUseFeature(featureId)) {
-            return Result.success("") // 비활성화 시 빈 문자열
+        return try {
+            val result = localCategorizationService.extractMerchantName(notificationText)
+            Result.success(result)
+        } catch (e: Exception) {
+            Result.success("")
         }
-        return geminiService.extractMerchantName(notificationText)
     }
 
+    // ========== AI 기능 래퍼 메서드들 (유료 전용) ==========
+
     /**
-     * 월말 지출 예측
+     * 월말 지출 예측 (AI - 유료)
      */
     suspend fun predictMonthlySpending(
         currentMonthExpense: Long,
@@ -134,7 +142,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 스마트 인사이트 생성
+     * 스마트 인사이트 생성 (AI - 유료)
      */
     suspend fun generateSmartInsights(
         currentMonth: MonthlyFinancialData,
@@ -149,7 +157,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 이상 지출 감지
+     * 이상 지출 감지 (AI - 유료)
      */
     suspend fun detectAnomalies(
         currentTransaction: ParsedTransactionInfo,
@@ -164,7 +172,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 목표 달성 예측
+     * 목표 달성 예측 (AI - 유료)
      */
     suspend fun predictGoalAchievement(
         goalName: String,
@@ -189,7 +197,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 중복 거래 AI 판단
+     * 중복 거래 AI 판단 (AI - 유료)
      */
     suspend fun analyzeDuplicateTransaction(
         transaction1: ParsedTransactionInfo,
@@ -203,10 +211,10 @@ class AIFeatureService @Inject constructor(
         return geminiService.analyzeDuplicateTransaction(transaction1, transaction2, timeDiffMinutes)
     }
 
-    // ========== 기존 AI 코칭 기능 래퍼 ==========
+    // ========== 기존 AI 코칭 기능 래퍼 (유료) ==========
 
     /**
-     * 재정 분석
+     * 재정 분석 (AI - 유료)
      */
     suspend fun analyzeFinances(
         monthlyData: List<MonthlyFinancialData>,
@@ -221,7 +229,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 재산 증식 분석 (Debug 전용)
+     * 재산 증식 분석 (AI - 유료)
      */
     suspend fun analyzeInvestment(
         monthlyBalance: Long,
@@ -236,7 +244,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 목표 달성 코칭
+     * 목표 달성 코칭 (AI - 유료)
      */
     suspend fun analyzeGoalProgress(
         goalName: String,
@@ -261,7 +269,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 금융 상품 검색 (Debug 전용)
+     * 금융 상품 검색 (AI - 유료)
      */
     suspend fun searchFinancialProducts(
         productType: String,
@@ -276,7 +284,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 저축 전략 (Debug 전용)
+     * 저축 전략 (AI - 유료)
      */
     suspend fun getSavingsStrategy(
         primaryBank: String,
@@ -292,7 +300,7 @@ class AIFeatureService @Inject constructor(
     }
 
     /**
-     * 재산 증식 가이드 (Debug 전용)
+     * 재산 증식 가이드 (AI - 유료)
      */
     suspend fun getInvestmentStartGuide(
         investorProfile: String,

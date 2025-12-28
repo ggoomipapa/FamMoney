@@ -31,10 +31,10 @@ fun BankSettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("?�???�정") },
+                title = { Text("은행 설정") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "?�로 가�")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로 가기")
                     }
                 },
                 actions = {
@@ -44,7 +44,7 @@ fun BankSettingsScreen(
                             onNavigateBack()
                         }
                     ) {
-                        Icon(Icons.Default.Check, contentDescription = "?�")
+                        Icon(Icons.Default.Check, contentDescription = "저장")
                     }
                 }
             )
@@ -57,7 +57,7 @@ fun BankSettingsScreen(
         ) {
             item {
                 Text(
-                    text = "?�림???�동?�로 ?�식???�?�을 ?�택?�세??\n?�택???�?�의 ?�출�??�림�?가계�???기록?�니",
+                    text = "알림을 자동으로 인식할 은행을 선택하세요.\n선택한 은행의 지출/입금 알림이 가계부에 기록됩니다.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(16.dp)
@@ -119,7 +119,7 @@ fun BankSettingItem(
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = "?�림 ?�스: ${bank.packageNames.size}�",
+                    text = "알림 패키지: ${bank.packageNames.size}개",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

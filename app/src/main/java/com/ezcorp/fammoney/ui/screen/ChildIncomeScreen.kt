@@ -49,7 +49,7 @@ fun ChildIncomeScreen(
     var showDeleteIncomeDialog by remember { mutableStateOf<ChildIncome?>(null) }
     var showDeleteExpenseDialog by remember { mutableStateOf<ChildExpense?>(null) }
 
-    // ?©ë ê´ë¦??¤ì´?¼ë¡ê·??í
+    // 용돈 관리??¤ì´?¼ë¡ê·??í
     var showSetAllowanceDialog by remember { mutableStateOf(false) }
     var showStartAllowanceDialog by remember { mutableStateOf(false) }
     var showGiveAllowanceDialog by remember { mutableStateOf(false) }
@@ -77,11 +77,11 @@ fun ChildIncomeScreen(
     if (showErrorSnackbar) {
         AlertDialog(
             onDismissRequest = { showErrorSnackbar = false },
-            title = { Text("?¤ë¥") },
+            title = { Text("자녀") },
             text = { Text(errorMessage) },
             confirmButton = {
                 TextButton(onClick = { showErrorSnackbar = false }) {
-                    Text("?ì¸")
+                    Text("주기")
                 }
             }
         )
@@ -111,8 +111,8 @@ fun ChildIncomeScreen(
     if (showDeleteChildDialog && uiState.selectedChild != null) {
         AlertDialog(
             onDismissRequest = { showDeleteChildDialog = false },
-            title = { Text("?ë? ?? ") },
-            text = { Text("'${uiState.selectedChild!!.name}'??ëª¨ë  ?ì ê¸°ë¡???? ?©ë?? ?? ?ìê² ìµ?ê¹") },
+            title = { Text("자녀 삭제") },
+            text = { Text("'${uiState.selectedChild!!.name}'의 수입 기록을 삭제하시겠습니까?") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -120,12 +120,12 @@ fun ChildIncomeScreen(
                         showDeleteChildDialog = false
                     }
                 ) {
-                    Text("?? ", color = MaterialTheme.colorScheme.error)
+                    Text("삭제", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteChildDialog = false }) {
-                    Text("ì·¨ì")
+                    Text("취소")
                 }
             }
         )
@@ -134,8 +134,8 @@ fun ChildIncomeScreen(
     showDeleteIncomeDialog?.let { income ->
         AlertDialog(
             onDismissRequest = { showDeleteIncomeDialog = null },
-            title = { Text("?ì ?? ") },
-            text = { Text("???ì ê¸°ë¡???? ?ìê² ìµ?ê¹") },
+            title = { Text("수입 삭제") },
+            text = { Text("이 수입 기록을 삭제하시겠습니까?") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -143,12 +143,12 @@ fun ChildIncomeScreen(
                         showDeleteIncomeDialog = null
                     }
                 ) {
-                    Text("?? ", color = MaterialTheme.colorScheme.error)
+                    Text("삭제", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteIncomeDialog = null }) {
-                    Text("ì·¨ì")
+                    Text("취소")
                 }
             }
         )
@@ -157,8 +157,8 @@ fun ChildIncomeScreen(
     showDeleteExpenseDialog?.let { expense ->
         AlertDialog(
             onDismissRequest = { showDeleteExpenseDialog = null },
-            title = { Text("ì§ì¶??? ") },
-            text = { Text("??ì§ì¶?ê¸°ë¡???? ?ìê² ìµ?ê¹") },
+            title = { Text("지출?삭제") },
+            text = { Text("이 지출 기록을 삭제하시겠습니까?") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -166,12 +166,12 @@ fun ChildIncomeScreen(
                         showDeleteExpenseDialog = null
                     }
                 ) {
-                    Text("?? ", color = MaterialTheme.colorScheme.error)
+                    Text("삭제", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteExpenseDialog = null }) {
-                    Text("ì·¨ì")
+                    Text("취소")
                 }
             }
         )
@@ -211,7 +211,7 @@ fun ChildIncomeScreen(
         )
     }
 
-    // ?©ë ?¤ì  ?¤ì´?¼ë¡ê·"
+    // 용돈 설정 ?¤ì´?¼ë¡ê·"
     if (showSetAllowanceDialog && uiState.selectedChild != null) {
         SetAllowanceDialog(
             child = uiState.selectedChild!!,
@@ -223,7 +223,7 @@ fun ChildIncomeScreen(
         )
     }
 
-    // ?©ë ?ì ?ì¸ ?¤ì´?¼ë¡ê·?
+    // 용돈 연결 주기 ?¤ì´?¼ë¡ê·?
     if (showStartAllowanceDialog && uiState.selectedChild != null) {
         StartAllowanceConfirmDialog(
             child = uiState.selectedChild!!,
@@ -235,7 +235,7 @@ fun ChildIncomeScreen(
         )
     }
 
-    // ?©ë ì£¼ê¸° ?¤ì´?¼ë¡ê·?
+    // 용돈 지급 ?¤ì´?¼ë¡ê·?
     if (showGiveAllowanceDialog && uiState.selectedChild != null) {
         GiveAllowanceDialog(
             child = uiState.selectedChild!!,
@@ -247,12 +247,12 @@ fun ChildIncomeScreen(
         )
     }
 
-    // ?©ë ì·¨ì ?ì¸ ?¤ì´?¼ë¡ê·?
+    // 용돈 취소 주기 ?¤ì´?¼ë¡ê·?
     if (showCancelAllowanceDialog && uiState.selectedChild != null) {
         AlertDialog(
             onDismissRequest = { showCancelAllowanceDialog = false },
-            title = { Text("?©ë ê´ë¦?ì·¨ì") },
-            text = { Text("?©ë ê´ë¦¬ë? ì·¨ì?ê³  ?ë¦½ ?¨ê³ë¡??ìê°ë?? ?ë¦½ê¸?ê¸°ë¡? ?? ?©ë?? ê³ì?ìê² ìµ?ê¹") },
+            title = { Text("용돈 관리?취소") },
+            text = { Text("용돈 관리를 취소하시겠습니까? 모든 다음 달 기록은 확인 삭제됩니다.") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -260,12 +260,12 @@ fun ChildIncomeScreen(
                         showCancelAllowanceDialog = false
                     }
                 ) {
-                    Text("?ì¸", color = MaterialTheme.colorScheme.error)
+                    Text("주기", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showCancelAllowanceDialog = false }) {
-                    Text("ì·¨ì")
+                    Text("취소")
                 }
             }
         )
@@ -274,15 +274,15 @@ fun ChildIncomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("?ë? ?©ë ê´ë¦") },
+                title = { Text("자녀 용돈 관리") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "?¤ë¡ ê°ê¸")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로 가기")
                     }
                 },
                 actions = {
                     IconButton(onClick = { showAddChildDialog = true }) {
-                        Icon(Icons.Default.PersonAdd, contentDescription = "?ë? ì¶ê")
+                        Icon(Icons.Default.PersonAdd, contentDescription = "자녀 추가")
                     }
                 }
             )
@@ -301,7 +301,7 @@ fun ChildIncomeScreen(
                 ) {
                     Icon(
                         Icons.Default.Add,
-                        contentDescription = if (uiState.currentTab == ChildTransactionTab.INCOME) "?ì ì¶ê" else "ì§ì¶?ì¶ê"
+                        contentDescription = if (uiState.currentTab == ChildTransactionTab.INCOME) "수입 추가" else "지출?추가"
                     )
                 }
             }
@@ -325,13 +325,13 @@ fun ChildIncomeScreen(
                 if (uiState.selectedChild != null) {
                     val child = uiState.selectedChild!!
 
-                    // ?©ë ?¨ê³?????ë¦½ê¸?ê³ ì  ì¹´ë ?ì
+                    // 용돈 ?¨ê³????다음 달?ê³ ì  ì¹´ë ?ì
                 if (child.isAllowanceActive && child.preSavingsAmount > 0) {
                         PreSavingsCard(child = child)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
 
-                    // ? í???ë? ?ë³´ ì¹´ë (?©ë ê´ë¦?ë²í¼ ?¬í¨)
+                    // ? í???ë? 정보 ì¹´ë (용돈 관리?ë²í¼ ?¬í¨)
                 ChildSummaryCardWithAllowance(
                         child = child,
                         onEdit = { showEditChildDialog = true },
@@ -342,7 +342,7 @@ fun ChildIncomeScreen(
                         onCancelAllowance = { showCancelAllowanceDialog = true }
                     )
 
-                    // ?ì/ì§ì¶"
+                    // 수입/지출"
 TabRow(
                         selectedTabIndex = if (uiState.currentTab == ChildTransactionTab.INCOME) 0 else 1,
                         modifier = Modifier.padding(horizontal = 16.dp)
@@ -350,14 +350,14 @@ TabRow(
                         Tab(
                             selected = uiState.currentTab == ChildTransactionTab.INCOME,
                             onClick = { viewModel.setCurrentTab(ChildTransactionTab.INCOME) },
-                            text = { Text("?ì") },
+                            text = { Text("수입") },
                             selectedContentColor = IncomeColor,
                             unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Tab(
                             selected = uiState.currentTab == ChildTransactionTab.EXPENSE,
                             onClick = { viewModel.setCurrentTab(ChildTransactionTab.EXPENSE) },
-                            text = { Text("ì§ì¶") },
+                            text = { Text("지출") },
                             selectedContentColor = ExpenseColor,
                             unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -409,7 +409,7 @@ if (uiState.currentTab == ChildTransactionTab.INCOME) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "?ë?ë¥?? í?´ì£¼?¸ì",
+                            text = "자녀를 먼저 선택해주세요",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -482,12 +482,12 @@ fun ChildSummaryCard(
                 }
                 Row {
                     IconButton(onClick = onEdit) {
-                        Icon(Icons.Default.Edit, contentDescription = "?ì ", modifier = Modifier.size(20.dp))
+                        Icon(Icons.Default.Edit, contentDescription = "수정", modifier = Modifier.size(20.dp))
                     }
                     IconButton(onClick = onDelete) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "?? ",
+                            contentDescription = "삭제",
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(20.dp)
                         )
@@ -504,7 +504,7 @@ fun ChildSummaryCard(
                 // ?ì
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "?ì",
+                        text = "수입",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -516,10 +516,10 @@ fun ChildSummaryCard(
                     )
                 }
 
-                // ì§ì¶?
+                // 지출?
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "ì§ì¶",
+                        text = "지출",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -531,10 +531,10 @@ fun ChildSummaryCard(
                     )
                 }
 
-                // ?ì¡
+                // 금액
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "?ì¡",
+                        text = "금액",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -641,13 +641,13 @@ fun EmptyChildrenMessage(onAddChild: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "?±ë¡???ë?ê° ?ìµ?ë¤",
+            text = "수입 내역이 없습니다",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "?ë?ë¥?ì¶ê??ì¬ ?ì??ê¸°ë¡?´ë³´?¸ì",
+            text = "자녀를 먼저 추가한 후에 수입을 기록할 수 있습니다",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             textAlign = TextAlign.Center
@@ -656,7 +656,7 @@ fun EmptyChildrenMessage(onAddChild: () -> Unit) {
         Button(onClick = onAddChild) {
             Icon(Icons.Default.Add, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("?ë? ì¶ê")
+            Text("자녀 추가")
         }
     }
 }
@@ -677,13 +677,13 @@ fun EmptyIncomesMessage() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "?ì ?´ì­???ìµ?ë¤",
+            text = "수입 내역이 없습니다",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "?°ì¸¡ ?ë¨ + ë²í¼?¼ë¡ ?ì??ì¶ê??´ë³´?¸ì",
+            text = "최근 수입 + 반복용돈으로 수입을 추가할 수 있습니다",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             textAlign = TextAlign.Center
@@ -701,12 +701,12 @@ fun AddChildDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("?ë? ì¶ê") },
+        title = { Text("자녀 추가") },
         text = {
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("?´ë¦") },
+                label = { Text("닫기") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -716,12 +716,12 @@ fun AddChildDialog(
                 onClick = { onConfirm(name) },
                 enabled = name.isNotBlank()
             ) {
-                Text("ì¶ê")
+                Text("추가")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("ì·¨ì")
+                Text("취소")
             }
         }
     )
@@ -738,12 +738,12 @@ fun EditChildDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("?ë? ?ë³´ ?ì ") },
+        title = { Text("자녀 정보 수정") },
         text = {
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("?´ë¦") },
+                label = { Text("닫기") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -753,12 +753,12 @@ fun EditChildDialog(
                 onClick = { onConfirm(child.copy(name = name)) },
                 enabled = name.isNotBlank()
             ) {
-                Text("?")
+                Text("확인")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("ì·¨ì")
+                Text("취소")
             }
         }
     )
@@ -789,7 +789,7 @@ fun AddChildIncomeDialog(
                 .padding(16.dp)
         ) {
             Text(
-                text = "${child.name} ?ì ì¶ê",
+                text = "${child.name} 수입 추가",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -798,7 +798,7 @@ fun AddChildIncomeDialog(
             OutlinedTextField(
                 value = amountText,
                 onValueChange = { amountText = it.filter { c -> c.isDigit() } },
-                label = { Text("ê¸ì¡") },
+                label = { Text("금액") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 suffix = { Text("") },
@@ -807,9 +807,9 @@ fun AddChildIncomeDialog(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // ?êµ¬?ê² ë°ì?ì - ?ë¡­?¤ì´ ???ì§ì  ? í UI
+            // 지급에서 받으세요 - ?ë¡­?¤ì´ 확인??ì§ì  ? í UI
             Text(
-                text = "?êµ¬?ê² ë°ì?ì",
+                text = "지급에서 받으세요",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -863,7 +863,7 @@ fun AddChildIncomeDialog(
                 OutlinedTextField(
                     value = customGiverName,
                     onValueChange = { customGiverName = it },
-                    label = { Text("?´ë¦ ?ë ¥") },
+                    label = { Text("닫기 입력") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -874,7 +874,7 @@ fun AddChildIncomeDialog(
             OutlinedTextField(
                 value = memo,
                 onValueChange = { memo = it },
-                label = { Text("ë©ëª¨ (? í)") },
+                label = { Text("메모 (선택)") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -889,7 +889,7 @@ fun AddChildIncomeDialog(
                     onClick = onDismiss,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("ì·¨ì")
+                    Text("취소")
                 }
                 Button(
                     onClick = {
@@ -904,7 +904,7 @@ fun AddChildIncomeDialog(
                               (selectedGiverType != IncomeGiverType.OTHER || customGiverName.isNotBlank()),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("?")
+                    Text("확인")
                 }
             }
 
@@ -949,7 +949,7 @@ fun GiverTypeBottomSheet(
                 .padding(16.dp)
         ) {
             Text(
-                text = "?êµ¬?ê² ë°ì?ì",
+                text = "지급에서 받으세요",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -988,7 +988,7 @@ fun GiverTypeItem(
     }
 }
 
-// ===== ì§ì¶?ê´??ì»´í¬?í¸ =====
+// ===== 지출?ê´??ì»´í¬?í¸ =====
 
 @Composable
 fun ChildExpenseItem(
@@ -1076,13 +1076,13 @@ fun EmptyExpensesMessage() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "ì§ì¶??´ì­???ìµ?ë¤",
+            text = "지출 내역이 없습니다",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "?°ì¸¡ ?ë¨ + ë²í¼?¼ë¡ ì§ì¶ì ì¶ê??´ë³´?¸ì",
+            text = "최근 지출으로 추가할 수 있습니다",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             textAlign = TextAlign.Center
@@ -1090,15 +1090,15 @@ fun EmptyExpensesMessage() {
     }
 }
 
-// ?ë? ì§ì¶?ì¶ê? ?ë©´ ?í
+// ?ë? 지출?추가? ?ë©´ ?í
 private enum class ChildExpenseScreen {
     MAIN,
     CATEGORY
 }
 
 /**
- * ?ë? ì§ì¶?ì¶ê? ë°í??í¸
- * AlertDialog ???ModalBottomSheetë¥??¬ì©?ì¬ ?´ë? ? í UI???z-index ì¶©ë ë°©ì"
+ * ?ë? 지출?추가? ë°í??í¸
+ * AlertDialog 확인??ModalBottomSheetë¥??¬ì©?ì¬ ?´ë? ? í UI확인??z-index ì¶©ë ë°©ì"
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -1126,7 +1126,7 @@ fun AddChildExpenseDialog(
                         .padding(bottom = 32.dp)
                 ) {
                     Text(
-                        text = "${child.name} ì§ì¶?ì¶ê",
+                        text = "${child.name} 지출?추가",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 16.dp)
@@ -1135,7 +1135,7 @@ fun AddChildExpenseDialog(
                     OutlinedTextField(
                         value = amountText,
                         onValueChange = { amountText = it.filter { c -> c.isDigit() } },
-                        label = { Text("ê¸ì¡") },
+                        label = { Text("금액") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
                         suffix = { Text("") },
@@ -1156,7 +1156,7 @@ fun AddChildExpenseDialog(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = selectedCategory?.let { "${it.icon} ${it.displayName}" } ?: "ë¬´ì????ì",
+                                text = selectedCategory?.let { "${it.icon} ${it.displayName}" } ?: "다운로드 확인하세요",
                                 color = if (selectedCategory == null) MaterialTheme.colorScheme.onSurfaceVariant
                                         else MaterialTheme.colorScheme.onSurface
                             )
@@ -1169,7 +1169,7 @@ fun AddChildExpenseDialog(
                     OutlinedTextField(
                         value = description,
                         onValueChange = { description = it },
-                        label = { Text("?¬ì©ì²?(? í)") },
+                        label = { Text("사용처(선택)") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -1179,7 +1179,7 @@ fun AddChildExpenseDialog(
                     OutlinedTextField(
                         value = memo,
                         onValueChange = { memo = it },
-                        label = { Text("ë©ëª¨ (? í)") },
+                        label = { Text("메모 (선택)") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -1194,7 +1194,7 @@ fun AddChildExpenseDialog(
                             onClick = onDismiss,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("ì·¨ì")
+                            Text("취소")
                         }
                         Button(
                             onClick = {
@@ -1208,7 +1208,7 @@ fun AddChildExpenseDialog(
                                       selectedCategory != null,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("?")
+                            Text("확인")
                         }
                     }
                 }
@@ -1225,10 +1225,10 @@ fun AddChildExpenseDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = { currentScreen = ChildExpenseScreen.MAIN }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "?¤ë¡")
+                            Icon(Icons.Default.ArrowBack, contentDescription = "뒤로")
                         }
                         Text(
-                            text = "ë¬´ì????ì",
+                            text = "다운로드 확인하세요",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -1250,9 +1250,9 @@ fun AddChildExpenseDialog(
                         })
                     }
 
-                    // ???ì·¨ë"
+                    // 확인에 취소"
                 Text(
-                        text = "???ì·¨ë",
+                        text = "확인에 취소",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(vertical = 8.dp)
@@ -1264,9 +1264,9 @@ fun AddChildExpenseDialog(
                         })
                     }
 
-                    // ?í
+                    // 일정
                 Text(
-                        text = "?í",
+                        text = "일정",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(vertical = 8.dp)
@@ -1278,9 +1278,9 @@ fun AddChildExpenseDialog(
                         })
                     }
 
-                    // ?ì¶?ê¸°í"
+                    // 저축 기록"
                 Text(
-                        text = "?ì¶?ê¸°í",
+                        text = "저축 기록",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(vertical = 8.dp)
@@ -1323,11 +1323,11 @@ fun ExpenseCategoryItem(
     }
 }
 
-// ===== ?©ë ê´ë¦?ì»´í¬?í¸ =====
+// ===== 용돈 관리?ì»´í¬?í¸ =====
 
 /**
- * ?ë¦½ê¸?ê³ ì  ì¹´ë
- * ?©ë ?¨ê³?????´ì  ?ë¦½ê¸ì ê³ ì  ?ì
+ * 다음 달?ê³ ì  ì¹´ë
+ * 용돈 ?¨ê³????이전 달다음 달ì ê³ ì  ?ì
  */
 @Composable
 fun PreSavingsCard(child: Child) {
@@ -1359,7 +1359,7 @@ fun PreSavingsCard(child: Child) {
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "?ë¦½ê¸",
+                    text = "다음 달",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
@@ -1382,7 +1382,7 @@ fun PreSavingsCard(child: Child) {
 }
 
 /**
- * ?ë? ?ë³´ ì¹´ë (?©ë ê´ë¦?ë²í¼ ?¬í¨)
+ * ?ë? 정보 ì¹´ë (용돈 관리?ë²í¼ ?¬í¨)
  */
 @Composable
 fun ChildSummaryCardWithAllowance(
@@ -1403,7 +1403,7 @@ fun ChildSummaryCardWithAllowance(
         Column(
             modifier = Modifier.padding(20.dp)
         ) {
-            // ?¤ë: ?ë? ?´ë¦ + ?¸ì§/??  ë²í¼
+            // ?¤ë: ?ë? 닫기 + ?¸ì§/삭제 ë²í¼
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -1436,12 +1436,12 @@ fun ChildSummaryCardWithAllowance(
                 }
                 Row {
                     IconButton(onClick = onEdit) {
-                        Icon(Icons.Default.Edit, contentDescription = "?ì ", modifier = Modifier.size(20.dp))
+                        Icon(Icons.Default.Edit, contentDescription = "수정", modifier = Modifier.size(20.dp))
                     }
                     IconButton(onClick = onDelete) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "?? ",
+                            contentDescription = "삭제",
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(20.dp)
                         )
@@ -1451,15 +1451,15 @@ fun ChildSummaryCardWithAllowance(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ?ì¡ ?ë³´
+            // 금액 정보
             if (child.isAllowanceActive) {
-                // ?©ë ?¨ê³: ?ì¬ ?©ë ?ì¡ë§??¬ê² ?ì
+                // 용돈 ?¨ê³: 이번 용돈 금액ë§??¬ê² ?ì
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "?ì¬ ?©ë ?ì¡",
+                        text = "이번 용돈 금액",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1471,21 +1471,21 @@ fun ChildSummaryCardWithAllowance(
                     )
                     if (child.allowanceAmount > 0) {
                         Text(
-                            text = "?ê¸° ?©ë: ${String.format("%,d", child.allowanceAmount)}원/${if (child.allowanceFrequency == "weekly") "주" else "월"}",
+                            text = "총 용돈: ${String.format("%,d", child.allowanceAmount)}원/${if (child.allowanceFrequency == "weekly") "주" else "월"}",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
             } else {
-                // ?ë¦½ ?¨ê³: ?ì/ì§ì¶??ì¡ ?ì
+                // ?ë¦½ ?¨ê³: 수입/지출?금액 ?ì
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "?ì",
+                            text = "수입",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1498,7 +1498,7 @@ fun ChildSummaryCardWithAllowance(
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "ì§ì¶",
+                            text = "지출",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1511,7 +1511,7 @@ fun ChildSummaryCardWithAllowance(
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "?ì¡",
+                            text = "금액",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1527,9 +1527,9 @@ fun ChildSummaryCardWithAllowance(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ?©ë ê´ë¦?ë²í¼
+            // 용돈 관리?ë²í¼
 if (child.isAllowanceActive) {
-                // ?©ë ?¨ê³: ?©ë ?¤ì , ?©ë ì£¼ê¸°, ì·¨ì
+                // 용돈 ?¨ê³: 용돈 설정, 용돈 지급, 취소
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1541,7 +1541,7 @@ if (child.isAllowanceActive) {
                     ) {
                         Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("?¤ì ", style = MaterialTheme.typography.bodySmall)
+                        Text("설정", style = MaterialTheme.typography.bodySmall)
                     }
                     Button(
                         onClick = onGiveAllowance,
@@ -1550,18 +1550,18 @@ if (child.isAllowanceActive) {
                     ) {
                         Icon(Icons.Default.AttachMoney, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("?©ë ì£¼ê¸°", style = MaterialTheme.typography.bodySmall)
+                        Text("용돈 지급", style = MaterialTheme.typography.bodySmall)
                     }
                     TextButton(
                         onClick = onCancelAllowance,
                         modifier = Modifier.weight(1f),
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
                     ) {
-                        Text("ì·¨ì", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                        Text("취소", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                     }
                 }
             } else {
-                // ?ë¦½ ?¨ê³: ?©ë ?¤ì  + ?©ë ?ì
+                // ?ë¦½ ?¨ê³: 용돈 설정 + 용돈 연결
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -1572,7 +1572,7 @@ if (child.isAllowanceActive) {
                     ) {
                         Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("?©ë ?¤ì ")
+                        Text("용돈 설정")
                     }
                     Button(
                         onClick = onStartAllowance,
@@ -1581,7 +1581,7 @@ if (child.isAllowanceActive) {
                     ) {
                         Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("?©ë ?ì")
+                        Text("용돈 연결")
                     }
                 }
             }
@@ -1590,7 +1590,7 @@ if (child.isAllowanceActive) {
 }
 
 /**
- * ?©ë ?¤ì  ?¤ì´?¼ë¡ê·? */
+ * 용돈 설정 ?¤ì´?¼ë¡ê·? */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetAllowanceDialog(
@@ -1603,13 +1603,13 @@ fun SetAllowanceDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("${child.name} ?©ë ?¤ì ") },
+        title = { Text("${child.name} 용돈 설정") },
         text = {
             Column {
                 OutlinedTextField(
                     value = amountText,
                     onValueChange = { amountText = it.filter { c -> c.isDigit() } },
-                    label = { Text("?©ë ê¸ì¡") },
+                    label = { Text("용돈 금액") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     suffix = { Text("") },
@@ -1619,7 +1619,7 @@ fun SetAllowanceDialog(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "ì§ê¸?ì£¼ê¸°",
+                    text = "지급 기록",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1633,13 +1633,13 @@ fun SetAllowanceDialog(
                     FilterChip(
                         selected = frequency == "weekly",
                         onClick = { frequency = "weekly" },
-                        label = { Text("ë§¤ì£¼") },
+                        label = { Text("매주") },
                         modifier = Modifier.weight(1f)
                     )
                     FilterChip(
                         selected = frequency == "monthly",
                         onClick = { frequency = "monthly" },
-                        label = { Text("ë§¤ì") },
+                        label = { Text("매월") },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -1655,19 +1655,19 @@ fun SetAllowanceDialog(
                 },
                 enabled = amountText.isNotBlank() && (amountText.toLongOrNull() ?: 0) > 0
             ) {
-                Text("?")
+                Text("확인")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("ì·¨ì")
+                Text("취소")
             }
         }
     )
 }
 
 /**
- * ?©ë ?ì ?ì¸ ?¤ì´?¼ë¡ê·? */
+ * 용돈 연결 주기 ?¤ì´?¼ë¡ê·? */
 @Composable
 fun StartAllowanceConfirmDialog(
     child: Child,
@@ -1678,23 +1678,23 @@ fun StartAllowanceConfirmDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("?©ë ê´ë¦??ì") },
+        title = { Text("용돈 관리?연결") },
         text = {
             Column {
                 Text(
-                    text = "?ì¬ê¹ì? ëª¨ì? ${String.format("%,d", currentBalance)}?ì ?ë¦½ê¸ì¼ë¡???¥íê³? ?©ë ê´ë¦¬ë? ?ì?©ë",
+                    text = "이번 기간 지난 달 ${String.format("%,d", currentBalance)}?ì 다음 달ì¼ë¡?확인?¥íê³? 용돈 관리¬ë? 연결?©ë",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "???ë¦½ê¸ì? ë³ëë¡??ì?©ë??n???©ë ?ì¡? 0?ë????ì?©ë??n???ì¼ë¡?ë°ë ?©ë???ì¡??ì¶ê??©ë",
+                    text = "다음 달에 용돈이 지급됩니다\n\n용돈 금액 확인: 0원\n연결됩니다\n\n자녀마다 용돈을 금액을 추가하세요",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 if (child.allowanceAmount > 0) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "?¤ì ???ê¸° ?©ë: ${String.format("%,d", child.allowanceAmount)}원/${if (child.allowanceFrequency == "weekly") "주" else "월"}",
+                        text = "설정??총 용돈: ${String.format("%,d", child.allowanceAmount)}원/${if (child.allowanceFrequency == "weekly") "주" else "월"}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -1703,19 +1703,19 @@ fun StartAllowanceConfirmDialog(
         },
         confirmButton = {
             Button(onClick = onConfirm) {
-                Text("?ì?ê¸°")
+                Text("연결하기")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("ì·¨ì")
+                Text("취소")
             }
         }
     )
 }
 
 /**
- * ?©ë ì£¼ê¸° ?¤ì´?¼ë¡ê·? */
+ * 용돈 지급 ?¤ì´?¼ë¡ê·? */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GiveAllowanceDialog(
@@ -1727,13 +1727,13 @@ fun GiveAllowanceDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("${child.name}?ê² ?©ë ì£¼ê¸°") },
+        title = { Text("${child.name}의 용돈 지급") },
         text = {
             Column {
                 OutlinedTextField(
                     value = amountText,
                     onValueChange = { amountText = it.filter { c -> c.isDigit() } },
-                    label = { Text("ê¸ì¡") },
+                    label = { Text("금액") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     suffix = { Text("") },
@@ -1755,7 +1755,7 @@ fun GiveAllowanceDialog(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "?ì¬ ?©ë ?ì¡: ${String.format("%,d", child.allowanceBalance)}",
+                    text = "이번 용돈 금액: ${String.format("%,d", child.allowanceBalance)}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1771,12 +1771,12 @@ fun GiveAllowanceDialog(
                 },
                 enabled = amountText.isNotBlank() && (amountText.toLongOrNull() ?: 0) > 0
             ) {
-                Text("ì£¼ê¸°")
+                Text("주기")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("ì·¨ì")
+                Text("취소")
             }
         }
     )

@@ -50,15 +50,15 @@ fun PendingDuplicatesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("ì¤ë³µ ê±°ë ?ì¸") },
+                title = { Text("중복 거래 주기") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "?¤ë¡")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로")
                     }
                 },
                 actions = {
                     IconButton(onClick = { showInfoDialog = true }) {
-                        Icon(Icons.Default.Info, contentDescription = "?ë³´")
+                        Icon(Icons.Default.Info, contentDescription = "정보")
                     }
                 }
             )
@@ -77,7 +77,7 @@ fun PendingDuplicatesScreen(
                     CircularProgressIndicator()
                 }
             } else if (uiState.duplicates.isEmpty()) {
-                // ì²ë¦¬??ì¤ë³µ ê±°ëê° ?ì
+                // ì²ë¦¬??중복 거래ê° ?ì
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -93,13 +93,13 @@ fun PendingDuplicatesScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "ì²ë¦¬??ì¤ë³µ ê±°ëê° ?ìµ?ë¤",
+                            text = "처리할 중복 거래가 없습니다",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         if (uiState.resolvedCount > 0) {
                             Text(
-                                text = "${uiState.resolvedCount}ê±´ì ì¤ë³µ ê±°ëë¥?ì²ë¦¬?ìµ?ë¤",
+                                text = "${uiState.resolvedCount}건의 중복 거래를 처리했습니다",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.outline,
                                 modifier = Modifier.padding(top = 8.dp)
@@ -108,9 +108,9 @@ fun PendingDuplicatesScreen(
                     }
                 }
             } else {
-                // ì¤ë³µ ê±°ë ëª©ë¡
+                // 중복 거래 ëª©ë¡
                 Text(
-                    text = "${uiState.duplicates.size}ê±´ì ì¤ë³µ ê±°ëê° ê°ì??ì?µë",
+                    text = "${uiState.duplicates.size}건의 중복 거래가 감지되었습니다",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.padding(16.dp)
@@ -145,22 +145,22 @@ private fun DuplicateInfoDialog(
             Icon(Icons.Default.Info, contentDescription = null)
         },
         title = {
-            Text("ì¤ë³µ ê±°ë?")
+            Text("중복 거래확인")
         },
         text = {
             Column {
                 Text(
-                    text = "ì²´í¬ì¹´ëë¥??¬ì©?ë©´ ì¹´ë?¬ì? ??ì???ì???ë¦¼???????ìµ?ë¤.",
+                    text = "체크카드를 사용하면 카드사와 은행에서 확인되므로 알림이 올 수 있습니다.",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "ê°ì? ê¸ì¡??ê±°ì ?ì??ê°ì??ë©´ ì¤ë³µ?¼ë¡ ?ë¨?ì¬ ?ì¸???ì²­?©ë",
+                    text = "같은 금액과 거래일 기준으로 감지되면 중복으로 확인 요청합니다",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "\"?¤ìë¶???ì¼?ê² ?ì©\"??? í?ë©´ ê°ì? ì¹´ë+???ì¡°í©?ì???ë?¼ë¡ ì²ë¦¬?©ë",
+                    text = "\"앞으로도 같이 적용\"??? í?ë©´ ê°ì? ì¹´ë+확인??ì¡°í©?ì???ë?¼ë¡ ì²ë¦¬?©ë",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium
                 )
@@ -168,7 +168,7 @@ private fun DuplicateInfoDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("?ì¸")
+                Text("주기")
             }
         }
     )
@@ -197,7 +197,7 @@ private fun DuplicateCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // ê¸ì¡ ?ì
+            // 금액 ?ì
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -214,7 +214,7 @@ private fun DuplicateCard(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "ì¤ë³µ ê°ì",
+                        text = "중복 감지",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -231,7 +231,7 @@ private fun DuplicateCard(
             Divider()
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ê±°ë 1
+            // 거래 1
             TransactionInfoRow(
                 label = "1",
                 bankName = duplicate.transaction1.bankName,
@@ -241,7 +241,7 @@ private fun DuplicateCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // ê±°ë 2
+            // 거래 2
             TransactionInfoRow(
                 label = "2",
                 bankName = duplicate.transaction2.bankName,
@@ -251,7 +251,7 @@ private fun DuplicateCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ?¤ìë¶???ì¼?ê² ?ì© ì²´í¬ë°ì¤
+            // 앞으로도 같이 적용 ì²´í¬ë°ì¤
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -265,7 +265,7 @@ private fun DuplicateCard(
                     onCheckedChange = { applyToFuture = it }
                 )
                 Text(
-                    text = "?¤ìë¶???ì¼?ê² ?ì©",
+                    text = "앞으로도 같이 적용",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -281,7 +281,7 @@ Row(
                     onClick = { onResolve(DuplicateResolution.KEEP_BOTH, applyToFuture) },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("????? ì", style = MaterialTheme.typography.labelSmall)
+                    Text("둘 다 유지", style = MaterialTheme.typography.labelSmall)
                 }
                 Button(
                     onClick = { onResolve(DuplicateResolution.KEEP_FIRST, applyToFuture) },
@@ -290,7 +290,7 @@ Row(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    Text("1ë§?? ì", style = MaterialTheme.typography.labelSmall)
+                    Text("1만 유지", style = MaterialTheme.typography.labelSmall)
                 }
                 Button(
                     onClick = { onResolve(DuplicateResolution.KEEP_SECOND, applyToFuture) },
@@ -299,7 +299,7 @@ Row(
                         containerColor = MaterialTheme.colorScheme.secondary
                     )
                 ) {
-                    Text("2ë§?? ì", style = MaterialTheme.typography.labelSmall)
+                    Text("2만 유지", style = MaterialTheme.typography.labelSmall)
                 }
             }
         }

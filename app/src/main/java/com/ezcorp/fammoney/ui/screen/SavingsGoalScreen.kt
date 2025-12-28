@@ -34,7 +34,7 @@ fun SavingsGoalScreen(
     var showContributeDialog by remember { mutableStateOf<SavingsGoal?>(null) }
     var showDeleteDialog by remember { mutableStateOf<SavingsGoal?>(null) }
 
-    // ëª©í ì¶ê? ?¤ì´?¼ë¡ê·?
+    // 목표 추가 다이얼로그
     if (showAddDialog) {
         AddSavingsGoalDialog(
             onDismiss = { showAddDialog = false },
@@ -68,8 +68,8 @@ fun SavingsGoalScreen(
     showDeleteDialog?.let { goal ->
         AlertDialog(
             onDismissRequest = { showDeleteDialog = null },
-            title = { Text("ëª©í ?? ") },
-            text = { Text("'${goal.name}' ëª©íë¥??? ?ìê² ìµ?ê¹?\nëª¨ë  ?ì¶?ê¸°ë¡???¨ê» ?? ?©ë") },
+            title = { Text("목표 삭제") },
+            text = { Text("'${goal.name}' 목표를 삭제하시겠습니까?\n모든 저축 기록도 함께 삭제됩니다.") },
             confirmButton = {
                 Button(
                     onClick = {
@@ -80,12 +80,12 @@ fun SavingsGoalScreen(
                         containerColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text("?? ")
+                    Text("삭제")
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = null }) {
-                    Text("ì·¨ì")
+                    Text("취소")
                 }
             }
         )
@@ -94,15 +94,15 @@ fun SavingsGoalScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("ëª©í ?ì¶") },
+                title = { Text("목표 저축") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "?¤ë¡ ê°ê¸")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로 가기")
                     }
                 },
                 actions = {
                     IconButton(onClick = { showAddDialog = true }) {
-                        Icon(Icons.Default.Add, contentDescription = "ëª©í ì¶ê")
+                        Icon(Icons.Default.Add, contentDescription = "목표 추가")
                     }
                 }
             )
@@ -126,13 +126,13 @@ fun SavingsGoalScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "?±ë¡??ëª©íê° ?ìµ?ë¤",
+                        text = "등록된 목표가 없습니다",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "ê°ì¡±ê³¼ ?¨ê» ?ì¶?ëª©íë¥??¸ìë³´ì¸",
+                        text = "가족과 함께 저축 목표를 세워보세요",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                     )
@@ -140,7 +140,7 @@ fun SavingsGoalScreen(
                     Button(onClick = { showAddDialog = true }) {
                         Icon(Icons.Default.Add, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("ëª©í ë§ë¤ê¸")
+                        Text("목표 만들기")
                     }
                 }
             }
@@ -152,14 +152,14 @@ fun SavingsGoalScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // ì§í ì¤ì¸ ëª©í
+                // 진행 중인 목표
                 val activeGoals = uiState.savingsGoals.filter { !it.isCompleted }
                 val completedGoals = uiState.savingsGoals.filter { it.isCompleted }
 
                 if (activeGoals.isNotEmpty()) {
                     item {
                         Text(
-                            text = "ì§í ì¤",
+                            text = "진행 중",
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(bottom = 8.dp)
@@ -179,7 +179,7 @@ fun SavingsGoalScreen(
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "?¬ì± ?ë£",
+                            text = "달성 완료",
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(bottom = 8.dp)
@@ -237,20 +237,20 @@ private fun SavingsGoalCard(
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Icon(
                                     Icons.Default.Sync,
-                                    contentDescription = "?ë ?°ë",
+                                    contentDescription = "자동 연동",
                                     modifier = Modifier.size(16.dp),
                                     tint = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
                         Text(
-                            text = "ëª©í: ${String.format("%,d", goal.targetAmount)}",
+                            text = "목표: ${String.format("%,d", goal.targetAmount)}원",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         if (goal.autoDepositEnabled && goal.linkedBankName.isNotBlank()) {
                             Text(
-                                text = "${goal.linkedBankName} ?ë ?°ë",
+                                text = "${goal.linkedBankName} 자동 연동",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.primary
                             )
@@ -260,7 +260,7 @@ private fun SavingsGoalCard(
                 if (goal.isCompleted) {
                     AssistChip(
                         onClick = {},
-                        label = { Text("?¬ì±!") },
+                        label = { Text("달성!") },
                         leadingIcon = {
                             Icon(
                                 Icons.Default.Check,
@@ -273,7 +273,7 @@ private fun SavingsGoalCard(
                     IconButton(onClick = onDelete) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "?? ",
+                            contentDescription = "삭제",
                             tint = MaterialTheme.colorScheme.error
                         )
                     }
@@ -282,14 +282,14 @@ private fun SavingsGoalCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ì§íë¥?ë°?
+            // 진행률 바
             Column {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "${String.format("%,d", goal.currentAmount)}",
+                        text = "${String.format("%,d", goal.currentAmount)}원",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -317,7 +317,7 @@ private fun SavingsGoalCard(
                 ) {
                     Icon(Icons.Default.Add, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("?ì¶íê¸")
+                    Text("저축하기")
                 }
             }
         }
@@ -332,22 +332,22 @@ fun AddSavingsGoalDialog(
 ) {
     var name by remember { mutableStateOf("") }
     var amountInput by remember { mutableStateOf("") }
-    var selectedEmoji by remember { mutableStateOf("?¯") }
+    var selectedEmoji by remember { mutableStateOf("🎯") }
     var autoDepositEnabled by remember { mutableStateOf(false) }
     var linkedAccountNumber by remember { mutableStateOf("") }
     var linkedBankName by remember { mutableStateOf("") }
     var showBankDropdown by remember { mutableStateOf(false) }
 
-    val emojis = listOf("?¯", "? ", "?", "?ï¸", "?", "?±", "?»", "?®", "?", "?¼", "?", "?ï¸")
+    val emojis = listOf("🎯", "🏠", "✈️", "🚗", "💍", "📱", "💻", "🎓", "👶", "🏥", "💰", "🎁")
     val banks = listOf(
-        "êµ???", "? í?", "?°ë¦¬?", "?ë?", "?í?",
-        "ê¸°ì?", "ì¹´ì¹´?¤ë±", "? ì¤ë±í¬", "ì¼?´ë±", "SC?ì¼?",
-        "?¨í°?", "?ë§?ê¸ê³", "? í", "?°ì²´êµ", "ê¸°í"
+        "국민은행", "신한은행", "우리은행", "하나은행", "농협은행",
+        "기업은행", "카카오뱅크", "토스뱅크", "케이뱅크", "SC제일은행",
+        "씨티은행", "새마을금고", "신협", "수협", "기타"
     )
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("???ì¶?ëª©í") },
+        title = { Text("새 저축 목표") },
         text = {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
@@ -355,8 +355,8 @@ fun AddSavingsGoalDialog(
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("ëª©í ?´ë¦") },
-                    placeholder = { Text("?? ?ì£¼???¬í") },
+                    label = { Text("목표 이름") },
+                    placeholder = { Text("예: 제주도 여행") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -366,7 +366,7 @@ fun AddSavingsGoalDialog(
                 OutlinedTextField(
                     value = amountInput,
                     onValueChange = { amountInput = it.filter { c -> c.isDigit() } },
-                    label = { Text("ëª©í ê¸ì¡ (") },
+                    label = { Text("목표 금액 (원)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
@@ -374,7 +374,7 @@ fun AddSavingsGoalDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text("?ì´ì½?? í", style = MaterialTheme.typography.bodyMedium)
+                Text("아이콘 선택", style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -406,7 +406,7 @@ fun AddSavingsGoalDialog(
                 Divider()
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // ?ë ?ê¸ ê°ì? ?¤ì 
+                // 자동 입금 감지 설정
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -414,12 +414,12 @@ fun AddSavingsGoalDialog(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "?ë ?ê¸ ê°ì",
+                            text = "자동 입금 감지",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "ê³ì¢ ?ê¸ ???ë?¼ë¡ ë°ì",
+                            text = "계좌 입금 시 자동으로 반영",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -433,8 +433,8 @@ fun AddSavingsGoalDialog(
                 if (autoDepositEnabled) {
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // ???? í
-                ExposedDropdownMenuBox(
+                    // 은행 선택
+                    ExposedDropdownMenuBox(
                         expanded = showBankDropdown,
                         onExpandedChange = { showBankDropdown = it }
                     ) {
@@ -442,7 +442,7 @@ fun AddSavingsGoalDialog(
                             value = linkedBankName,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("???? í") },
+                            label = { Text("은행 선택") },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = showBankDropdown)
                             },
@@ -468,12 +468,12 @@ fun AddSavingsGoalDialog(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // ê³ì¢ë²í¸ ?ë ¥
-                OutlinedTextField(
+                    // 계좌번호 입력
+                    OutlinedTextField(
                         value = linkedAccountNumber,
                         onValueChange = { linkedAccountNumber = it },
-                        label = { Text("?°ë ê³ì¢ë²í¸") },
-                        placeholder = { Text("?? 123-456-789012") },
+                        label = { Text("연동 계좌번호") },
+                        placeholder = { Text("예: 123-456-789012") },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth()
@@ -481,7 +481,7 @@ fun AddSavingsGoalDialog(
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "??ê³ì¢ë¡??ê¸?ë©´ ?ë?¼ë¡ ?ì¶??´ì­??ë°ì?©ë",
+                        text = "해당 계좌로 입금되면 자동으로 저축 내역에 반영됩니다",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -508,12 +508,12 @@ fun AddSavingsGoalDialog(
                     (amountInput.toLongOrNull() ?: 0L) > 0 &&
                     (!autoDepositEnabled || (linkedAccountNumber.isNotBlank() && linkedBankName.isNotBlank()))
             ) {
-                Text("ë§ë¤ê¸")
+                Text("만들기")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("ì·¨ì")
+                Text("취소")
             }
         }
     )
@@ -536,14 +536,14 @@ fun ContributeDialog(
                 OutlinedTextField(
                     value = amountInput,
                     onValueChange = { amountInput = it.filter { c -> c.isDigit() } },
-                    label = { Text("?ì¶?ê¸ì¡ (") },
+                    label = { Text("저축 금액 (원)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "?¨ì? ê¸ì¡: ${String.format("%,d", remaining)}",
+                    text = "남은 금액: ${String.format("%,d", remaining)}원",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -559,12 +559,12 @@ fun ContributeDialog(
                 },
                 enabled = amountInput.isNotBlank() && (amountInput.toLongOrNull() ?: 0L) > 0
             ) {
-                Text("?ì¶íê¸")
+                Text("저축하기")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("ì·¨ì")
+                Text("취소")
             }
         }
     )

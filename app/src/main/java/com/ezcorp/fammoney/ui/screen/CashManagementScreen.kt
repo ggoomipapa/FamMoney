@@ -40,10 +40,10 @@ fun CashManagementScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("?�금 관�") },
+                title = { Text("현금 관리") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "?�로")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로")
                     }
                 }
             )
@@ -53,7 +53,7 @@ fun CashManagementScreen(
                 onClick = { showAddDialog = true },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "?�금 거래 추�")
+                Icon(Icons.Default.Add, contentDescription = "현금 거래 추가")
             }
         }
     ) { paddingValues ->
@@ -125,7 +125,7 @@ fun CashManagementScreen(
         }
     }
 
-    // ?�금 거래 추�? ?�이?�로�"
+    // 현금 거래 추가? ?�이뒤로�"
     if (showAddDialog) {
         AddCashTransactionDialog(
             onDismiss = { showAddDialog = false },
@@ -156,14 +156,14 @@ fun CashMonthSelector(
         }
 
         Text(
-            text = "${year}??${month}",
+            text = "${year}년 ${month}월",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         IconButton(onClick = onNext) {
-            Icon(Icons.Default.ChevronRight, contentDescription = "?�음 ")
+            Icon(Icons.Default.ChevronRight, contentDescription = "삭제 ")
         }
     }
 }
@@ -348,7 +348,7 @@ fun AddCashTransactionDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("?�금 거래 추�") },
+        title = { Text("현금 거래 추가") },
         text = {
             Column(
                 modifier = Modifier.fillMaxWidth(),

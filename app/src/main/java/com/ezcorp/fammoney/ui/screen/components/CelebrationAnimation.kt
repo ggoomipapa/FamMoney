@@ -117,7 +117,7 @@ PulsingIcon(icon = icon)
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("?ì¸", modifier = Modifier.padding(vertical = 4.dp))
+                        Text("주기", modifier = Modifier.padding(vertical = 4.dp))
                     }
                 }
             }
@@ -174,7 +174,7 @@ fun ConfettiAnimation(
             List(particleCount) {
                 ConfettiParticle(
                     x = Random.nextFloat(),
-                    y = Random.nextFloat() * -1f,  // ?ë©´ ?ì???ì
+                    y = Random.nextFloat() * -1f,  // ?ë©´ ?ì??연결
                 color = confettiColors.random(),
                     size = Random.nextFloat() * 10f + 5f,
                     velocityX = (Random.nextFloat() - 0.5f) * 0.02f,
@@ -228,7 +228,7 @@ fun AchievementUnlockedDialog(
     onDismiss: () -> Unit
 ) {
     CelebrationDialog(
-        title = "? ?ì  ?¬ì±!",
+        title = "? ?ì  완료!",
         message = "$achievementIcon $achievementTitle",
         icon = achievementIcon,
         subMessage = achievementDescription,
@@ -271,7 +271,7 @@ fun SurplusAchievedDialog(
             "?ì?ì ?ìë¡? $formattedSurplus ?ì ëª¨ì?´ì"
         }
         consecutiveMonths > 1 -> {
-            "${consecutiveMonths}ê°ì ?°ì ?ì! ?´ë² ??$formattedSurplus ???ì½"
+            "${consecutiveMonths}개월 연속 ?ì! ?´ë² ??$formattedSurplus ???ì½"
         }
         else -> {
             "?´ë² ??$formattedSurplus ?ì ëª¨ì?´ì!"
@@ -287,10 +287,10 @@ fun SurplusAchievedDialog(
     }
 
     val subMessage = when {
-        consecutiveMonths >= 6 -> "??¨í´?? ?¬ì  ê´ë¦¬ì ?¬ì¸?´ì?¤ì!"
+        consecutiveMonths >= 6 -> "확인?¨í´?? ?¬ì  ê´ë¦¬ì ?¬ì¸?´ì?¤ì!"
         consecutiveMonths >= 3 -> "?µê????ì´ê°ê³??ì´?? ê³ì ?ë´?¸ì!"
         previousDeficit != null -> "ì§?ë¬ë³´ë¤ ${"%,d".format(surplusAmount + (previousDeficit ?: 0))}?ì´??ê°ì ?ì´"
-        else -> "???ì´?¤ë? ? ì??ë©´ ??ëª©í???¬ì±?????ì´"
+        else -> "???ì´?¤ë? ? ì??ë©´ ??목표??완료?????ì´"
     }
 
     CelebrationDialog(
@@ -303,7 +303,7 @@ fun SurplusAchievedDialog(
 }
 
 /**
- * ëª©í ?¬ì± ì¶í ?¤ì´?¼ë¡ê·? */
+ * 목표 완료 ì¶í ?¤ì´?¼ë¡ê·? */
 @Composable
 fun GoalAchievedDialog(
     goalName: String,
@@ -314,10 +314,10 @@ fun GoalAchievedDialog(
     val formattedAmount = "%,d".format(goalAmount)
 
     CelebrationDialog(
-        title = "?¯ ëª©í ?¬ì±!",
+        title = "좋음 목표 완료!",
         message = "$goalName\n$formattedAmount ??ëª¨ì¼ê¸??ë£!",
         icon = "?",
-        subMessage = "${daysToAchieve}??ë§ì ëª©íë¥??¬ì±?ì´",
+        subMessage = "${daysToAchieve}??ë§ì 목표를?완료?ì´",
         onDismiss = onDismiss
     )
 }

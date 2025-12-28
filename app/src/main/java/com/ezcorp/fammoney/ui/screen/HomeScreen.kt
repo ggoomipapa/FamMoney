@@ -106,9 +106,9 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(uiState.currentGroup?.name ?: "?¸ë¨¸") },
+                title = { Text(uiState.currentGroup?.name ?: "팸머니") },
                 actions = {
-                    // ì¤ë³µ ê±°ë ?ë¦¼ ë°°ì? (ì¤ë³µ ê±°ëê° ?ì ?ë§ ?ì) - ?? ì²?ë²ì§¸???ì
+                    // 중복 거래 ?ë¦¼ ë°°ì? (중복 거래ê° ?ì ?ë§ ?ì) - ?? ì²?ë²ì§¸???ì
                 if (uiState.pendingDuplicatesCount > 0) {
                         Box(
                             modifier = Modifier
@@ -118,7 +118,7 @@ fun HomeScreen(
                         ) {
                             Icon(
                                 Icons.Default.ContentCopy,
-                                contentDescription = "ì¤ë³µ ê±°ë",
+                                contentDescription = "중복 거래",
                                 modifier = Modifier.size(24.dp)
                             )
                             // ë°°ì?ë¥?????ë³´ì´ê²??¤ë¥¸ìª??ì ?ì
@@ -144,17 +144,17 @@ fun HomeScreen(
                     }
 
                     if (isCompactScreen) {
-                        // ì¢ì? ?ë©´: ?µê³? ?¤ì ë§?ì§ì  ?ì, ?ë¨¸ì§???¤ë²?ë¡??ë©ë´
+                        // ì¢ì? ?ë©´: 통계확인 설정ë§?ì§ì  ?ì, ?ë¨¸ì§???¤ë²?ë¡??ë©ë´
                 IconButton(onClick = onNavigateToStatistics) {
-                            Icon(Icons.Default.BarChart, contentDescription = "?µê³")
+                            Icon(Icons.Default.BarChart, contentDescription = "통계")
                         }
                         IconButton(onClick = onNavigateToSettings) {
-                            Icon(Icons.Default.Settings, contentDescription = "?¤ì ")
+                            Icon(Icons.Default.Settings, contentDescription = "설정")
                         }
                         // ?¤ë²?ë¡??ë©ë´
                 Box {
                             IconButton(onClick = { showOverflowMenu = true }) {
-                                Icon(Icons.Default.MoreVert, contentDescription = "?ë³´ê¸")
+                                Icon(Icons.Default.MoreVert, contentDescription = "더보기")
                             }
                             DropdownMenu(
                                 expanded = showOverflowMenu,
@@ -162,7 +162,7 @@ fun HomeScreen(
                             ) {
                                 if (uiState.cashManagementEnabled) {
                                     DropdownMenuItem(
-                                        text = { Text("?ê¸ ê´ë¦") },
+                                        text = { Text("현금 관리") },
                                         onClick = {
                                             showOverflowMenu = false
                                             onNavigateToCashManagement()
@@ -174,7 +174,7 @@ fun HomeScreen(
                                 }
                                 if (uiState.currentGroup?.childIncomeEnabled == true) {
                                     DropdownMenuItem(
-                                        text = { Text("?ë? ?ì") },
+                                        text = { Text("용돈 관리") },
                                         onClick = {
                                             showOverflowMenu = false
                                             onNavigateToChildIncome()
@@ -190,19 +190,19 @@ fun HomeScreen(
                         // ?ì? ?ë©´: ëª¨ë  ?ì´ì½??ì
                 if (uiState.cashManagementEnabled) {
                             IconButton(onClick = onNavigateToCashManagement) {
-                                Icon(Icons.Default.Payments, contentDescription = "?ê¸ ê´ë¦")
+                                Icon(Icons.Default.Payments, contentDescription = "현금 관리")
                             }
                         }
                         if (uiState.currentGroup?.childIncomeEnabled == true) {
                             IconButton(onClick = onNavigateToChildIncome) {
-                                Icon(Icons.Default.ChildCare, contentDescription = "?ë? ?ì")
+                                Icon(Icons.Default.ChildCare, contentDescription = "용돈 관리")
                             }
                         }
                         IconButton(onClick = onNavigateToStatistics) {
-                            Icon(Icons.Default.BarChart, contentDescription = "?µê³")
+                            Icon(Icons.Default.BarChart, contentDescription = "통계")
                         }
                         IconButton(onClick = onNavigateToSettings) {
-                            Icon(Icons.Default.Settings, contentDescription = "?¤ì ")
+                            Icon(Icons.Default.Settings, contentDescription = "설정")
                         }
                     }
                 }
@@ -213,7 +213,7 @@ fun HomeScreen(
                 onClick = { showAddTransactionDialog = true },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "ê±°ë ì¶ê")
+                Icon(Icons.Default.Add, contentDescription = "거래 추가")
             }
         }
     ) { paddingValues ->
@@ -253,12 +253,12 @@ fun HomeScreen(
                 // AI ?¸ì¬?´í¸ ?¹ì (ì»¤ë¥??AI ?ì©)
                 item {
                     if (uiState.isAIEnabled) {
-                        // êµ¬ë?? ?ì²´ AI ê¸°ë¥ ?ì
+                        // êµ¬ë?? 인사이트 AI ê¸°ë¥ ?ì
                 Column(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            // ì§ì¶??ì¸¡ ì¹´ë
+                            // 지출??ì¸¡ ì¹´ë
                 SpendingPredictionCard(
                                 prediction = uiState.spendingPrediction,
                                 currentExpense = uiState.totalExpense
@@ -284,7 +284,7 @@ fun HomeScreen(
                                 modifier = Modifier.fillMaxWidth()
                             )
 
-                            // ?¼ì³ì§??í?????ì¸ ?´ì© ?ì
+                            // ?¼ì³ì§??í?????ì¸ 내용 ?ì
                 androidx.compose.animation.AnimatedVisibility(
                                 visible = isAITeaserExpanded
                             ) {
@@ -298,7 +298,7 @@ fun HomeScreen(
                     }
                 }
 
-                // ëª©í ?ì¶?ì¹´ë (ëª©íê° ?ì ?ë§ ?ì)
+                // 목표 저축?ì¹´ë (목표ê° ?ì ?ë§ ?ì)
                 if (uiState.savingsGoals.isNotEmpty()) {
                     item {
                         SavingsGoalCard(
@@ -356,18 +356,18 @@ fun MonthSelector(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onPrevious) {
-            Icon(Icons.Default.ChevronLeft, contentDescription = "?´ì  ")
+            Icon(Icons.Default.ChevronLeft, contentDescription = "이전 달")
         }
 
         Text(
-            text = "${year}??${month}",
+            text = "${year}년 ${month}월",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         IconButton(onClick = onNext) {
-            Icon(Icons.Default.ChevronRight, contentDescription = "?¤ì ")
+            Icon(Icons.Default.ChevronRight, contentDescription = "다음 달")
         }
     }
 }
@@ -400,7 +400,7 @@ fun SummaryCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "?ì",
+                    text = "수입",
                     style = if (isCompactScreen) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -425,7 +425,7 @@ fun SummaryCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "ì§ì¶",
+                    text = "지출",
                     style = if (isCompactScreen) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -449,10 +449,10 @@ fun SummaryCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f)
             ) {
-                // ?ê³  ê¸°ë¥???ì±?ëë©??ì¬ ?ê³  ?ì, ?ëë©??©ê³ ?ì
+                // 잔고 ê¸°ë¥???ì±?ëë©??ì¬ 잔고 ?ì, ?ëë©?합계 ?ì
                 if (balanceEnabled) {
                     Text(
-                        text = "?ê³ ",
+                        text = "잔고",
                         style = if (isCompactScreen) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -466,7 +466,7 @@ fun SummaryCard(
                     )
                 } else {
                     Text(
-                        text = "?©ê³",
+                        text = "합계",
                         style = if (isCompactScreen) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -509,13 +509,13 @@ fun SavingsGoalCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "ëª©í ?ì¶",
+                    text = "목표 저축",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
                 Icon(
                     Icons.Default.ChevronRight,
-                    contentDescription = "?ë³´ê¸",
+                    contentDescription = "더보기",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -575,7 +575,7 @@ fun UserFilterChips(
             FilterChip(
                 selected = selectedUserId == null,
                 onClick = { onUserSelected(null) },
-                label = { Text("?ì²´") }
+                label = { Text("전체") }
             )
         }
         items(users) { user ->
@@ -604,8 +604,8 @@ fun TransactionItem(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("??  ?ì¸") },
-            text = { Text("??ê±°ë ?´ì­???? ?ìê² ìµ?ê¹") },
+            title = { Text("삭제 확인") },
+            text = { Text("이 거래 내역을 삭제하시겠습니까?") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -613,12 +613,12 @@ fun TransactionItem(
                         showDeleteDialog = false
                     }
                 ) {
-                    Text("?? ", color = MaterialTheme.colorScheme.error)
+                    Text("삭제", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("ì·¨ì")
+                    Text("취소")
                 }
             }
         )
@@ -672,7 +672,7 @@ Row(
 
         Spacer(modifier = Modifier.width(if (isCompactScreen) 8.dp else 12.dp))
 
-        // ?¤ë¥¸ìª? ê¸ì¡
+        // ?¤ë¥¸ìª? 금액
         Text(
             text = "${if (transaction.type == TransactionType.INCOME) "+" else "-"}${String.format("%,d", transaction.amount)}",
             style = if (isCompactScreen) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium,
@@ -704,13 +704,13 @@ fun EmptyTransactionsMessage() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "ê±°ë ?´ì­???ìµ?ë¤",
+            text = "거래 내역이 없습니다",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "????ë¦¼???¤ë©´ ?ë?¼ë¡ ê¸°ë¡?©ë??n?ë ?ë?¼ë¡ ?ë ¥?´ë³´?¸ì",
+            text = "알림을 통해 자동으로 기록됩니다\n또는 직접 입력해보세요",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             textAlign = TextAlign.Center
@@ -726,7 +726,7 @@ fun HighAmountConfirmDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("ê³ ì¡ ê±°ë ?ì¸") },
+        title = { Text("고액 거래 확인") },
         text = {
             Column {
                 Text(
@@ -735,37 +735,37 @@ fun HighAmountConfirmDialog(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "????ª©??ê°ê³ë?????¥í ê¹ì",
+                    text = "이 거래 내역을 삭제하시겠습니까",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "?´ì©: ${transaction.description}",
+                    text = "내용: ${transaction.description}",
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = "??? ${transaction.bankName}",
+                    text = "확인?? ${transaction.bankName}",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
         },
         confirmButton = {
             Button(onClick = onConfirm) {
-                Text("?")
+                Text("확인")
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("ì·¨ì")
+                Text("취소")
             }
         }
     )
 }
 
 /**
- * ê±°ë ì¶ê? ë°í??í¸
- * AlertDialog ???ModalBottomSheetë¥??¬ì©?ì¬ ?´ë? ? í UI???z-index ì¶©ë ë°©ì"
+ * 거래 추가? ë°í??í¸
+ * AlertDialog 확인??ModalBottomSheetë¥??¬ì©?ì¬ ?´ë? ? í UI확인??z-index ì¶©ë ë°©ì"
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -783,7 +783,7 @@ fun AddTransactionDialog(
     var selectedMerchantName by remember { mutableStateOf("") }
     var memo by remember { mutableStateOf("") }
 
-    // ?ë? ?©ë ?°ë
+    // ?ë? 용돈 ?°ë
     var linkedChildId by remember { mutableStateOf("") }
     var linkedChildName by remember { mutableStateOf("") }
 
@@ -796,7 +796,7 @@ fun AddTransactionDialog(
     ) {
         when (currentScreen) {
             AddTransactionScreen.MAIN -> {
-                // ë©ì¸ ê±°ë ?ë ¥ ?ë©´
+                // ë©ì¸ 거래 ?ë ¥ ?ë©´
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -805,13 +805,13 @@ fun AddTransactionDialog(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "ê±°ë ì¶ê",
+                        text = "거래 추가",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    // ?ì/ì§ì¶?? í
+                    // 수입/지출?? í
                 Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -819,7 +819,7 @@ fun AddTransactionDialog(
                         FilterChip(
                             selected = transactionType == TransactionType.INCOME,
                             onClick = { transactionType = TransactionType.INCOME },
-                            label = { Text("?ì") },
+                            label = { Text("수입") },
                             leadingIcon = if (transactionType == TransactionType.INCOME) {
                                 { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
                             } else null,
@@ -832,7 +832,7 @@ fun AddTransactionDialog(
                         FilterChip(
                             selected = transactionType == TransactionType.EXPENSE,
                             onClick = { transactionType = TransactionType.EXPENSE },
-                            label = { Text("ì§ì¶") },
+                            label = { Text("지출") },
                             leadingIcon = if (transactionType == TransactionType.EXPENSE) {
                                 { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
                             } else null,
@@ -844,27 +844,27 @@ fun AddTransactionDialog(
                         )
                     }
 
-                    // ê¸ì¡ ?ë ¥
+                    // 금액 ?ë ¥
                 OutlinedTextField(
                         value = amountText,
                         onValueChange = { amountText = it.filter { c -> c.isDigit() } },
-                        label = { Text("ê¸ì¡") },
+                        label = { Text("금액") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
                         suffix = { Text("") },
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    // ?´ì© ?ë ¥
+                    // 내용 ?ë ¥
                 OutlinedTextField(
                         value = description,
                         onValueChange = { description = it },
-                        label = { Text("?´ì©") },
+                        label = { Text("내용") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    // ?ë¹? í ? í
+                    // 카테고리 선택
                 OutlinedCard(
                         onClick = { currentScreen = AddTransactionScreen.CATEGORY },
                         modifier = Modifier.fillMaxWidth()
@@ -877,16 +877,16 @@ fun AddTransactionDialog(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             if (selectedCategory.isNotBlank()) {
-                                // ?ë? ?©ë ì¹´íê³ ë¦¬??ê²½ì° ?¹ë³ ?ì
+                                // ?ë? 용돈 가이드 목록??ê²½ì° ?¹ë³ ?ì
                 if (linkedChildId.isNotEmpty()) {
-                                    Text("?¶ $linkedChildName ?©ë")
+                                    Text("👶 $linkedChildName 용돈")
                                 } else {
                                     val category = SpendingCategory.fromString(selectedCategory)
                                     Text("${category.icon} ${category.displayName}")
                                 }
                             } else {
                                 Text(
-                                    "?ë¹? í ? í",
+                                    "카테고리 선택",
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
@@ -894,7 +894,7 @@ fun AddTransactionDialog(
                         }
                     }
 
-                    // ?¬ì©ì²?? í (ì§ì¶ì¼ ?ë§)
+                    // 사용처 선택 (지출ì¼ ?ë§)
                 if (transactionType == TransactionType.EXPENSE) {
                         OutlinedCard(
                             onClick = { currentScreen = AddTransactionScreen.MERCHANT },
@@ -911,7 +911,7 @@ fun AddTransactionDialog(
                                     Text(selectedMerchantName)
                                 } else {
                                     Text(
-                                        "?¬ì©ì²?? í",
+                                        "사용처 선택",
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
@@ -920,11 +920,11 @@ fun AddTransactionDialog(
                         }
                     }
 
-                    // ë©ëª¨ ?ë ¥
+                    // 메모 ?ë ¥
                 OutlinedTextField(
                         value = memo,
                         onValueChange = { memo = it },
-                        label = { Text("ë©ëª¨ (? í)") },
+                        label = { Text("메모 (선택)") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -940,7 +940,7 @@ fun AddTransactionDialog(
                             onClick = onDismiss,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("ì·¨ì")
+                            Text("취소")
                         }
                         Button(
                             onClick = {
@@ -952,14 +952,14 @@ fun AddTransactionDialog(
                             enabled = amountText.isNotBlank() && (amountText.toLongOrNull() ?: 0) > 0,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("?")
+                            Text("확인")
                         }
                     }
                 }
             }
 
             AddTransactionScreen.CATEGORY -> {
-                // ì¹´íê³ ë¦¬ ? í ?ë©´
+                // 가이드 목록 ? í ?ë©´
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -970,10 +970,10 @@ fun AddTransactionDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = { currentScreen = AddTransactionScreen.MAIN }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "?¤ë¡")
+                            Icon(Icons.Default.ArrowBack, contentDescription = "뒤로")
                         }
                         Text(
-                            text = "?ë¹? í ? í",
+                            text = "카테고리 선택",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -985,7 +985,7 @@ fun AddTransactionDialog(
                         modifier = Modifier.heightIn(max = 450.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // ?ë? ?©ë ì¹´íê³ ë¦¬ (ë§??ì ?ì)
+                        // ?ë? 용돈 가이드 목록 (ë§??ì ?ì)
                 if (childIncomeEnabled && children.isNotEmpty()) {
                             item {
                                 ChildAllowanceCategoryGroup(
@@ -1029,7 +1029,7 @@ fun AddTransactionDialog(
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("?¥ ?í", SpendingCategory.livingGroup) {
+                        item { CategoryGroup("?¥ 일정", SpendingCategory.livingGroup) {
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
@@ -1041,7 +1041,7 @@ fun AddTransactionDialog(
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("? êµì¡", SpendingCategory.educationGroup) {
+                        item { CategoryGroup("좋아요 êµì¡", SpendingCategory.educationGroup) {
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
@@ -1066,7 +1066,7 @@ fun AddTransactionDialog(
             }
 
             AddTransactionScreen.MERCHANT -> {
-                // ?¬ì©ì²?? í ?ë©´
+                // 사용처 선택 ?ë©´
                 var searchQuery by remember { mutableStateOf("") }
                 val merchants = remember { Merchant.getDefaultMerchants() }
                 val filteredMerchants = remember(searchQuery) {
@@ -1084,10 +1084,10 @@ fun AddTransactionDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = { currentScreen = AddTransactionScreen.MAIN }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "?¤ë¡")
+                            Icon(Icons.Default.ArrowBack, contentDescription = "뒤로")
                         }
                         Text(
-                            text = "?¬ì©ì²?? í",
+                            text = "사용처 선택",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -1098,7 +1098,7 @@ fun AddTransactionDialog(
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
-                        placeholder = { Text("ê²") },
+                        placeholder = { Text("검색") },
                         leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
@@ -1136,7 +1136,7 @@ fun AddTransactionDialog(
     }
 }
 
-// ê±°ë ì¶ê? ?ë©´ ?í
+// 거래 추가? ?ë©´ ?í
 private enum class AddTransactionScreen {
     MAIN,
     CATEGORY,
@@ -1169,8 +1169,8 @@ private fun CategoryGroup(
 }
 
 /**
- * ?ë? ?©ë ì¹´íê³ ë¦¬ ê·¸ë£¹
- * ?ë? ëª©ë¡?ì ?ì ?¼ë¡ ?ì±?ë ?©ë ì¹´íê³ ë¦¬
+ * ?ë? 용돈 가이드 목록 ê·¸ë£¹
+ * ?ë? ëª©ë¡?ì ?ì ?¼ë¡ ?ì±?ë 용돈 가이드 목록
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -1180,7 +1180,7 @@ private fun ChildAllowanceCategoryGroup(
 ) {
     Column {
         Text(
-            text = "?¶ ?ë? ?©ë",
+            text = "👶 자녀 용돈",
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.padding(vertical = 8.dp)
         )
@@ -1189,7 +1189,7 @@ private fun ChildAllowanceCategoryGroup(
                 FilterChip(
                     selected = false,
                     onClick = { onChildSelected(child.id, child.name) },
-                    label = { Text("?¶ ${child.name} ?©ë") }
+                    label = { Text("👶 ${child.name} 용돈") }
                 )
             }
         }

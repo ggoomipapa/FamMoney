@@ -34,7 +34,7 @@ import com.ezcorp.fammoney.service.SmartInsight
 import com.ezcorp.fammoney.service.SpendingPrediction
 
 /**
- * AI ?�사?�트 카드 (???�면??
+ * AI 인사이트 카드 (???�면??
  */
 @Composable
 fun AIInsightCard(
@@ -68,7 +68,7 @@ fun AIInsightCard(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "AI ?�사?�트",
+                        text = "AI 인사이트",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -97,7 +97,7 @@ fun AIInsightCard(
                 }
             } else if (insights.isEmpty()) {
                 Text(
-                    text = "?�이?��? 분석 중입?�다...",
+                    text = "데이터 분석 중입니다...",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -164,7 +164,7 @@ private fun InsightChip(
 }
 
 /**
- * 지�??�측 카드
+ * 지개?�측 카드
  */
 @Composable
 fun SpendingPredictionCard(
@@ -219,7 +219,7 @@ fun SpendingPredictionCard(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = when (prediction.trend) {
-                                "increase" -> "증�? 추세"
+                                "increase" -> "증개 추세"
                                 "decrease" -> "감소 추세"
                                 else -> "?��"
                             },
@@ -273,7 +273,7 @@ fun SpendingPredictionCard(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "?��? ${prediction.remainingDays}??· ?�재 ${String.format("%,d", currentExpense)}???�용",
+                text = "약 ${prediction.remainingDays}일 남은 ${String.format("%,d", currentExpense)}원 사용",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -282,7 +282,7 @@ fun SpendingPredictionCard(
 }
 
 /**
- * 목표 ?�측 카드 (?��? 버전)
+ * 목표 예측 카드 (간략 버전)
  */
 @Composable
 fun GoalPredictionChip(
@@ -305,7 +305,7 @@ fun GoalPredictionChip(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // ?�성 ?�률 ?�형
+            // 달성 확률 원형
             Box(
                 modifier = Modifier
                     .size(32.dp)
@@ -342,8 +342,8 @@ fun GoalPredictionChip(
 }
 
 /**
- * AI ?��? 카드 (?�힌 ?�태 - ?�기???�발)
- * 무료 ?�용?�에�?부???�이 AI 기능 존재�??�림
+ * AI ?�개 카드 (?�힌 ?�태 - 닫기???�발)
+ * 무료 ?�용?�에개부???�이 AI 기능 존재개?�림
  */
 @Composable
 fun AITeaserCard(
@@ -447,20 +447,20 @@ fun AILockedCard(
                     Spacer(modifier = Modifier.width(12.dp))
 
                     Text(
-                        text = "AI ?�사?�트",
+                        text = "AI 인사이트",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
 
-                // ?�기 버튼
+                // 닫기 버튼
                 IconButton(
                     onClick = onDismiss,
                     modifier = Modifier.size(24.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "?�기",
+                        contentDescription = "닫기",
                         modifier = Modifier.size(16.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -469,7 +469,7 @@ fun AILockedCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // 미리보기 ??��??(?�릿?�게)
+            // 미리보기 내용 (블러하게)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -495,7 +495,7 @@ fun AILockedCard(
                 )
             ) {
                 Text(
-                    text = "커넥??AI�??�금 ?�제",
+                    text = "커넥트 AI로 지금 해제",
                     style = MaterialTheme.typography.labelLarge
                 )
             }

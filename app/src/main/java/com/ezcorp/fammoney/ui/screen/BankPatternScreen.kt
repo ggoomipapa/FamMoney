@@ -29,18 +29,18 @@ fun BankPatternScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("SMS ?�싱 ?�턴 관�") },
+                title = { Text("SMS 알림 패턴 관리") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "?�로 가�")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로 가기")
                     }
                 },
                 actions = {
                     IconButton(onClick = { showResetDialog = true }) {
-                        Icon(Icons.Default.Refresh, contentDescription = "초기")
+                        Icon(Icons.Default.Refresh, contentDescription = "초기화")
                     }
                     IconButton(onClick = { onNavigateToEdit("new") }) {
-                        Icon(Icons.Default.Add, contentDescription = "???�턴")
+                        Icon(Icons.Default.Add, contentDescription = "새 패턴")
                     }
                 }
             )
@@ -79,15 +79,15 @@ fun BankPatternScreen(
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    "?�턴 관�??�내",
+                                    "패턴 관리 안내",
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             }
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                "?�??카드??SMS ?�식??변경되�??�기???�턴???�정?????�습?�다.\n" +
-                                "?�턴???�못 ?�정?�면 거래가 ?�식?��? ?�을 ???�으??주의?�세",
+                                "은행이나 카드사의 SMS 형식이 변경되면 패턴을 수정할 수 있습니다.\n" +
+                                "패턴을 잘못 수정하면 거래가 인식되지 않을 수 있으니 주의하세요",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer
                             )
@@ -95,10 +95,10 @@ fun BankPatternScreen(
                     }
                 }
 
-                // 기본 ?�턴 (?�정 불�", 비활?�화�?가?"
+                // 기본 패턴 (수정 불가, 비활성화만 가능)
                 item {
                     Text(
-                        "기본 ?�턴",
+                        "기본 패턴",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
@@ -116,13 +116,13 @@ fun BankPatternScreen(
                     )
                 }
 
-                // ?�용???�의 ?�턴
+                // 사용자 정의 패턴
                 val customPatterns = uiState.patterns.filter { it.isCustom }
                 if (customPatterns.isNotEmpty()) {
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            "?�용???�의 ?�턴",
+                            "사용자 정의 패턴",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )
@@ -148,12 +148,12 @@ fun BankPatternScreen(
         }
     }
 
-    // 초기???�인 ?�이?�로�"
+    // 초기화 확인 다이얼로그
     if (showResetDialog) {
         AlertDialog(
             onDismissRequest = { showResetDialog = false },
-            title = { Text("?�턴 초기") },
-            text = { Text("모든 ?�턴??기본값으�??�돌리시겠습?�까?\n?�용???�의 ?�턴??모두 ??��?�니") },
+            title = { Text("패턴 초기화") },
+            text = { Text("모든 패턴을 기본값으로 되돌리시겠습니까?\n사용자 정의 패턴은 모두 삭제됩니다") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -161,7 +161,7 @@ fun BankPatternScreen(
                         showResetDialog = false
                     }
                 ) {
-                    Text("초기")
+                    Text("초기화")
                 }
             },
             dismissButton = {
@@ -172,12 +172,12 @@ fun BankPatternScreen(
         )
     }
 
-    // ??�� ?�인 ?�이?�로�?
+    // 삭제 확인 다이얼로그
     showDeleteDialog?.let { patternId ->
         AlertDialog(
             onDismissRequest = { showDeleteDialog = null },
-            title = { Text("?�턴 ??��") },
-            text = { Text("???�턴????��?�시겠습?�까") },
+            title = { Text("패턴 삭제") },
+            text = { Text("이 패턴을 삭제하시겠습니까?") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -185,7 +185,7 @@ fun BankPatternScreen(
                         showDeleteDialog = null
                     }
                 ) {
-                    Text("??��")
+                    Text("삭제")
                 }
             },
             dismissButton = {
@@ -240,7 +240,7 @@ fun PatternListItem(
                             shape = MaterialTheme.shapes.small
                         ) {
                             Text(
-                                "커스?�",
+                                "커스텀",
                                 style = MaterialTheme.typography.labelSmall,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
@@ -251,9 +251,9 @@ fun PatternListItem(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "?�키지: ${pattern.packageNames.size}�?| " +
-                            "?�입 ?�워?? ${pattern.incomeKeywords.size}�?| " +
-                            "지�??�워?? ${pattern.expenseKeywords.size}�",
+                    text = "패키지: ${pattern.packageNames.size}개 | " +
+                            "수입 키워드: ${pattern.incomeKeywords.size}개 | " +
+                            "지출 키워드: ${pattern.expenseKeywords.size}개",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -261,7 +261,7 @@ fun PatternListItem(
                 )
 
                 Text(
-                    text = "금액 ?�턴: ${pattern.amountRegex}",
+                    text = "금액 패턴: ${pattern.amountRegex}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -273,7 +273,7 @@ fun PatternListItem(
                 IconButton(onClick = onDelete) {
                     Icon(
                         Icons.Default.Delete,
-                        contentDescription = "??��",
+                        contentDescription = "삭제",
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
@@ -281,7 +281,7 @@ fun PatternListItem(
 
             Icon(
                 Icons.Default.ChevronRight,
-                contentDescription = "?�집",
+                contentDescription = "편집",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
