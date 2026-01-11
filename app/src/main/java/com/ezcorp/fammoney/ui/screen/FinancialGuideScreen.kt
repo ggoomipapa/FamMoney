@@ -36,7 +36,7 @@ fun FinancialGuideScreen(
                         when {
                             selectedGuide != null -> selectedGuide!!.title
                             selectedCategory != null -> selectedCategory!!.displayName
-                            else -> "ê¸ìµ ê°?´ë"
+                            else -> "금융 가이드"
                         }
                     )
                 },
@@ -90,7 +90,7 @@ fun GuideHomeContent(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // ?¤ë
+        // 헤더
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -101,15 +101,15 @@ fun GuideHomeContent(
                 Column(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    Text("좋아요", fontSize = 32.sp)
+                    Text("💡", fontSize = 32.sp)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "금융 상품 정보 도움",
+                        text = "금융 상품, 쉽게 알아보기",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "CMA, 적금, ETF 등 기초 금융 지식 배우기",
+                        text = "CMA, 적금, ETF 등 기초 금융 지식을 배워보세요.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                     )
@@ -117,7 +117,7 @@ fun GuideHomeContent(
             }
         }
 
-        // 가이드 목록
+        // 카테고리 목록
         item {
             Text(
                 text = "카테고리",
@@ -130,7 +130,7 @@ fun GuideHomeContent(
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(GuideCategory.entries) { category ->
+                items(GuideCategory.values()) { category ->
                     Card(
                         modifier = Modifier
                             .width(120.dp)
@@ -156,11 +156,11 @@ fun GuideHomeContent(
             }
         }
 
-        // 금융 가이드
+        // 전체 금융 가이드
         item {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "금융 가이드",
+                text = "전체 금융 가이드",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -295,7 +295,7 @@ fun GuideDetailContent(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // ?¤ë
+        // 헤더
         item {
             Card(
                 colors = CardDefaults.cardColors(
@@ -323,8 +323,8 @@ fun GuideDetailContent(
             }
         }
 
-        // ë³¸ë¬¸ ?¹ì
-items(guide.content) { section ->
+        // 본문 섹션
+        items(guide.content) { section ->
             Card {
                 Column(
                     modifier = Modifier
@@ -349,7 +349,7 @@ items(guide.content) { section ->
                                 modifier = Modifier.padding(vertical = 4.dp)
                             ) {
                                 Text(
-                                    text = "",
+                                    text = "•",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.primary
                                 )
@@ -365,8 +365,8 @@ items(guide.content) { section ->
             }
         }
 
-        // 
-if (guide.tips.isNotEmpty()) {
+        // 꿀팁
+        if (guide.tips.isNotEmpty()) {
             item {
                 Card(
                     colors = CardDefaults.cardColors(
@@ -379,10 +379,10 @@ if (guide.tips.isNotEmpty()) {
                             .padding(16.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("싫어요", fontSize = 20.sp)
+                            Text("💡", fontSize = 20.sp)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "꿀",
+                                text = "꿀팁",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
@@ -392,7 +392,7 @@ if (guide.tips.isNotEmpty()) {
                             Row(
                                 modifier = Modifier.padding(vertical = 4.dp)
                             ) {
-                                Text("", color = MaterialTheme.colorScheme.primary)
+                                Text("✓", color = MaterialTheme.colorScheme.primary)
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = tip,
@@ -405,11 +405,11 @@ if (guide.tips.isNotEmpty()) {
             }
         }
 
-        // 관련 상품
+        // 관련 링크
         if (guide.relatedLinks.isNotEmpty()) {
             item {
                 Text(
-                    text = "관??링크",
+                    text = "관련 링크",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )

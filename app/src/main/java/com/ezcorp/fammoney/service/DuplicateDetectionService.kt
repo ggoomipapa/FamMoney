@@ -7,13 +7,13 @@ import com.ezcorp.fammoney.data.model.Transaction
 import com.ezcorp.fammoney.data.repository.DuplicateRepository
 import com.ezcorp.fammoney.data.repository.TransactionRepository
 import com.google.firebase.Timestamp
-import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * ì¤ë³µ ê±°ë ê°ì? ?ë¹?? * ì¹´ë? ??ì???ì???ë¦¼???¤ë ê²½ì°ë¥?ê°ì??ì¬ ì²ë¦¬
+ * 중복 거래 감지 서비스
+ * 카드와 은행에서 알림이 동시에 오는 경우를 감지하여 처리
  */
 @Singleton
 class DuplicateDetectionService @Inject constructor(
@@ -21,24 +21,37 @@ class DuplicateDetectionService @Inject constructor(
     private val transactionRepository: TransactionRepository,
     private val userPreferences: UserPreferences
 ) {
-    // ìµê·¼ ê±°ëë¥??ì ???(ë©ëª¨ë¦?ìºì)
+    // 최근 거래를 저장 (메모리 캐시)
     // key: "${userId}_${amount}", value: TransactionCacheEntry
     private val recentTransactions = ConcurrentHashMap<String, TransactionCacheEntry>()
 
-    // ì¤ë³µ ?ì? ?ê° ì°?(ë°ë¦¬ì´) - 2ë¶??´ë´ ê°ì? ê¸ì¡??ê±°ëë¥?ì¤ë³µ?¼ë¡ ê°ì£¼
+    // 중복 감지 시간 창 (밀리초) - 2분 이내 같은 금액의 거래를 중복으로 간주
     private val DUPLICATE_TIME_WINDOW_MS = 2 * 60 * 1000L
 
+    // 카드 알림 키워드
+    private val cardKeywords = listOf("승인", "일시불", "할부", "체크", "신용", "카드")
+    // 은행 알림 키워드
+    private val bankKeywords = listOf("출금", "이체", "입금", "계좌")
+
     /**
-     * ??ê±°ëê° ì¤ë³µ?¸ì? ?ì¸?ê³  ì²ë¦¬
-     * @return null?´ë©´ ì¤ë³µ???ë, PendingDuplicate?´ë©´ ì¤ë³µ ê°ì"
-*/
+     * 알림 텍스트가 카드 알림인지 판단
+     */
+    private fun isCardNotification(originalText: String): Boolean {
+        val cardScore = cardKeywords.count { originalText.contains(it) }
+        val bankScore = bankKeywords.count { originalText.contains(it) }
+        return cardScore > bankScore
+    }
+
+    /**
+     * 새 거래가 중복인지 확인하고 처리
+     */
     suspend fun checkAndHandleDuplicate(
         transaction: Transaction
     ): DuplicateCheckResult {
         val cacheKey = "${transaction.userId}_${transaction.amount}"
         val now = System.currentTimeMillis()
 
-        // ?¤ë??ìºì ?ë¦¬
+        // 오래된 캐시 정리
         cleanupExpiredCache(now)
 
         val existingEntry = recentTransactions[cacheKey]
@@ -46,10 +59,53 @@ class DuplicateDetectionService @Inject constructor(
         if (existingEntry != null) {
             val timeDiff = now - existingEntry.timestamp
             if (timeDiff < DUPLICATE_TIME_WINDOW_MS) {
-                // ì¤ë³µ ê°ì??"
+                // 중복 감지됨
                 val existingTransaction = existingEntry.transaction
 
-                // ê¸°ì¡´ ê·ì¹???ëì§ ?ì¸
+                // 사용자 설정 확인 (카드 우선 / 은행 우선 / 매번 물어보기)
+                val preference = userPreferences.getDuplicatePreference()
+
+                if (preference != UserPreferences.DUPLICATE_PREF_ASK) {
+                    // 자동 처리
+                    val existingIsCard = isCardNotification(existingTransaction.originalText)
+                    val newIsCard = isCardNotification(transaction.originalText)
+
+                    // 같은 유형이면 첫 번째 유지
+                    if (existingIsCard == newIsCard) {
+                        recentTransactions.remove(cacheKey)
+                        return DuplicateCheckResult.SkipSecond
+                    }
+
+                    val keepCard = preference == UserPreferences.DUPLICATE_PREF_CARD
+
+                    return if (keepCard) {
+                        // 카드 알림 우선
+                        if (existingIsCard) {
+                            // 기존이 카드 -> 새 거래(은행) 스킵
+                            recentTransactions.remove(cacheKey)
+                            DuplicateCheckResult.SkipSecond
+                        } else {
+                            // 새 거래가 카드 -> 기존(은행) 삭제
+                            transactionRepository.deleteTransaction(existingTransaction.id)
+                            recentTransactions.remove(cacheKey)
+                            DuplicateCheckResult.KeepSecond(existingTransaction.id)
+                        }
+                    } else {
+                        // 은행 알림 우선
+                        if (!existingIsCard) {
+                            // 기존이 은행 -> 새 거래(카드) 스킵
+                            recentTransactions.remove(cacheKey)
+                            DuplicateCheckResult.SkipSecond
+                        } else {
+                            // 새 거래가 은행 -> 기존(카드) 삭제
+                            transactionRepository.deleteTransaction(existingTransaction.id)
+                            recentTransactions.remove(cacheKey)
+                            DuplicateCheckResult.KeepSecond(existingTransaction.id)
+                        }
+                    }
+                }
+
+                // 기존 규칙이 있는지 확인
                 val groupId = transaction.groupId
                 val rule = duplicateRepository.getDuplicateRule(
                     groupId = groupId,
@@ -58,8 +114,8 @@ class DuplicateDetectionService @Inject constructor(
                 )
 
                 if (rule != null) {
-                    // ê¸°ì¡´ ê·ì¹???°ë¼ ?ë ì²ë¦¬
-                return when (rule.resolution) {
+                    // 기존 규칙에 따라 자동 처리
+                    return when (rule.resolution) {
                         DuplicateResolution.KEEP_BOTH -> {
                             recentTransactions.remove(cacheKey)
                             DuplicateCheckResult.KeepBoth
@@ -69,8 +125,7 @@ class DuplicateDetectionService @Inject constructor(
                             DuplicateCheckResult.SkipSecond
                         }
                         DuplicateResolution.KEEP_SECOND -> {
-                            // ì²?ë²ì§¸ ê±°ë ?? 
-                transactionRepository.deleteTransaction(existingTransaction.id)
+                            transactionRepository.deleteTransaction(existingTransaction.id)
                             recentTransactions.remove(cacheKey)
                             DuplicateCheckResult.KeepSecond(existingTransaction.id)
                         }
@@ -80,19 +135,18 @@ class DuplicateDetectionService @Inject constructor(
                             DuplicateCheckResult.DeleteBoth(existingTransaction.id)
                         }
                         DuplicateResolution.PENDING -> {
-                            // ê·ì¹??PENDING?´ë©´ ?¬ì©?ìê²?ë¬¼ì´ë´?
-                createPendingDuplicate(existingTransaction, transaction, cacheKey)
+                            createPendingDuplicate(existingTransaction, transaction, cacheKey)
                         }
                     }
                 } else {
-                    // ê·ì¹???ì¼ë©??¬ì©?ìê²?ë¬¼ì´ë´?
-                return createPendingDuplicate(existingTransaction, transaction, cacheKey)
+                    // 규칙이 없으면 사용자에게 물어봄
+                    return createPendingDuplicate(existingTransaction, transaction, cacheKey)
                 }
             }
         }
 
-        // ìºì???
-recentTransactions[cacheKey] = TransactionCacheEntry(
+        // 캐시에 추가
+        recentTransactions[cacheKey] = TransactionCacheEntry(
             transaction = transaction,
             timestamp = now
         )
@@ -145,7 +199,7 @@ recentTransactions[cacheKey] = TransactionCacheEntry(
     }
 
     /**
-     * ì¤ë³µ ?´ê²° ì²ë¦¬
+     * 중복 해결 처리
      */
     suspend fun resolveDuplicate(
         duplicateId: String,
@@ -157,7 +211,7 @@ recentTransactions[cacheKey] = TransactionCacheEntry(
         groupId: String,
         applyToFuture: Boolean
     ) {
-        // ?´ê²° ë°©ë²???°ë¼ ê±°ë ?? 
+        // 해결 방법에 따라 거래 삭제
         when (resolution) {
             DuplicateResolution.KEEP_FIRST -> {
                 transactionRepository.deleteTransaction(transaction2Id)
@@ -170,15 +224,15 @@ recentTransactions[cacheKey] = TransactionCacheEntry(
                 transactionRepository.deleteTransaction(transaction2Id)
             }
             else -> {
-                // KEEP_BOTH, PENDING? ??  ?ì
+                // KEEP_BOTH, PENDING은 삭제 없음
             }
         }
 
-        // ì¤ë³µ ê¸°ë¡ ?´ê²° ì²ë¦¬
+        // 중복 기록 해결 처리
         duplicateRepository.resolveDuplicate(duplicateId, resolution)
 
-        // "?¤ìë¶???ì¼?ê² ?ì©" ? í ??ê·ì¹ ?
-if (applyToFuture && resolution != DuplicateResolution.PENDING) {
+        // "앞으로도 같이 적용" 선택 시 규칙 저장
+        if (applyToFuture && resolution != DuplicateResolution.PENDING) {
             val rule = com.ezcorp.fammoney.data.model.DuplicateRule(
                 groupId = groupId,
                 bank1Id = bank1Id,
@@ -196,24 +250,24 @@ if (applyToFuture && resolution != DuplicateResolution.PENDING) {
 }
 
 /**
- * ì¤ë³µ ?ì¸ ê²°ê³¼
+ * 중복 확인 결과
  */
 sealed class DuplicateCheckResult {
-    /** ì¤ë³µ ?ë - ?ì ???*/
+    /** 중복 아님 - 정상 저장 */
     object NoDuplicate : DuplicateCheckResult()
 
-    /** ì¤ë³µ ê°ì? - ?¬ì©???ì¸ ?ì */
+    /** 중복 감지 - 사용자 확인 필요 */
     data class DuplicateDetected(val pendingDuplicate: PendingDuplicate) : DuplicateCheckResult()
 
-    /** ê·ì¹???°ë¼ ????? ì? */
+    /** 규칙에 따라 둘 다 유지 */
     object KeepBoth : DuplicateCheckResult()
 
-    /** ê·ì¹???°ë¼ ??ë²ì§¸ ê±°ë ê±´ë? */
+    /** 규칙에 따라 두번째 거래 건너뜀 */
     object SkipSecond : DuplicateCheckResult()
 
-    /** ê·ì¹???°ë¼ ??ë²ì§¸ë§?? ì? (ì²?ë²ì§¸ ?? ?? */
+    /** 규칙에 따라 두번째만 유지 (첫번째 삭제됨) */
     data class KeepSecond(val deletedTransactionId: String) : DuplicateCheckResult()
 
-    /** ê·ì¹???°ë¼ ??????  */
+    /** 규칙에 따라 둘 다 삭제 */
     data class DeleteBoth(val deletedTransactionId: String) : DuplicateCheckResult()
 }

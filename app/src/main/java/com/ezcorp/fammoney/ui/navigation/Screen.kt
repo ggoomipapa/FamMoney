@@ -3,6 +3,7 @@ package com.ezcorp.fammoney.ui.navigation
 sealed class Screen(val route: String) {
     data object Splash : Screen("splash")
     data object Setup : Screen("setup")
+    data object Onboarding : Screen("onboarding")
     data object JoinGroup : Screen("join_group")
     data object Home : Screen("home")
     data object Transactions : Screen("transactions")
@@ -55,4 +56,7 @@ sealed class Screen(val route: String) {
 
     // 금융 가?�드
     data object FinancialGuide : Screen("financial_guide")
+
+    // 태그 관리 (여행/이벤트)
+    data object Tags : Screen("tags")
 }

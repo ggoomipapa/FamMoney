@@ -39,6 +39,7 @@ fun SettingsScreen(
     onNavigateToBankPatterns: () -> Unit = {},
     onNavigateToAICoaching: () -> Unit = {},
     onNavigateToMotivation: () -> Unit = {},
+    onNavigateToTags: () -> Unit = {},
     mainViewModel: MainViewModel = hiltViewModel(),
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
@@ -50,6 +51,7 @@ fun SettingsScreen(
     var showCopiedSnackbar by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showSharingScopeDialog by remember { mutableStateOf(false) }
+    var showMigrationDialog by remember { mutableStateOf(false) }
     var notifyGroup by remember(uiState.currentUser) {
         mutableStateOf(uiState.currentUser?.notifyGroupOnTransaction ?: true)
     }
@@ -65,6 +67,12 @@ fun SettingsScreen(
     var cashManagementEnabled by remember(uiState.cashManagementEnabled) {
         mutableStateOf(uiState.cashManagementEnabled)
     }
+
+    // 중복 알림 처리 설정
+    var duplicatePreference by remember(uiState.duplicatePreference) {
+        mutableStateOf(uiState.duplicatePreference)
+    }
+    var showDuplicatePreferenceDialog by remember { mutableStateOf(false) }
 
     // 프로필 다이얼로그 상태
     var showEditGroupNameDialog by remember { mutableStateOf(false) }
@@ -413,6 +421,64 @@ fun SettingsScreen(
         )
     }
 
+    // 마이그레이션 다이얼로그
+    if (showMigrationDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                if (!uiState.isMigrating) {
+                    showMigrationDialog = false
+                    mainViewModel.clearMigrationResult()
+                }
+            },
+            title = { Text("거래내역 마이그레이션") },
+            text = {
+                Column {
+                    if (uiState.isMigrating) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text("마이그레이션 진행 중...")
+                        }
+                    } else if (uiState.migrationResult != null) {
+                        Text(uiState.migrationResult!!)
+                    } else {
+                        Text(
+                            "기존 거래내역의 수입/지출 유형을 다시 판정합니다.\n\n" +
+                            "- 입금, 출금취소 → 수입으로 변경\n" +
+                            "- 출금, 결제, 승인 → 지출로 변경\n\n" +
+                            "이 작업은 1회만 실행하시는 것이 좋습니다."
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                if (!uiState.isMigrating && uiState.migrationResult == null) {
+                    TextButton(
+                        onClick = { mainViewModel.runMigration() }
+                    ) {
+                        Text("실행")
+                    }
+                } else if (uiState.migrationResult != null) {
+                    TextButton(
+                        onClick = {
+                            showMigrationDialog = false
+                            mainViewModel.clearMigrationResult()
+                        }
+                    ) {
+                        Text("확인")
+                    }
+                }
+            },
+            dismissButton = {
+                if (!uiState.isMigrating && uiState.migrationResult == null) {
+                    TextButton(onClick = { showMigrationDialog = false }) {
+                        Text("취소")
+                    }
+                }
+            }
+        )
+    }
+
     if (showThresholdDialog) {
         AlertDialog(
             onDismissRequest = { showThresholdDialog = false },
@@ -453,6 +519,109 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showThresholdDialog = false }) {
+                    Text("취소")
+                }
+            }
+        )
+    }
+
+    // 중복 알림 처리 설정 다이얼로그
+    if (showDuplicatePreferenceDialog) {
+        AlertDialog(
+            onDismissRequest = { showDuplicatePreferenceDialog = false },
+            title = { Text("중복 알림 처리") },
+            text = {
+                Column {
+                    Text(
+                        text = "체크카드 결제 시 카드 알림과 은행 알림이 동시에 올 때 처리 방식을 선택하세요.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // 카드 알림 우선
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = duplicatePreference == com.ezcorp.fammoney.service.UserPreferences.DUPLICATE_PREF_CARD,
+                            onClick = {
+                                duplicatePreference = com.ezcorp.fammoney.service.UserPreferences.DUPLICATE_PREF_CARD
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column {
+                            Text("카드 알림 우선", style = MaterialTheme.typography.bodyLarge)
+                            Text(
+                                "은행 알림은 자동으로 무시",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // 은행 알림 우선
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = duplicatePreference == com.ezcorp.fammoney.service.UserPreferences.DUPLICATE_PREF_BANK,
+                            onClick = {
+                                duplicatePreference = com.ezcorp.fammoney.service.UserPreferences.DUPLICATE_PREF_BANK
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column {
+                            Text("은행 알림 우선", style = MaterialTheme.typography.bodyLarge)
+                            Text(
+                                "카드 알림은 자동으로 무시",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // 매번 물어보기
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = duplicatePreference == com.ezcorp.fammoney.service.UserPreferences.DUPLICATE_PREF_ASK,
+                            onClick = {
+                                duplicatePreference = com.ezcorp.fammoney.service.UserPreferences.DUPLICATE_PREF_ASK
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column {
+                            Text("매번 물어보기", style = MaterialTheme.typography.bodyLarge)
+                            Text(
+                                "중복 감지 시 선택 화면 표시",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        mainViewModel.updateDuplicatePreference(duplicatePreference)
+                        showDuplicatePreferenceDialog = false
+                    }
+                ) {
+                    Text("저장")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDuplicatePreferenceDialog = false }) {
                     Text("취소")
                 }
             }
@@ -1009,6 +1178,46 @@ fun SettingsScreen(
                 }
             }
 
+            // 태그 관리 (여행/이벤트)
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    onClick = onNavigateToTags
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Default.LocalOffer,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = "태그 관리",
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                                Text(
+                                    text = "여행, 이벤트별 지출을 태그로 관리합니다",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                        Icon(Icons.Default.ChevronRight, contentDescription = null)
+                    }
+                }
+            }
+
             // 그룹 알림 설정
             if (uiState.groupMembers.size > 1) {
                 item {
@@ -1302,6 +1511,65 @@ fun SettingsScreen(
                 }
             }
 
+            // 중복 알림 처리 설정
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    onClick = { showDuplicatePreferenceDialog = true }
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.Default.ContentCopy,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Column {
+                                    Text(
+                                        text = "중복 알림 처리",
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                    Text(
+                                        text = when (duplicatePreference) {
+                                            com.ezcorp.fammoney.service.UserPreferences.DUPLICATE_PREF_CARD -> "카드 알림 우선"
+                                            com.ezcorp.fammoney.service.UserPreferences.DUPLICATE_PREF_BANK -> "은행 알림 우선"
+                                            else -> "매번 물어보기"
+                                        },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+                            Icon(
+                                Icons.Default.ChevronRight,
+                                contentDescription = null
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "체크카드 결제 시 카드 알림과 은행 알림이 동시에 오면 하나만 저장합니다.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
             // 자녀 수입 설정
             item {
                 Spacer(modifier = Modifier.height(24.dp))
@@ -1390,6 +1658,51 @@ fun SettingsScreen(
                                 )
                                 Text(
                                     text = "데이터를 백업하거나 복원합니다",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                        Icon(
+                            Icons.Default.ChevronRight,
+                            contentDescription = null
+                        )
+                    }
+                }
+            }
+
+            // 마이그레이션 버튼
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    onClick = { showMigrationDialog = true }
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Sync,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = "거래내역 마이그레이션",
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                                Text(
+                                    text = "수입/지출 유형 재판정 (1회 권장)",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )

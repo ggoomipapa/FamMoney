@@ -135,12 +135,12 @@ fun TransactionDetailScreen(
         AlertDialog(
             onDismissRequest = { showImageSourceDialog = false },
             title = { Text("영수증 스캔") },
-            text = { Text("영수증 이미지를 어디서 가져올까요") },
+            text = { Text("영수증 이미지를 어디서 가져올까요?") },
             confirmButton = {
                 TextButton(onClick = {
                     showImageSourceDialog = false
                     // 카메라 권한 확인 후 실행
-                if (ContextCompat.checkSelfPermission(
+                    if (ContextCompat.checkSelfPermission(
                             context,
                             Manifest.permission.CAMERA
                         ) == PackageManager.PERMISSION_GRANTED
@@ -186,7 +186,7 @@ fun TransactionDetailScreen(
                 },
                 actions = {
                     // 영수증 스캔 버튼
-                IconButton(
+                    IconButton(
                         onClick = { showImageSourceDialog = true },
                         enabled = !isScanning
                     ) {
@@ -200,7 +200,7 @@ fun TransactionDetailScreen(
                         }
                     }
                     // 저장 버튼
-                TextButton(
+                    TextButton(
                         onClick = {
                             transaction?.let {
                                 viewModel.updateTransaction(
@@ -237,8 +237,8 @@ fun TransactionDetailScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // 금액 ?�시
-                item {
+                    // 금액 표시
+                    item {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp)
@@ -249,12 +249,6 @@ fun TransactionDetailScreen(
                                     .padding(24.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(
-                                    text = if (tx.type == TransactionType.INCOME) "수입" else "지출",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = "${if (tx.type == TransactionType.INCOME) "+" else "-"}${String.format("%,d", tx.amount)}원",
                                     style = MaterialTheme.typography.headlineLarge,
@@ -274,8 +268,8 @@ fun TransactionDetailScreen(
                         }
                     }
 
-                    // 기본 ?�보
-                item {
+                    // 기본 정보
+                    item {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp)
@@ -287,22 +281,22 @@ fun TransactionDetailScreen(
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 if (tx.description.isNotBlank()) {
-                                    DetailRow(label = "?�용", value = tx.description)
+                                    DetailRow(label = "내용", value = tx.description)
                                 }
                                 if (tx.bankName.isNotBlank()) {
-                                    DetailRow(label = "?�??카드", value = tx.bankName)
+                                    DetailRow(label = "은행/카드", value = tx.bankName)
                                 }
-                                DetailRow(label = "?�력방식", value = when(tx.source) {
-                                    InputSource.NOTIFICATION -> "?�림 ?�동?�력"
-                                    InputSource.MANUAL_TEXT_INPUT -> "?�스???�력"
-                                    InputSource.MANUAL_ENTRY -> "직접 ?�력"
+                                DetailRow(label = "입력방식", value = when(tx.source) {
+                                    InputSource.NOTIFICATION -> "알림 자동입력"
+                                    InputSource.MANUAL_TEXT_INPUT -> "텍스트 입력"
+                                    InputSource.MANUAL_ENTRY -> "직접 입력"
                                 })
                             }
                         }
                     }
 
-                    // ?�비?�형 ?�택
-                item {
+                    item {
+                        val isIncome = tx.type == TransactionType.INCOME
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -318,15 +312,19 @@ fun TransactionDetailScreen(
                             ) {
                                 Column {
                                     Text(
-                                        text = "?�비?�형",
+                                        text = if (isIncome) "수입 유형" else "소비 유형",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     if (selectedCategory.isNotBlank()) {
-                                        val category = SpendingCategory.fromString(selectedCategory)
+                                        val categoryText = if (isIncome) {
+                                            IncomeCategory.fromString(selectedCategory).let { "${it.icon} ${it.displayName}" }
+                                        } else {
+                                            SpendingCategory.fromString(selectedCategory).let { "${it.icon} ${it.displayName}" }
+                                        }
                                         Text(
-                                            text = "${category.icon} ${category.displayName}",
+                                            text = categoryText,
                                             style = MaterialTheme.typography.bodyLarge,
                                             fontWeight = FontWeight.Medium
                                         )
@@ -348,7 +346,7 @@ fun TransactionDetailScreen(
                     }
 
                     // 사용처 입력 (자동완성)
-                item {
+                    item {
                         Column {
                             OutlinedTextField(
                                 value = selectedMerchantName,
@@ -370,7 +368,7 @@ fun TransactionDetailScreen(
                             )
 
                             // 자동완성 제안 목록
-                if (showMerchantSuggestions && filteredSuggestions.isNotEmpty()) {
+                            if (showMerchantSuggestions && filteredSuggestions.isNotEmpty()) {
                                 Card(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -397,8 +395,8 @@ fun TransactionDetailScreen(
                         }
                     }
 
-                    // 메모 ?�력
-                item {
+                    // 메모 입력
+                    item {
                         OutlinedTextField(
                             value = memo,
                             onValueChange = { memo = it },
@@ -409,8 +407,8 @@ fun TransactionDetailScreen(
                         )
                     }
 
-                    // ?�캔 ?�러 ?�시
-                scanError?.let { error ->
+                    // 스캔 에러 표시
+                    scanError?.let { error ->
                         item {
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
@@ -438,15 +436,15 @@ fun TransactionDetailScreen(
                                         modifier = Modifier.weight(1f)
                                     )
                                     IconButton(onClick = { viewModel.clearScanError() }) {
-                                        Icon(Icons.Default.Close, contentDescription = "?�기")
+                                        Icon(Icons.Default.Close, contentDescription = "닫기")
                                     }
                                 }
                             }
                         }
                     }
 
-                    // ?�수�??�목 ?�시
-                if (receiptItems.isNotEmpty()) {
+                    // 영수증 항목 표시
+                    if (receiptItems.isNotEmpty()) {
                         item {
                             ReceiptItemsSection(
                                 items = receiptItems,
@@ -510,7 +508,7 @@ fun CategoryBottomSheet(
                 .padding(16.dp)
         ) {
             Text(
-                text = if (isIncome) "?�입 ?�형 ?�택" else "?�비 ?�형 ?�택",
+                text = if (isIncome) "수입 유형 선택" else "소비 유형 선택",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -535,63 +533,63 @@ fun CategoryBottomSheet(
                     modifier = Modifier.heightIn(max = 400.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // 그룹별로 ?�시
-                item {
-                        Text("?���??�비", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                    // 그룹별로 표시
+                    item {
+                        Text("음식/소비", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.foodGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("?�� 주거", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("주거", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.housingGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("?�� 교통", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("교통", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.transportGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("?���??�핑", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("쇼핑", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.shoppingGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("?�� 문화/?��", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("문화/여가", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.cultureGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("?�� ?�활", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("생활", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.livingGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("?�� 금융", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("금융", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.financeGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("\uD83C\uDF93 교육", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("교육", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.educationGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("\uD83D\uDC90 경조사", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("경조사", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.eventGroup, selectedCategory, onCategorySelected)
                     }
                     item {
-                        Text("\uD83D\uDCDD 기타", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                        Text("기타", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                     }
                     item {
                         CategoryFlowRow(SpendingCategory.otherGroup, selectedCategory, onCategorySelected)
@@ -663,7 +661,7 @@ fun MerchantBottomSheet(
                 .padding(16.dp)
         ) {
             Text(
-                text = "?�용�??�택",
+                text = "사용처 선택",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp)

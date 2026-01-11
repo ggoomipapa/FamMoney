@@ -20,8 +20,8 @@ data class BankConfig(
                     "com.kbstar.liivbank",
                     "com.kakao.talk"
                 ),
-                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음"),
-                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출"),
+                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "출금취소"),
+                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "체크카드출금", "신용카드출금"),
                 amountRegex = "([0-9,]+)\\s*원"
             ),
             BankConfig(
@@ -32,8 +32,8 @@ data class BankConfig(
                     "com.shcard.smartpay",
                     "com.kakao.talk"
                 ),
-                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음"),
-                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출"),
+                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "출금취소"),
+                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "체크카드출금", "신용카드출금"),
                 amountRegex = "([0-9,]+)\\s*원"
             ),
             BankConfig(
@@ -43,8 +43,8 @@ data class BankConfig(
                     "com.kakaobank.channel",
                     "com.kakao.talk"
                 ),
-                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음"),
-                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출"),
+                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "출금취소"),
+                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "체크카드출금", "신용카드출금"),
                 amountRegex = "([0-9,]+)\\s*원"
             ),
             BankConfig(
@@ -55,8 +55,8 @@ data class BankConfig(
                     "com.wooricard.smartapp",
                     "com.kakao.talk"
                 ),
-                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음"),
-                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출"),
+                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "출금취소"),
+                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "체크카드출금", "신용카드출금"),
                 amountRegex = "([0-9,]+)\\s*원"
             ),
             BankConfig(
@@ -67,8 +67,8 @@ data class BankConfig(
                     "com.hanaskcard.rocomo.potal",
                     "com.kakao.talk"
                 ),
-                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음"),
-                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출"),
+                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "출금취소"),
+                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "체크카드출금", "신용카드출금"),
                 amountRegex = "([0-9,]+)\\s*원"
             ),
             BankConfig(
@@ -79,8 +79,8 @@ data class BankConfig(
                     "com.nhncardsmartapp",
                     "com.kakao.talk"
                 ),
-                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음"),
-                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출"),
+                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "출금취소"),
+                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "체크카드출금", "신용카드출금"),
                 amountRegex = "([0-9,]+)\\s*원"
             ),
             BankConfig(
@@ -90,8 +90,8 @@ data class BankConfig(
                     "com.ibk.android.ionebank",
                     "com.kakao.talk"
                 ),
-                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음"),
-                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출"),
+                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "출금취소"),
+                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "체크카드출금", "신용카드출금"),
                 amountRegex = "([0-9,]+)\\s*원"
             ),
             BankConfig(
@@ -100,8 +100,8 @@ data class BankConfig(
                 packageNames = listOf(
                     "viva.republica.toss"
                 ),
-                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "받았어요"),
-                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "보냈어요"),
+                incomeKeywords = listOf("입금", "받으셨", "들어옴", "이체받음", "송금받음", "받았어요", "출금취소"),
+                expenseKeywords = listOf("출금", "결제", "이체", "송금", "사용", "승인", "지출", "보냈어요", "체크카드출금", "신용카드출금"),
                 amountRegex = "([0-9,]+)\\s*원"
             ),
             BankConfig(

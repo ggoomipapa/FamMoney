@@ -12,6 +12,7 @@ import com.ezcorp.fammoney.data.repository.ReceiptRepository
 import com.ezcorp.fammoney.data.repository.TransactionRepository
 import com.ezcorp.fammoney.service.ParsedReceiptItem
 import com.ezcorp.fammoney.service.ReceiptOcrService
+import com.ezcorp.fammoney.service.SmartCategorizationService
 import com.ezcorp.fammoney.service.UserPreferences
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +27,8 @@ class TransactionDetailViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
     private val receiptRepository: ReceiptRepository,
     private val receiptOcrService: ReceiptOcrService,
-    private val userPreferences: UserPreferences
+    private val userPreferences: UserPreferences,
+    private val smartCategorizationService: SmartCategorizationService
 ) : ViewModel() {
 
     private val _transaction = MutableStateFlow<Transaction?>(null)
@@ -106,6 +108,19 @@ class TransactionDetailViewModel @Inject constructor(
                 val items = _receiptItems.value
                 if (items.isNotEmpty()) {
                     saveReceiptItems(transaction.id, items, transaction.merchantName)
+                }
+
+                // 사용처와 카테고리 매핑 학습
+                if (transaction.merchantName.isNotBlank() && transaction.category.isNotBlank()) {
+                    val groupId = userPreferences.getGroupId()
+                    if (groupId != null) {
+                        smartCategorizationService.learn(
+                            groupId = groupId,
+                            merchantName = transaction.merchantName,
+                            category = transaction.category,
+                            transactionType = transaction.type.name
+                        )
+                    }
                 }
 
                 _isSaved.value = true

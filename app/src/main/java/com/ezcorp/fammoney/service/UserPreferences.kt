@@ -138,6 +138,62 @@ class UserPreferences @Inject constructor(
         }
     }
 
+    // 온보딩 완료 여부
+    val onboardingCompletedFlow: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[ONBOARDING_COMPLETED_KEY] ?: false
+    }
+
+    suspend fun isOnboardingCompleted(): Boolean = onboardingCompletedFlow.first()
+
+    suspend fun setOnboardingCompleted(completed: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[ONBOARDING_COMPLETED_KEY] = completed
+        }
+    }
+
+    // 중복 알림 처리 방식
+    // "card" = 카드 알림 우선 (은행 알림 무시)
+    // "bank" = 은행 알림 우선 (카드 알림 무시)
+    // "ask" = 매번 물어보기 (기본값)
+    val duplicatePreferenceFlow: Flow<String> = dataStore.data.map { preferences ->
+        preferences[DUPLICATE_PREFERENCE_KEY] ?: DUPLICATE_PREF_ASK
+    }
+
+    suspend fun getDuplicatePreference(): String = duplicatePreferenceFlow.first()
+
+    suspend fun saveDuplicatePreference(preference: String) {
+        dataStore.edit { preferences ->
+            preferences[DUPLICATE_PREFERENCE_KEY] = preference
+        }
+    }
+
+    // 현재 활성 태그 (여행/이벤트 등)
+    val activeTagIdFlow: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[ACTIVE_TAG_ID_KEY]
+    }
+
+    val activeTagNameFlow: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[ACTIVE_TAG_NAME_KEY]
+    }
+
+    suspend fun getActiveTagId(): String? = activeTagIdFlow.first()
+
+    suspend fun getActiveTagName(): String? = activeTagNameFlow.first()
+
+    suspend fun saveActiveTag(tagId: String, tagName: String) {
+        dataStore.edit { preferences ->
+            preferences[ACTIVE_TAG_ID_KEY] = tagId
+            preferences[ACTIVE_TAG_NAME_KEY] = tagName
+        }
+    }
+
+    suspend fun clearActiveTag() {
+        dataStore.edit { preferences ->
+            preferences.remove(ACTIVE_TAG_ID_KEY)
+            preferences.remove(ACTIVE_TAG_NAME_KEY)
+        }
+    }
+
     suspend fun saveFullUserData(
         userId: String,
         groupId: String,
@@ -161,7 +217,16 @@ class UserPreferences @Inject constructor(
         private val HIGH_AMOUNT_THRESHOLD_KEY = longPreferencesKey("high_amount_threshold")
         private val CASH_MANAGEMENT_ENABLED_KEY = booleanPreferencesKey("cash_management_enabled")
         private val GEMINI_API_KEY = stringPreferencesKey("gemini_api_key")
+        private val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
+        private val DUPLICATE_PREFERENCE_KEY = stringPreferencesKey("duplicate_preference")
+        private val ACTIVE_TAG_ID_KEY = stringPreferencesKey("active_tag_id")
+        private val ACTIVE_TAG_NAME_KEY = stringPreferencesKey("active_tag_name")
 
         const val DEFAULT_HIGH_AMOUNT_THRESHOLD = 1_000_000L  // 기본값 100만원
+
+        // 중복 알림 처리 방식 상수
+        const val DUPLICATE_PREF_CARD = "card"  // 카드 알림 우선
+        const val DUPLICATE_PREF_BANK = "bank"  // 은행 알림 우선
+        const val DUPLICATE_PREF_ASK = "ask"    // 매번 물어보기
     }
 }

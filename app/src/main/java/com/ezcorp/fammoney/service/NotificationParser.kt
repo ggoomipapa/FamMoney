@@ -2,21 +2,89 @@ package com.ezcorp.fammoney.service
 
 import com.ezcorp.fammoney.data.model.BankConfig
 import com.ezcorp.fammoney.data.model.TransactionType
+import java.util.regex.Pattern
+import javax.inject.Inject
+import javax.inject.Singleton
+
+/**
+ * 한국 금융기관별 알림 파싱 시스템
+ *
+ * 지원 금융기관:
+ * - 카드사: 삼성, 신한, 현대, KB국민, 하나, 롯데, BC, NH농협, 우리
+ * - 은행: KB국민, 신한, 우리, 하나, 농협, 기업, SC제일, 케이뱅크, 카카오뱅크, 토스뱅크
+ * - 간편결제: 카카오페이, 네이버페이, 토스, 삼성페이, 페이코
+ */
 
 data class ParsedTransaction(
     val amount: Long,
     val type: TransactionType,
     val bankConfig: BankConfig,
     val description: String,
-    val merchantName: String,  // 사용처
-    val senderName: String = "",  // 입금자 이름 (입금 거래 시)
-    val accountNumber: String = "",  // 계좌번호 (마스킹 포함 가능)
+    val merchantName: String,
+    val senderName: String = "",
+    val accountNumber: String = "",
     val originalText: String
 )
 
-class NotificationParser {
+@Singleton
+class NotificationParser @Inject constructor(
+    private val exchangeRateService: ExchangeRateService
+) {
 
-    fun parse(
+    companion object {
+        // 금액 추출 패턴들 (우선순위 순)
+        private val AMOUNT_PATTERNS = listOf(
+            Pattern.compile("([\\d,]+)\\s*원\\s*(?:승인|결제|출금|입금|이체)"),
+            Pattern.compile("(?:승인|결제|출금|입금|이체)\\s*([\\d,]+)\\s*원"),
+            Pattern.compile("(?:일시불|\\d+개월)[/\\s]*([\\d,]+)\\s*원"),
+            Pattern.compile("([\\d,]+)\\s*원\\s*(?:일시불|\\d+개월)"),
+            Pattern.compile("([\\d,]+)\\s*원")
+        )
+
+        // 잔액 추출 패턴
+        private val BALANCE_PATTERNS = listOf(
+            Pattern.compile("잔액\\s*[:：]?\\s*([\\d,]+)\\s*원?"),
+            Pattern.compile("잔액([\\d,]+)원?")
+        )
+
+        // 날짜/시간 추출 패턴
+        private val DATE_PATTERN = Pattern.compile("(\\d{1,2})[/\\-](\\d{1,2})\\s+(\\d{1,2}):(\\d{2})")
+
+        // 카드번호/계좌번호 마스킹 패턴
+        private val ACCOUNT_PATTERNS = listOf(
+            Pattern.compile("(\\d{3,6}[*]+\\d{0,6})"),
+            Pattern.compile("([*]+\\d{3,6})"),
+            Pattern.compile("(\\d+\\*+\\d*)")
+        )
+
+        // 거래 유형 키워드
+        private val INCOME_KEYWORDS = listOf(
+            "입금", "받으셨", "들어옴", "이체받음", "송금받음", "받았어요", "출금취소"
+        )
+
+        private val EXPENSE_KEYWORDS = listOf(
+            "출금", "결제", "승인", "이체", "송금", "사용", "지출",
+            "체크카드출금", "신용카드출금", "보냈어요"
+        )
+
+        // 제외 키워드 (가맹점명에서 제외)
+        private val EXCLUDED_KEYWORDS = setOf(
+            "Web발신", "[Web발신]", "승인", "결제", "출금", "입금", "이체",
+            "일시불", "할부", "잔액", "누적", "님", "체크카드", "신용카드",
+            "원", "개월", "취소", "체크카드출금", "신용카드출금", "카드출금",
+            "인터넷출금", "자동이체", "계좌이체", "출금취소"
+        )
+
+        // 금융기관 제외 키워드 (가맹점명에서 제외)
+        private val INSTITUTION_KEYWORDS = setOf(
+            "KB", "국민", "신한", "우리", "하나", "농협", "기업", "SC",
+            "카카오뱅크", "토스뱅크", "케이뱅크", "삼성카드", "현대카드",
+            "롯데카드", "BC카드", "NH", "IBK", "카카오페이", "네이버페이",
+            "토스", "삼성페이", "페이코", "은행", "카드"
+        )
+    }
+
+    suspend fun parse(
         packageName: String,
         notificationText: String,
         selectedBanks: List<BankConfig>
@@ -28,7 +96,7 @@ class NotificationParser {
         return parseWithBankConfig(notificationText, matchingBank)
     }
 
-    fun parseManualInput(
+    suspend fun parseManualInput(
         text: String,
         selectedBanks: List<BankConfig>
     ): ParsedTransaction? {
@@ -41,23 +109,45 @@ class NotificationParser {
         return null
     }
 
-    private fun parseWithBankConfig(text: String, bankConfig: BankConfig): ParsedTransaction? {
-        val amount = extractAmount(text, bankConfig.amountRegex) ?: return null
+    private suspend fun parseWithBankConfig(text: String, bankConfig: BankConfig): ParsedTransaction? {
+        // 1. 금액 추출
+        val (amount, isForeign) = extractAmount(text) ?: return null
 
+        val finalAmount = if (isForeign) {
+            // 실시간 환율 적용
+            val exchangeRate = exchangeRateService.getExchangeRate(baseCurrency = "USD", targetCurrency = "KRW") ?: 1300.0 // Default to 1300 if API fails
+            (amount.toDouble() * exchangeRate).toLong()
+        } else {
+            amount.toLong()
+        }
+                
+        if (finalAmount <= 0) return null
+
+        // 2. 거래 유형 판별
         val type = determineTransactionType(text, bankConfig)
 
-        val merchantName = extractMerchantName(text)
-        val description = extractDescription(text)
+        // 3. 가맹점/송금인 추출
+        val merchantName: String
+        val senderName: String
 
-        // 입금 거래인 경우 송금자 이름과 계좌번호 추출
-        val senderName = if (type == TransactionType.INCOME) {
-            extractSenderName(text)
-        } else ""
+        if (type == TransactionType.INCOME) {
+            // 입금인 경우: 송금인 추출
+            senderName = extractSenderName(text)
+            merchantName = if (senderName.isNotBlank()) senderName else extractIncomeReason(text)
+        } else {
+            // 출금인 경우: 가맹점 추출
+            merchantName = extractMerchantName(text, isForeign)
+            senderName = ""
+        }
 
+        // 4. 계좌번호 추출
         val accountNumber = extractAccountNumber(text)
 
+        // 5. 설명 추출
+        val description = extractDescription(text, type)
+
         return ParsedTransaction(
-            amount = amount,
+            amount = finalAmount,
             type = type,
             bankConfig = bankConfig,
             description = description,
@@ -68,207 +158,351 @@ class NotificationParser {
         )
     }
 
-    private fun extractAmount(text: String, regexPattern: String): Long? {
-        val regex = Regex(regexPattern)
-        val matchResult = regex.find(text) ?: return null
+    /**
+     * 금액 추출
+     */
+    private fun extractAmount(text: String): Pair<Number, Boolean>? {
+        // 해외 패턴 (USD)
+        val foreignPatterns = listOf(
+            Pattern.compile("USD\\s*([\\d,]+\\.?\\d*)", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("\\$\\s*([\\d,]+\\.?\\d*)")
+        )
 
-        val amountStr = matchResult.groupValues.getOrNull(1) ?: return null
-        val cleanAmount = amountStr.replace(",", "").replace(" ", "")
-
-        return cleanAmount.toLongOrNull()
+        for (pattern in foreignPatterns) {
+            val matcher = pattern.matcher(text)
+            if (matcher.find()) {
+                val amountStr = matcher.group(1).replace(",", "")
+                val amount = amountStr.toDoubleOrNull()
+                if (amount != null && amount > 0) {
+                    return Pair(amount, true) // (금액, 해외거래여부)
+                }
+            }
+        }
+        
+        // 국내 패턴 (원)
+        for (pattern in AMOUNT_PATTERNS) {
+            val matcher = pattern.matcher(text)
+            if (matcher.find()) {
+                val amountStr = matcher.group(1).replace(",", "")
+                val amount = amountStr.toLongOrNull()
+                if (amount != null && amount > 0) {
+                    return Pair(amount, false)
+                }
+            }
+        }
+        return null
     }
 
+    /**
+     * 거래 유형 판별
+     */
     private fun determineTransactionType(text: String, bankConfig: BankConfig): TransactionType {
-        val hasIncomeKeyword = bankConfig.incomeKeywords.any { keyword ->
-            text.contains(keyword)
+        // 취소/환불 키워드 우선 확인
+        val cancelKeywords = listOf("취소", "CANCELED", "CANCELLED", "환불", "REFUND")
+        if (cancelKeywords.any { text.contains(it, ignoreCase = true) }) {
+            return TransactionType.INCOME
         }
 
-        val hasExpenseKeyword = bankConfig.expenseKeywords.any { keyword ->
-            text.contains(keyword)
+        // "출금취소"는 입금으로 처리 (우선 체크)
+        if (text.contains("출금취소")) {
+            return TransactionType.INCOME
+        }
+        
+        // 수입 키워드 확인 (은행 설정 + 기본 키워드)
+        val allIncomeKeywords = bankConfig.incomeKeywords + INCOME_KEYWORDS
+        val allExpenseKeywords = bankConfig.expenseKeywords + EXPENSE_KEYWORDS
+
+        // 각 키워드의 첫 등장 위치 확인
+        var incomeIndex = Int.MAX_VALUE
+        var expenseIndex = Int.MAX_VALUE
+
+        for (keyword in allIncomeKeywords) {
+            val idx = text.indexOf(keyword)
+            if (idx >= 0 && idx < incomeIndex) {
+                incomeIndex = idx
+            }
+        }
+
+        for (keyword in allExpenseKeywords) {
+            // "출금취소"에서 "출금"이 매칭되지 않도록
+            if (keyword == "출금" && text.contains("출금취소")) continue
+
+            val idx = text.indexOf(keyword)
+            if (idx >= 0 && idx < expenseIndex) {
+                expenseIndex = idx
+            }
         }
 
         return when {
-            hasIncomeKeyword && !hasExpenseKeyword -> TransactionType.INCOME
-            hasExpenseKeyword && !hasIncomeKeyword -> TransactionType.EXPENSE
-            hasIncomeKeyword && hasExpenseKeyword -> {
-                val incomeIndex = bankConfig.incomeKeywords
-                    .mapNotNull { text.indexOf(it).takeIf { idx -> idx >= 0 } }
-                    .minOrNull() ?: Int.MAX_VALUE
-
-                val expenseIndex = bankConfig.expenseKeywords
-                    .mapNotNull { text.indexOf(it).takeIf { idx -> idx >= 0 } }
-                    .minOrNull() ?: Int.MAX_VALUE
-
-                if (incomeIndex < expenseIndex) TransactionType.INCOME else TransactionType.EXPENSE
-            }
-            else -> TransactionType.EXPENSE
+            incomeIndex < expenseIndex -> TransactionType.INCOME
+            expenseIndex < incomeIndex -> TransactionType.EXPENSE
+            else -> TransactionType.EXPENSE // 기본값
         }
     }
 
     /**
-     * 사용처(가맹점) 이름 추출
-     * 다양한 은행/카드 SMS/알림 형식에서 사용처를 추출
+     * 가맹점명 추출 (출금/결제 시)
      */
-    private fun extractMerchantName(text: String): String {
-        // 제외할 키워드 (은행/카드사 이름, 일반 키워드)
-        val excludeKeywords = listOf(
-            "은행", "카드", "국민", "신한", "우리", "하나", "신협", "새마을금고", "카카오뱅크", "토스뱅크",
-            "승인", "거절", "결제", "출금", "입금", "일시불", "할부", "취소", "잔액", "체크", "신용",
-            "님", "고객", "본인", "해외", "온라인", "오프라인"
-        )
+    private fun extractMerchantName(text: String, isForeign: Boolean): String {
+        val lines = text.split("\n", " ")
+            .map { it.trim() }
+            .filter { it.isNotBlank() && it.length >= 2 }
 
-        // 다양한 카드/은행 SMS 형식의 사용처 패턴 (우선순위 순)
-        val merchantPatterns = listOf(
-            // 카드 알림 형식: "[카드사] 홍길동 쿠팡 50,000원" - 이름 뒤 사용처
-            Regex("\\]\\s*[가-힣]{2,4}\\s+([가-힣a-zA-Z0-9][가-힣a-zA-Z0-9\\s]{0,20}?)\\s+[0-9,]+원"),
-            // 카드 알림 형식: "삼성카드 스타벅스 12,500원" - 카드명 바로 뒤
-            Regex("(?:삼성|현대|롯데|BC|KB|NH|IBK)(?:카드)?\\s+([가-힣a-zA-Z][가-힣a-zA-Z0-9\\s]{1,20}?)\\s+[0-9,]+원"),
-            // 일시불 뒤에 오는 사용처: "일시불CU편의점 3,500원"
-            Regex("(?:일시불|[0-9]+개월)\\s+([가-힣a-zA-Z][가-힣a-zA-Z0-9\\s]{1,20}?)\\s+[0-9,]+원"),
-            // 승인 앞의 사용처: "스타벅스 12,500원 승인"
-            Regex("([가-힣a-zA-Z][가-힣a-zA-Z0-9\\s]{1,20}?)\\s+[0-9,]+원\\s*(?:승인|결제|출금)"),
-            // 결제 키워드 뒤의 사용처: "결제 배달의민족 25,000원"
-            Regex("(?:결제|승인|사용)\\s+([가-힣a-zA-Z][가-힣a-zA-Z0-9\\s]{1,20}?)\\s+[0-9,]+원"),
-            // 괄호 안의 사용처: "(쿠팡) 승인"
-            Regex("\\(([가-힣a-zA-Z0-9][가-힣a-zA-Z0-9\\s]{0,20}?)\\)\\s*(?:[0-9,]+원)?\\s*(?:승인|결제|출금)?"),
-            // 사용처 명시적 표기
-            Regex("(?:사용처|가맹점|매장)[:\\s]+([가-힣a-zA-Z0-9][가-힣a-zA-Z0-9\\s]{1,20}?)(?:\\s|,|\\n|$)"),
-            // 페이 결제: "카카오페이 스타벅스 5,000원"
-            Regex("(?:네이버페이|카카오페이|토스|페이코|삼성페이|현대페이|신한페이)\\s+([가-힣a-zA-Z0-9][가-힣a-zA-Z0-9\\s]{1,20}?)\\s+[0-9,]+원"),
-            // ~에서 형식: "스타벅스에서"
-            Regex("([가-힣a-zA-Z0-9]{2,15})에서"),
-            // 대괄호 안 (카드사 제외): "[스타벅스]"
-            Regex("\\[([가-힣a-zA-Z0-9][가-힣a-zA-Z0-9\\s]{1,15}?)\\](?!카드|은행|승인|거절)"),
-            // 금액 앞 사용처 (마지막 fallback): "GS25 3,500원"
-            Regex("([가-힣a-zA-Z][가-힣a-zA-Z0-9]{1,15})\\s+[0-9,]+원")
-        )
-
-        for (pattern in merchantPatterns) {
-            val match = pattern.find(text)
-            if (match != null) {
-                var merchant = match.groupValues.getOrNull(1)?.trim() ?: continue
-
-                // 앞뒤 공백 및 특수문자 정리
-                merchant = merchant.trim()
-
-                // 유효성 검사
-                if (merchant.length < 2 || merchant.length > 25) continue
-
-                // 제외 키워드 포함 여부 확인
-                val containsExcluded = excludeKeywords.any { keyword ->
-                    merchant.contains(keyword, ignoreCase = true)
-                }
-                if (containsExcluded) continue
-
-                // 숫자로만 구성된 경우 제외
-                if (merchant.all { it.isDigit() }) continue
-
-                // 성공적으로 추출
-                return merchant
+        for (line in lines) {
+            // 유효한 가맹점명인지 확인
+            if (isValidMerchantName(line, isForeign)) {
+                return cleanMerchantName(line)
             }
+        }
+
+        // 특수 패턴 처리 (국내 거래용)
+        if (!isForeign) {
+            // "(주)회사명 체크카드출금" 형식
+            val corporatePattern = Pattern.compile("(\\([주유사재]\\)[가-힣a-zA-Z0-9]+)\\s*(?:체크카드출금|신용카드출금|카드출금)")
+            val corpMatcher = corporatePattern.matcher(text)
+            if (corpMatcher.find()) {
+                return corpMatcher.group(1)
+            }
+
+            // "[카드사] 승인 금액원 가맹점" 형식
+            val cardPattern = Pattern.compile("(?:승인|결제)\\s*[\\d,]+원\\s+([가-힣a-zA-Z0-9]+)")
+            val cardMatcher = cardPattern.matcher(text)
+            if (cardMatcher.find()) {
+                val merchant = cardMatcher.group(1)
+                if (isValidMerchantName(merchant, false)) {
+                    return merchant
+                }
+            }
+        } else {
+            // 해외 거래용 특수 패턴
+            // 예: "Amazon.com" 또는 "GOOGLE *SERVICES"
+            val foreignMerchantPattern = Pattern.compile("""([a-zA-Z0-9.,*&' -]+)""")
+            val matcher = foreignMerchantPattern.matcher(text)
+            val candidates = mutableListOf<String>()
+            while(matcher.find()) {
+                val potentialMerchant = matcher.group(1).trim()
+                if (isValidMerchantName(potentialMerchant, true)) {
+                    candidates.add(potentialMerchant)
+                }
+            }
+            // 가장 긴 후보를 선택 (가장 구체적인 정보일 가능성이 높음)
+            return candidates.maxByOrNull { it.length } ?: ""
         }
 
         return ""
     }
 
-    private fun extractDescription(text: String): String {
-        val patterns = listOf(
-            Regex("\\[(.+?)\\]"),
-            Regex("(.+?)에서"),
-            Regex("(.+?)결제"),
-            Regex("잔액[:\\s]*([0-9,]+원)")
-        )
-
-        for (pattern in patterns) {
-            val match = pattern.find(text)
-            if (match != null) {
-                val desc = match.groupValues.getOrNull(1)?.trim()
-                if (!desc.isNullOrBlank() && desc.length <= 50) {
-                    return desc
-                }
-            }
-        }
-
-        return text.take(50)
-    }
-
     /**
-     * 입금 시 송금자 이름 추출
-     * 다양한 은행 입금 알림 형식에서 보낸 사람 이름을 추출
+     * 송금인 추출 (입금 시)
      */
     private fun extractSenderName(text: String): String {
+        // "김*성님" 형식의 마스킹된 이름 찾기
         val senderPatterns = listOf(
-            // "김철수님이 보냈어요" 형식 (카카오뱅크/토스)
-            Regex("([가-힣]{2,4})님이.+보냈"),
-            // "김철수님으로부터" 형식
-            Regex("([가-힣]{2,4})님으로부터"),
-            // "김철수님이 입금" 형식
-            Regex("([가-힣]{2,4})님이\\s*입금"),
-            // "[은행] 입금 금액 이름" 형식
-            Regex("입금\\s*[0-9,]+원\\s+([가-힣]{2,4})(?:\\s|$)"),
-            // "[은행] 이름 금액 입금" 형식
-            Regex("\\]\\s*([가-힣]{2,4})\\s+[0-9,]+원\\s*입금"),
-            // "이름님 금액원 입금" 형식
-            Regex("([가-힣]{2,4})님\\s+[0-9,]+원\\s*입금"),
-            // "입금 이름" 형식 (금액 뒤에 이름)
-            Regex("입금[^가-힣]*([가-힣]{2,4})(?:\\s|잔액|$)"),
-            // 마스킹된 이름 "김*수" 형식
-            Regex("([가-힣]\\*[가-힣])"),
-            // "보낸분 김철수" 형식
-            Regex("(?:보낸분|보내신 분|송금자)[:\\s]*([가-힣]{2,4})"),
-            // "FROM 김철수" 형식
-            Regex("FROM\\s*([가-힣]{2,4})")
+            Pattern.compile("([가-힣]\\*[가-힣]{1,2})님?\\s*(?:입금|송금|이체)"),
+            Pattern.compile("(?:입금|송금|이체)\\s*([가-힣]\\*[가-힣]{1,2})님?"),
+            Pattern.compile("([가-힣]{2,4})님?\\s*(?:입금|송금|이체)"),
+            Pattern.compile("(?:입금|송금|이체)\\s*([가-힣]{2,4})님?"),
+            Pattern.compile("보내신\\s*분\\s*[:：]?\\s*([가-힣*]+)"),
+            Pattern.compile("([가-힣]\\*[가-힣]{1,2})님?에게서")
         )
 
         for (pattern in senderPatterns) {
-            val match = pattern.find(text)
-            if (match != null) {
-                val sender = match.groupValues.getOrNull(1)?.trim()
-                if (!sender.isNullOrBlank() && sender.length in 2..5) {
-                    // 은행/카드사 이름이 아닌 경우에만 반환
-                val excludeKeywords = listOf("은행", "카드", "입금", "출금", "잔액", "계좌")
-                    if (excludeKeywords.none { sender.contains(it) }) {
-                        return sender
-                    }
+            val matcher = pattern.matcher(text)
+            if (matcher.find()) {
+                val sender = matcher.group(1)?.trim() ?: continue
+                // 마스킹된 본인 이름이 아닌 경우에만 반환
+                if (sender.isNotBlank() && sender.length in 2..5) {
+                    return sender.replace("님", "")
                 }
             }
         }
-
         return ""
+    }
+
+    /**
+     * 입금 사유 추출 (출금취소, 환불 등)
+     */
+    private fun extractIncomeReason(text: String): String {
+        val incomeReasons = listOf(
+            "출금취소" to "출금취소",
+            "환불" to "환불",
+            "급여" to "급여",
+            "월급" to "월급",
+            "이자" to "이자",
+            "배당" to "배당",
+            "용돈" to "용돈"
+        )
+
+        for ((keyword, reason) in incomeReasons) {
+            if (text.contains(keyword)) {
+                return reason
+            }
+        }
+        return "입금"
     }
 
     /**
      * 계좌번호 추출
-     * 마스킹된 계좌번호도 추출 가능
      */
     private fun extractAccountNumber(text: String): String {
-        val accountPatterns = listOf(
-            // "123-456-789012" 형식
-            Regex("(\\d{3,4}-\\d{2,4}-\\d{4,6})"),
-            // "***-***-123456" 마스킹 형식
-            Regex("(\\*{2,4}-\\*{2,4}-\\d{4,6})"),
-            // "123***456" 형식
-            Regex("(\\d{3,4}\\*{2,4}\\d{3,6})"),
-            // "(1234)" 끝자리 형식
-            Regex("\\((\\d{4})\\)\\s*(?:계좌|입금|출금)"),
-            // "계좌 1234-5678" 형식
-            Regex("계좌[:\\s]*(\\d{3,4}[\\-\\*]?\\d{2,4}[\\-\\*]?\\d{4,6})")
-        )
+        for (pattern in ACCOUNT_PATTERNS) {
+            val matcher = pattern.matcher(text)
+            if (matcher.find()) {
+                return matcher.group(1) ?: ""
+            }
+        }
+        return ""
+    }
 
-        for (pattern in accountPatterns) {
-            val match = pattern.find(text)
-            if (match != null) {
-                val account = match.groupValues.getOrNull(1)?.trim()
-                if (!account.isNullOrBlank()) {
-                    return account
+    /**
+     * 설명 추출
+     */
+    private fun extractDescription(text: String, type: TransactionType): String {
+        // 잔액 정보 추출
+        for (pattern in BALANCE_PATTERNS) {
+            val matcher = pattern.matcher(text)
+            if (matcher.find()) {
+                // 해외 거래의 경우 '원'이 아닐 수 있으므로 통화 기호를 붙이지 않는다.
+                return "잔액 ${matcher.group(1)}"
+            }
+        }
+        return ""
+    }
+
+    /**
+     * 유효한 가맹점명인지 확인
+     */
+    private fun isValidMerchantName(text: String, isForeign: Boolean): Boolean {
+        // 길이 체크
+        if (text.length < 2 || text.length > 30) return false
+        
+        // 제외 키워드 체크 (공통)
+        if (EXCLUDED_KEYWORDS.any { text.contains(it, ignoreCase = true) }) return false
+        if (INSTITUTION_KEYWORDS.any { text.contains(it, ignoreCase = true) }) return false
+
+        // 마스킹된 본인 이름 제외 (공통)
+        if (isMaskedOwnerName(text)) return false
+
+        // 숫자로만 구성된 경우 제외
+        if (text.all { it.isDigit() || it == '*' || it == '-' || it == ',' || it == '.'}) return false
+        
+        // 날짜/시간 패턴 제외
+        if (text.matches(Regex("^\\d{1,2}[/:]\\d{2}$"))) return false
+        if (DATE_PATTERN.matcher(text).find()) return false
+
+        if (isForeign) {
+            // 해외 가맹점은 영문, 숫자, 일부 특수문자 허용
+            return text.matches(Regex(".*[a-zA-Z].*"))
+        } else {
+            // 국내 가맹점
+            // 금액 패턴 제외
+            if (text.matches(Regex(".*[\\d,]+\\s*원.*"))) return false
+            // 한글 또는 영문숫자가 포함되어야 함
+            return text.matches(Regex(".*[가-힣a-zA-Z].*"))
+        }
+    }
+
+    /**
+     * 마스킹된 본인 이름인지 확인
+     */
+    private fun isMaskedOwnerName(text: String): Boolean {
+        val maskedPatterns = listOf(
+            Regex("^[가-힣]\\*[가-힣]님?$"),
+            Regex("^[가-힣]\\*[가-힣]{2}님?$"),
+            Regex("^[가-힣]{2}\\*[가-힣]님?$"),
+            Regex("^[가-힣]\\*+님?$")
+        )
+        return maskedPatterns.any { it.matches(text) }
+    }
+
+    /**
+     * 제외 키워드인지 확인
+     */
+    private fun isExcludedKeyword(text: String): Boolean {
+        return EXCLUDED_KEYWORDS.any { text.contains(it, ignoreCase = true) }
+    }
+
+    /**
+     * 금융기관명인지 확인
+     */
+    private fun isInstitutionName(text: String): Boolean {
+        return INSTITUTION_KEYWORDS.any { text.contains(it, ignoreCase = true) }
+    }
+
+    /**
+     * 가맹점명 정리
+     */
+    private fun cleanMerchantName(name: String): String {
+        var cleaned = name.trim()
+
+        // 앞뒤 특수문자 제거
+        cleaned = cleaned.trimStart('[', '(', ' ')
+        cleaned = cleaned.trimEnd(']', ')', ' ', '님')
+
+        // "체크카드출금" 등 제거
+        cleaned = cleaned.replace(Regex("\\s*(체크카드출금|신용카드출금|카드출금)\\s*"), "")
+
+        return cleaned.trim()
+    }
+}
+
+
+// ==================== 카테고리 자동 분류 ====================
+
+object CategoryClassifier {
+
+    private val CATEGORY_KEYWORDS = mapOf(
+        "식비" to listOf(
+            "스타벅스", "맥도날드", "버거킹", "롯데리아", "KFC", "써브웨이",
+            "배달의민족", "요기요", "쿠팡이츠", "배민", "카페", "커피",
+            "치킨", "피자", "분식", "한식", "중식", "일식", "양식",
+            "CU", "GS25", "세븐일레븐", "이마트24", "편의점", "마트",
+            "이마트", "롯데마트", "홈플러스", "코스트코", "식당", "음식점"
+        ),
+        "교통" to listOf(
+            "택시", "카카오T", "타다", "지하철", "버스", "코레일",
+            "SRT", "KTX", "고속버스", "시외버스", "주유소", "SK에너지",
+            "GS칼텍스", "현대오일뱅크", "S-OIL", "주차", "톨게이트", "하이패스"
+        ),
+        "쇼핑" to listOf(
+            "쿠팡", "네이버쇼핑", "11번가", "G마켓", "옥션", "위메프",
+            "티몬", "무신사", "지그재그", "에이블리", "올리브영", "다이소",
+            "유니클로", "자라", "H&M", "이케아", "ABC마트"
+        ),
+        "의료/건강" to listOf(
+            "병원", "의원", "약국", "헬스", "피트니스", "PT", "필라테스",
+            "요가", "치과", "안과", "피부과", "내과", "외과"
+        ),
+        "문화/여가" to listOf(
+            "CGV", "롯데시네마", "메가박스", "영화관", "넷플릭스", "왓챠",
+            "웨이브", "디즈니", "티빙", "쿠팡플레이", "유튜브", "게임",
+            "노래방", "PC방", "볼링", "당구", "헬스장"
+        ),
+        "통신/구독" to listOf(
+            "SKT", "KT", "LG유플러스", "알뜰폰", "인터넷", "IPTV",
+            "통신비", "휴대폰", "애플", "구글", "마이크로소프트"
+        ),
+        "교육" to listOf(
+            "학원", "과외", "교육", "인강", "클래스101", "패스트캠퍼스",
+            "유데미", "노마드코더", "서점", "교보문고", "영풍문고", "YES24"
+        ),
+        "생활/공과금" to listOf(
+            "전기", "가스", "수도", "관리비", "보험", "세금", "국민연금",
+            "건강보험", "고용보험", "아파트", "월세"
+        )
+    )
+
+    fun classify(merchantName: String): String {
+        val normalizedName = merchantName.uppercase()
+
+        for ((category, keywords) in CATEGORY_KEYWORDS) {
+            for (keyword in keywords) {
+                if (normalizedName.contains(keyword.uppercase())) {
+                    return category
                 }
             }
         }
 
-        return ""
-    }
-
-    companion object {
-        const val HIGH_AMOUNT_THRESHOLD = 1_000_000L
+        return "기타"
     }
 }

@@ -13,11 +13,13 @@ import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.data.model.User
 import com.google.firebase.Timestamp
 import android.app.Activity
+import com.ezcorp.fammoney.data.model.TransactionTag
 import com.ezcorp.fammoney.data.repository.AllowanceRepository
 import com.ezcorp.fammoney.data.repository.ChildIncomeRepository
 import com.ezcorp.fammoney.data.repository.BillingRepository
 import com.ezcorp.fammoney.data.repository.DuplicateRepository
 import com.ezcorp.fammoney.data.repository.SavingsGoalRepository
+import com.ezcorp.fammoney.data.repository.TagRepository
 import com.ezcorp.fammoney.data.repository.TransactionRepository
 import com.ezcorp.fammoney.data.repository.UserRepository
 import com.ezcorp.fammoney.service.AIFeatureService
@@ -25,6 +27,7 @@ import com.ezcorp.fammoney.service.GoalPrediction
 import com.ezcorp.fammoney.service.MonthlyFinancialData
 import com.ezcorp.fammoney.service.SmartInsight
 import com.ezcorp.fammoney.service.SpendingPrediction
+import com.ezcorp.fammoney.service.TransactionMigrationService
 import com.ezcorp.fammoney.service.UserPreferences
 import com.ezcorp.fammoney.util.effectiveMaxMembers
 import com.ezcorp.fammoney.util.effectiveSubscriptionType
@@ -40,6 +43,7 @@ import javax.inject.Inject
 data class MainUiState(
     val isLoading: Boolean = true,
     val isLoggedIn: Boolean = false,
+    val isOnboardingCompleted: Boolean = true,
     val currentUser: User? = null,
     val currentGroup: Group? = null,
     val groupMembers: List<User> = emptyList(),
@@ -69,7 +73,14 @@ data class MainUiState(
     val spendingPrediction: SpendingPrediction? = null,
     val goalPredictions: Map<String, GoalPrediction> = emptyMap(),
     val isLoadingAI: Boolean = false,
-    val categoryExpenses: Map<String, Long> = emptyMap()
+    val categoryExpenses: Map<String, Long> = emptyMap(),
+    val duplicatePreference: String = UserPreferences.DUPLICATE_PREF_ASK,
+    // 마이그레이션 상태
+    val isMigrating: Boolean = false,
+    val migrationCompleted: Boolean = false,
+    val migrationResult: String? = null,
+    // 태그 목록
+    val tags: List<TransactionTag> = emptyList()
 )
 
 @HiltViewModel
@@ -80,13 +91,18 @@ class MainViewModel @Inject constructor(
     private val allowanceRepository: AllowanceRepository,
     private val savingsGoalRepository: SavingsGoalRepository,
     private val childIncomeRepository: ChildIncomeRepository,
+    private val tagRepository: TagRepository,
     private val userPreferences: UserPreferences,
     val billingRepository: BillingRepository,
-    private val aiFeatureService: AIFeatureService
+    private val aiFeatureService: AIFeatureService,
+    private val migrationService: TransactionMigrationService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
+
+    // 거래내역 로딩 Job (중복 호출 방지용)
+    private var transactionsJob: kotlinx.coroutines.Job? = null
 
     // Gemini API 키 Flow
     val geminiApiKeyFlow = userPreferences.geminiApiKeyFlow
@@ -95,6 +111,16 @@ class MainViewModel @Inject constructor(
         checkLoginStatus()
         loadHighAmountThreshold()
         loadCashManagementSetting()
+        loadOnboardingStatus()
+        loadDuplicatePreference()
+    }
+
+    private fun loadOnboardingStatus() {
+        viewModelScope.launch {
+            userPreferences.onboardingCompletedFlow.collect { completed ->
+                _uiState.value = _uiState.value.copy(isOnboardingCompleted = completed)
+            }
+        }
     }
 
     // Gemini API 키 저장
@@ -132,6 +158,20 @@ class MainViewModel @Inject constructor(
     fun updateCashManagementEnabled(enabled: Boolean) {
         viewModelScope.launch {
             userPreferences.saveCashManagementEnabled(enabled)
+        }
+    }
+
+    private fun loadDuplicatePreference() {
+        viewModelScope.launch {
+            userPreferences.duplicatePreferenceFlow.collect { preference ->
+                _uiState.value = _uiState.value.copy(duplicatePreference = preference)
+            }
+        }
+    }
+
+    fun updateDuplicatePreference(preference: String) {
+        viewModelScope.launch {
+            userPreferences.saveDuplicatePreference(preference)
         }
     }
 
@@ -231,13 +271,19 @@ class MainViewModel @Inject constructor(
     }
 
     private fun loadTransactions(groupId: String) {
-        viewModelScope.launch {
-            val state = _uiState.value
+        // 이전 Job 취소하여 중복 collect 방지
+        transactionsJob?.cancel()
+        transactionsJob = viewModelScope.launch {
+            val year = _uiState.value.currentYear
+            val month = _uiState.value.currentMonth
             transactionRepository.getTransactionsByMonth(
                 groupId,
-                state.currentYear,
-                state.currentMonth
+                year,
+                month
             ).collect { transactions ->
+                // collect 블록 안에서 최신 state 읽기
+                val state = _uiState.value
+
                 // 사용자 필터 적용
                 val userFilteredTransactions = if (state.selectedUserFilter != null) {
                     transactions.filter { it.userId == state.selectedUserFilter }
@@ -251,21 +297,21 @@ class MainViewModel @Inject constructor(
 
                 val visibleTransactions = userFilteredTransactions.filter { transaction ->
                     // 본인 거래는 항상 보임
-                if (transaction.userId == currentUserId) {
+                    if (transaction.userId == currentUserId) {
                         true
                     } else {
                         // 다른 사람의 거래는 그 사람의 공유 범위 설정 확인
-                val transactionOwner = groupMembers.find { it.id == transaction.userId }
+                        val transactionOwner = groupMembers.find { it.id == transaction.userId }
                         if (transactionOwner != null) {
                             val shareFromDate = transactionOwner.shareFromDate
                             val hiddenIds = transactionOwner.hiddenTransactionIds
 
                             // 숨김 목록에 있는 거래는 안 보임
-                if (hiddenIds.contains(transaction.id)) {
+                            if (hiddenIds.contains(transaction.id)) {
                                 false
                             }
                             // 공유 시작일 이전 거래는 안 보임
-                else if (shareFromDate != null && transaction.transactionDate != null) {
+                            else if (shareFromDate != null && transaction.transactionDate != null) {
                                 transaction.transactionDate >= shareFromDate
                             } else {
                                 true
@@ -339,6 +385,12 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val userId = _uiState.value.currentUser?.id ?: return@launch
             userRepository.updateSelectedBanks(userId, bankIds)
+        }
+    }
+
+    fun completeOnboarding() {
+        viewModelScope.launch {
+            userPreferences.setOnboardingCompleted(true)
         }
     }
 
@@ -811,5 +863,155 @@ class MainViewModel @Inject constructor(
      */
     fun getAIDisabledReason(): String {
         return aiFeatureService.getDisabledReason()
+    }
+
+    // ========== 마이그레이션 ==========
+
+    /**
+     * 거래내역 마이그레이션 실행
+     * 기존 거래의 수입/지출 유형을 재판정
+     */
+    fun runMigration() {
+        viewModelScope.launch {
+            val groupId = _uiState.value.currentGroup?.id ?: return@launch
+
+            _uiState.value = _uiState.value.copy(
+                isMigrating = true,
+                migrationResult = null
+            )
+
+            try {
+                val result = migrationService.migrateTransactions(groupId)
+
+                val message = buildString {
+                    append("마이그레이션 완료!\n")
+                    append("총 ${result.totalCount}건 중 ${result.updatedCount}건 수정됨\n")
+                    if (result.incomeFixedCount > 0) {
+                        append("- 수입으로 변경: ${result.incomeFixedCount}건\n")
+                    }
+                    if (result.expenseFixedCount > 0) {
+                        append("- 지출로 변경: ${result.expenseFixedCount}건\n")
+                    }
+                    if (result.errors.isNotEmpty()) {
+                        append("오류: ${result.errors.size}건")
+                    }
+                }
+
+                _uiState.value = _uiState.value.copy(
+                    isMigrating = false,
+                    migrationCompleted = true,
+                    migrationResult = message
+                )
+
+                // 거래내역 새로고침
+                loadTransactions(groupId)
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isMigrating = false,
+                    migrationResult = "마이그레이션 실패: ${e.message}"
+                )
+            }
+        }
+    }
+
+    /**
+     * 마이그레이션 결과 초기화
+     */
+    fun clearMigrationResult() {
+        _uiState.value = _uiState.value.copy(
+            migrationResult = null,
+            migrationCompleted = false
+        )
+    }
+
+    // ========== 태그 기능 ==========
+
+    /**
+     * 태그 목록 로드
+     */
+    fun loadTags() {
+        viewModelScope.launch {
+            val groupId = userPreferences.getGroupId() ?: return@launch
+            tagRepository.getTagsByGroup(groupId).collect { tags ->
+                _uiState.value = _uiState.value.copy(tags = tags)
+            }
+        }
+    }
+
+    /**
+     * 선택한 거래들에 태그 적용
+     */
+    fun applyTagToTransactions(transactionIds: List<String>, tagId: String, tagName: String) {
+        viewModelScope.launch {
+            transactionIds.forEach { txId ->
+                val transaction = _uiState.value.transactions.find { it.id == txId }
+                if (transaction != null) {
+                    val updatedTransaction = transaction.copy(
+                        tagId = tagId,
+                        tagName = tagName
+                    )
+                    transactionRepository.updateTransaction(updatedTransaction)
+                }
+            }
+        }
+    }
+
+    /**
+     * 거래에서 태그 제거
+     */
+    fun removeTagFromTransaction(transactionId: String) {
+        viewModelScope.launch {
+            val transaction = _uiState.value.transactions.find { it.id == transactionId }
+            if (transaction != null) {
+                val updatedTransaction = transaction.copy(
+                    tagId = "",
+                    tagName = ""
+                )
+                transactionRepository.updateTransaction(updatedTransaction)
+            }
+        }
+    }
+
+    /**
+     * 새 태그 생성 후 거래에 적용
+     */
+    fun createTagAndApply(
+        tagName: String,
+        tagColor: String,
+        transactionIds: List<String>,
+        onComplete: () -> Unit
+    ) {
+        viewModelScope.launch {
+            val groupId = userPreferences.getGroupId() ?: return@launch
+
+            // 새 태그 생성
+            val newTag = TransactionTag(
+                groupId = groupId,
+                name = tagName,
+                color = tagColor,
+                icon = "label",
+                isActive = false,
+                createdAt = Timestamp.now()
+            )
+
+            val result = tagRepository.createTag(newTag)
+            result.onSuccess { tagId ->
+                // 거래에 태그 적용
+                transactionIds.forEach { txId ->
+                    val transaction = _uiState.value.transactions.find { it.id == txId }
+                    if (transaction != null) {
+                        val updatedTransaction = transaction.copy(
+                            tagId = tagId,
+                            tagName = tagName
+                        )
+                        transactionRepository.updateTransaction(updatedTransaction)
+                    }
+                }
+
+                // 태그 목록 새로고침
+                loadTags()
+                onComplete()
+            }
+        }
     }
 }

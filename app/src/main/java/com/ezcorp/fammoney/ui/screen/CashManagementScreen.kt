@@ -62,7 +62,7 @@ fun CashManagementScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // ???�택
+            // 월 선택
             CashMonthSelector(
                 year = uiState.currentYear,
                 month = uiState.currentMonth,
@@ -70,7 +70,7 @@ fun CashManagementScreen(
                 onNext = viewModel::nextMonth
             )
 
-            // ?�약 카드
+            // 요약 카드
             CashSummaryCard(
                 totalIncome = uiState.totalIncome,
                 totalExpense = uiState.totalExpense
@@ -95,13 +95,13 @@ fun CashManagementScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "?�금 거래 ?�역???�습?�다",
+                            text = "현금 거래 내역이 없습니다",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "+ 버튼???�러 ?�금 거래�?추�??�세",
+                            text = "+ 버튼을 눌러 현금 거래를 추가하세요",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                         )
@@ -125,7 +125,7 @@ fun CashManagementScreen(
         }
     }
 
-    // 현금 거래 추가? ?�이뒤로�"
+    // 현금 거래 추가 다이얼로그
     if (showAddDialog) {
         AddCashTransactionDialog(
             onDismiss = { showAddDialog = false },
@@ -152,7 +152,7 @@ fun CashMonthSelector(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onPrevious) {
-            Icon(Icons.Default.ChevronLeft, contentDescription = "?�전 ")
+            Icon(Icons.Default.ChevronLeft, contentDescription = "이전 달")
         }
 
         Text(
@@ -163,7 +163,7 @@ fun CashMonthSelector(
         )
 
         IconButton(onClick = onNext) {
-            Icon(Icons.Default.ChevronRight, contentDescription = "삭제 ")
+            Icon(Icons.Default.ChevronRight, contentDescription = "다음 달")
         }
     }
 }
@@ -187,7 +187,7 @@ fun CashSummaryCard(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "?�금 ?�입",
+                    text = "현금 수입",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -208,7 +208,7 @@ fun CashSummaryCard(
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "?�금 지�",
+                    text = "현금 지출",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -229,7 +229,7 @@ fun CashSummaryCard(
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "?�액",
+                    text = "잔액",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -257,14 +257,14 @@ fun CashTransactionItem(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("??�� ?�인") },
-            text = { Text("??거래 ?�역????��?�시겠습?�까") },
+            title = { Text("삭제 확인") },
+            text = { Text("이 거래 내역을 삭제하시겠습니까?") },
             confirmButton = {
                 TextButton(onClick = {
                     onDelete()
                     showDeleteDialog = false
                 }) {
-                    Text("??��", color = MaterialTheme.colorScheme.error)
+                    Text("삭제", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
@@ -285,7 +285,7 @@ fun CashTransactionItem(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // ?�쪽: ?�짜/?�간
+        // 왼쪽: 날짜/시간
         Column(
             modifier = Modifier.width(50.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -309,7 +309,7 @@ fun CashTransactionItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // 가?�데: ?�용
+        // 가운데: 내용
         Text(
             text = transaction.description.ifBlank { "현금 ${if (transaction.type == TransactionType.INCOME) "수입" else "지출"}" },
             style = MaterialTheme.typography.bodyMedium,
@@ -320,7 +320,7 @@ fun CashTransactionItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // ?�른�? 금액
+        // 오른쪽: 금액
         Text(
             text = "${if (transaction.type == TransactionType.INCOME) "+" else "-"}${String.format("%,d", transaction.amount)}",
             style = MaterialTheme.typography.bodyMedium,
@@ -354,7 +354,7 @@ fun AddCashTransactionDialog(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // ?�입/지�??�택
+                // 수입/지출 선택
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -362,7 +362,7 @@ fun AddCashTransactionDialog(
                     FilterChip(
                         selected = transactionType == TransactionType.INCOME,
                         onClick = { transactionType = TransactionType.INCOME },
-                        label = { Text("?�입") },
+                        label = { Text("수입") },
                         leadingIcon = if (transactionType == TransactionType.INCOME) {
                             { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
                         } else null,
@@ -375,7 +375,7 @@ fun AddCashTransactionDialog(
                     FilterChip(
                         selected = transactionType == TransactionType.EXPENSE,
                         onClick = { transactionType = TransactionType.EXPENSE },
-                        label = { Text("지�") },
+                        label = { Text("지출") },
                         leadingIcon = if (transactionType == TransactionType.EXPENSE) {
                             { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
                         } else null,
@@ -387,31 +387,31 @@ fun AddCashTransactionDialog(
                     )
                 }
 
-                // 금액 ?�력
+                // 금액 입력
                 OutlinedTextField(
                     value = amountText,
                     onValueChange = { amountText = it.filter { c -> c.isDigit() } },
                     label = { Text("금액") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
-                    suffix = { Text("") },
+                    suffix = { Text("원") },
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                // ?�용 ?�력
+                // 내용 입력
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("?�용") },
+                    label = { Text("내용") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                // 메모 ?�력
+                // 메모 입력
                 OutlinedTextField(
                     value = memo,
                     onValueChange = { memo = it },
-                    label = { Text("메모 (?�택)") },
+                    label = { Text("메모 (선택)") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -427,7 +427,7 @@ fun AddCashTransactionDialog(
                 },
                 enabled = amountText.isNotBlank() && (amountText.toLongOrNull() ?: 0) > 0
             ) {
-                Text("?�")
+                Text("추가")
             }
         },
         dismissButton = {

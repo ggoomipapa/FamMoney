@@ -112,28 +112,34 @@ class TransactionRepository @Inject constructor(
             set(year, month - 1, 1, 0, 0, 0)
             set(Calendar.MILLISECOND, 0)
         }
-        val startDate = Timestamp(calendar.time)
+        val startTime = calendar.timeInMillis
 
         calendar.add(Calendar.MONTH, 1)
-        val endDate = Timestamp(calendar.time)
+        val endTime = calendar.timeInMillis
 
+        // 복합 인덱스 없이 동작하도록 groupId만으로 쿼리 후 메모리에서 날짜 필터링
         val listener = transactionsCollection
             .whereEqualTo("groupId", groupId)
-            .whereGreaterThanOrEqualTo("transactionDate", startDate)
-            .whereLessThan("transactionDate", endDate)
-            .orderBy("transactionDate", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    // ?�덱??빌드 중이거나 ?�러 ??�?목록 반환 (?�래??방�")
-                trySend(emptyList())
+                    android.util.Log.e("TransactionRepository", "getTransactionsByMonth error", error)
+                    trySend(emptyList())
                     return@addSnapshotListener
                 }
 
-                val transactions = snapshot?.documents?.mapNotNull { doc ->
+                val allTransactions = snapshot?.documents?.mapNotNull { doc ->
                     doc.data?.let { Transaction.fromMap(doc.id, it) }
                 } ?: emptyList()
 
-                trySend(transactions)
+                // 메모리에서 날짜 필터링 및 정렬
+                val filtered = allTransactions.filter { tx ->
+                    tx.transactionDate?.let { timestamp ->
+                        val txTime = timestamp.toDate().time
+                        txTime >= startTime && txTime < endTime
+                    } ?: false
+                }.sortedByDescending { it.transactionDate?.toDate()?.time ?: 0 }
+
+                trySend(filtered)
             }
 
         awaitClose { listener.remove() }

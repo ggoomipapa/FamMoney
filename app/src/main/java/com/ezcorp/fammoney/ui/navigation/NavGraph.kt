@@ -30,6 +30,7 @@ fun NavGraph(
     val startDestination = when {
         authState.isLoading -> Screen.Splash.route
         authState.needsSetup -> Screen.Setup.route
+        mainState.isLoggedIn && !mainState.isOnboardingCompleted -> Screen.Onboarding.route
         mainState.isLoggedIn -> Screen.Home.route
         else -> Screen.Setup.route
     }
@@ -45,11 +46,22 @@ fun NavGraph(
         composable(Screen.Setup.route) {
             SetupScreen(
                 onSetupComplete = {
-                    navController.navigate(Screen.Home.route) {
+                    navController.navigate(Screen.Onboarding.route) {
                         popUpTo(Screen.Setup.route) { inclusive = true }
                     }
                 },
                 viewModel = authViewModel
+            )
+        }
+
+        composable(Screen.Onboarding.route) {
+            OnboardingScreen(
+                onOnboardingComplete = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Onboarding.route) { inclusive = true }
+                    }
+                },
+                viewModel = mainViewModel
             )
         }
 
@@ -116,6 +128,9 @@ fun NavGraph(
                 },
                 onNavigateToMotivation = {
                     navController.navigate(Screen.Motivation.route)
+                },
+                onNavigateToTags = {
+                    navController.navigate(Screen.Tags.route)
                 },
                 mainViewModel = mainViewModel,
                 authViewModel = authViewModel
@@ -249,6 +264,13 @@ fun NavGraph(
         // 금융 가이드
         composable(Screen.FinancialGuide.route) {
             FinancialGuideScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // 태그 관리 (여행/이벤트)
+        composable(Screen.Tags.route) {
+            TagListScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
         }

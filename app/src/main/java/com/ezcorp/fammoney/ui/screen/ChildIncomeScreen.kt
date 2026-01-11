@@ -315,24 +315,26 @@ fun ChildIncomeScreen(
             if (uiState.children.isEmpty()) {
                 EmptyChildrenMessage(onAddChild = { showAddChildDialog = true })
             } else {
-                // ?ë? ? í ì¹?
+                // 자녀 선택 칩
                 ChildSelectionChips(
                     children = uiState.children,
                     selectedChild = uiState.selectedChild,
-                    onChildSelected = { viewModel.selectChild(it) }
+                    onChildSelected = viewModel::selectChild,
+                    onSelectAll = { viewModel.selectChild(null) }
                 )
 
+                // 요약 카드 및 탭
                 if (uiState.selectedChild != null) {
                     val child = uiState.selectedChild!!
 
-                    // 용돈 ?¨ê³????다음 달?ê³ ì  ì¹´ë ?ì
-                if (child.isAllowanceActive && child.preSavingsAmount > 0) {
+                    // 용돈 체계일 경우 다음 달 고정 적립금 카드 표시
+                    if (child.isAllowanceActive && child.preSavingsAmount > 0) {
                         PreSavingsCard(child = child)
                         Spacer(modifier = Modifier.height(8.dp))
                     }
 
-                    // ? í???ë? 정보 ì¹´ë (용돈 관리?ë²í¼ ?¬í¨)
-                ChildSummaryCardWithAllowance(
+                    // 선택된 자녀 정보 카드 (용돈 관리 버튼 포함)
+                    ChildSummaryCardWithAllowance(
                         child = child,
                         onEdit = { showEditChildDialog = true },
                         onDelete = { showDeleteChildDialog = true },
@@ -341,78 +343,72 @@ fun ChildIncomeScreen(
                         onGiveAllowance = { showGiveAllowanceDialog = true },
                         onCancelAllowance = { showCancelAllowanceDialog = true }
                     )
+                } else {
+                    // "전체" 선택 시 요약 카드
+                    AllChildrenSummaryCard(children = uiState.children)
+                }
 
-                    // 수입/지출"
-TabRow(
-                        selectedTabIndex = if (uiState.currentTab == ChildTransactionTab.INCOME) 0 else 1,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    ) {
-                        Tab(
-                            selected = uiState.currentTab == ChildTransactionTab.INCOME,
-                            onClick = { viewModel.setCurrentTab(ChildTransactionTab.INCOME) },
-                            text = { Text("수입") },
-                            selectedContentColor = IncomeColor,
-                            unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Tab(
-                            selected = uiState.currentTab == ChildTransactionTab.EXPENSE,
-                            onClick = { viewModel.setCurrentTab(ChildTransactionTab.EXPENSE) },
-                            text = { Text("지출") },
-                            selectedContentColor = ExpenseColor,
-                            unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                // 수입/지출 탭
+                TabRow(
+                    selectedTabIndex = if (uiState.currentTab == ChildTransactionTab.INCOME) 0 else 1,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
+                    Tab(
+                        selected = uiState.currentTab == ChildTransactionTab.INCOME,
+                        onClick = { viewModel.setCurrentTab(ChildTransactionTab.INCOME) },
+                        text = { Text("수입") },
+                        selectedContentColor = IncomeColor,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Tab(
+                        selected = uiState.currentTab == ChildTransactionTab.EXPENSE,
+                        onClick = { viewModel.setCurrentTab(ChildTransactionTab.EXPENSE) },
+                        text = { Text("지출") },
+                        selectedContentColor = ExpenseColor,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    // ?? ?°ë¥¸ ?´ì­ ë¦¬ì¤
-if (uiState.currentTab == ChildTransactionTab.INCOME) {
-                        if (uiState.childIncomes.isEmpty()) {
-                            EmptyIncomesMessage()
-                        } else {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                items(uiState.childIncomes) { income ->
-                                    ChildIncomeItem(
-                                        income = income,
-                                        onDelete = { showDeleteIncomeDialog = income }
-                                    )
-                                }
-                                item {
-                                    Spacer(modifier = Modifier.height(80.dp))
-                                }
-                            }
-                        }
+                // 탭에 따른 내역 리스트
+                if (uiState.currentTab == ChildTransactionTab.INCOME) {
+                    val incomes = if (uiState.selectedChild == null) uiState.allChildIncomes else uiState.childIncomes
+                    if (incomes.isEmpty()) {
+                        EmptyIncomesMessage()
                     } else {
-                        if (uiState.childExpenses.isEmpty()) {
-                            EmptyExpensesMessage()
-                        } else {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                items(uiState.childExpenses) { expense ->
-                                    ChildExpenseItem(
-                                        expense = expense,
-                                        onDelete = { showDeleteExpenseDialog = expense }
-                                    )
-                                }
-                                item {
-                                    Spacer(modifier = Modifier.height(80.dp))
-                                }
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(incomes) { income ->
+                                ChildIncomeItem(
+                                    income = income,
+                                    onDelete = { showDeleteIncomeDialog = income }
+                                )
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(80.dp))
                             }
                         }
                     }
                 } else {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "자녀를 먼저 선택해주세요",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                    val expenses = if (uiState.selectedChild == null) uiState.allChildExpenses else uiState.childExpenses
+                    if (expenses.isEmpty()) {
+                        EmptyExpensesMessage()
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(expenses) { expense ->
+                                ChildExpenseItem(
+                                    expense = expense,
+                                    onDelete = { showDeleteExpenseDialog = expense }
+                                )
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(80.dp))
+                            }
+                        }
                     }
                 }
             }
@@ -425,7 +421,8 @@ if (uiState.currentTab == ChildTransactionTab.INCOME) {
 fun ChildSelectionChips(
     children: List<Child>,
     selectedChild: Child?,
-    onChildSelected: (Child) -> Unit
+    onChildSelected: (Child) -> Unit,
+    onSelectAll: () -> Unit
 ) {
     LazyRow(
         modifier = Modifier
@@ -433,6 +430,16 @@ fun ChildSelectionChips(
             .padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        item {
+            FilterChip(
+                selected = selectedChild == null,
+                onClick = onSelectAll,
+                label = { Text("전체") },
+                leadingIcon = if (selectedChild == null) {
+                    { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
+                } else null
+            )
+        }
         items(children) { child ->
             FilterChip(
                 selected = selectedChild?.id == child.id,
@@ -442,6 +449,94 @@ fun ChildSelectionChips(
                     { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
                 } else null
             )
+        }
+    }
+}
+
+@Composable
+fun AllChildrenSummaryCard(children: List<Child>) {
+    val totalIncome = children.sumOf { it.totalIncome }
+    val totalExpense = children.sumOf { it.totalExpense }
+    val totalBalance = children.sumOf { it.balance }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Group,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = "모든 자녀",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                // 총 수입
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "총 수입",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "+${String.format("%,d", totalIncome)}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = IncomeColor
+                    )
+                }
+
+                // 총 지출
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "총 지출",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "-${String.format("%,d", totalExpense)}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = ExpenseColor
+                    )
+                }
+
+                // 총 잔액
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "총 잔액",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "${String.format("%,d", totalBalance)}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (totalBalance >= 0) IncomeColor else ExpenseColor
+                    )
+                }
+            }
         }
     }
 }

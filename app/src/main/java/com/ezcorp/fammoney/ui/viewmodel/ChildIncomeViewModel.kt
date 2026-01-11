@@ -140,6 +140,15 @@ class ChildIncomeViewModel @Inject constructor(
             val result = childIncomeRepository.addChild(child)
             if (result.isSuccess) {
                 Log.d(TAG, "addChild 성공: ${result.getOrNull()}")
+                // FIX: Manually update the state for immediate UI feedback
+                val newChildId = result.getOrNull()
+                if (newChildId != null) {
+                    val newChild = child.copy(id = newChildId)
+                    _uiState.value = _uiState.value.copy(
+                        children = _uiState.value.children + newChild,
+                        selectedChild = newChild
+                    )
+                }
             } else {
                 Log.e(TAG, "addChild 실패: ${result.exceptionOrNull()?.message}")
                 _uiState.value = _uiState.value.copy(

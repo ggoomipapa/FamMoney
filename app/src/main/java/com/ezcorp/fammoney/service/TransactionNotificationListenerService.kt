@@ -1,4 +1,4 @@
-﻿package com.ezcorp.fammoney.service
+package com.ezcorp.fammoney.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.ezcorp.fammoney.R
 import com.ezcorp.fammoney.data.model.BankConfig
@@ -47,8 +48,10 @@ class TransactionNotificationListenerService : NotificationListenerService() {
     @Inject
     lateinit var aiFeatureService: AIFeatureService
 
+    @Inject
+    lateinit var parser: NotificationParser // Inject the parser
+
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val parser = NotificationParser()
 
     private val allBanks = BankConfig.getDefaultBanks()
 
@@ -80,42 +83,89 @@ class TransactionNotificationListenerService : NotificationListenerService() {
 
     private suspend fun processNotification(packageName: String, notificationText: String) {
         try {
-            val userId = userPreferences.getUserId() ?: return
-            val user = userRepository.getUserFlow(userId).first() ?: return
+            Log.d(TAG, "알림 수신 - 패키지: $packageName")
+            Log.d(TAG, "알림 텍스트: $notificationText")
+
+            val userId = userPreferences.getUserId()
+            if (userId == null) {
+                Log.d(TAG, "userId가 null - 로그인 필요")
+                return
+            }
+
+            val user = userRepository.getUserFlow(userId).first()
+            if (user == null) {
+                Log.d(TAG, "user가 null - 사용자 정보 없음")
+                return
+            }
+
+            Log.d(TAG, "선택된 은행 ID 목록: ${user.selectedBankIds}")
 
             val selectedBanks = allBanks.filter { bank ->
                 user.selectedBankIds.contains(bank.bankId)
             }
 
-            if (selectedBanks.isEmpty()) return
+            Log.d(TAG, "선택된 은행 수: ${selectedBanks.size}")
+            selectedBanks.forEach { bank ->
+                Log.d(TAG, "  - ${bank.displayName}: ${bank.packageNames}")
+            }
+
+            if (selectedBanks.isEmpty()) {
+                Log.d(TAG, "선택된 은행 없음 - 파싱 중단")
+                return
+            }
 
             val matchingBank = selectedBanks.find { bank ->
                 bank.packageNames.contains(packageName)
-            } ?: return
+            }
 
-            val parsed = parser.parse(packageName, notificationText, selectedBanks) ?: return
+            if (matchingBank == null) {
+                Log.d(TAG, "패키지명 '$packageName'과 매칭되는 은행 없음")
+                Log.d(TAG, "등록된 모든 은행의 패키지명:")
+                allBanks.forEach { bank ->
+                    if (bank.packageNames.any { it.contains("kb", ignoreCase = true) }) {
+                        Log.d(TAG, "  - ${bank.displayName}: ${bank.packageNames}")
+                    }
+                }
+                return
+            }
 
-            // ?¬ì©?ê? ?¤ì ??ê³ ì¡ ê±°ë ê¸°ì? ê¸ì¡ ê°?¸ì¤ê¸?
+            Log.d(TAG, "매칭된 은행: ${matchingBank.displayName}")
+
+            val parsed = parser.parse(packageName, notificationText, selectedBanks)
+            if (parsed == null) {
+                Log.d(TAG, "파싱 실패 - 금액 정규식 또는 형식 불일치")
+                return
+            }
+
+            Log.d(TAG, "파싱 성공 - 금액: ${parsed.amount}, 유형: ${parsed.type}, 가맹점: ${parsed.merchantName}, 송금자: ${parsed.senderName}")
+
+            // 사용자가 설정한 고액 거래 기준 금액 가져오기
             val highAmountThreshold = userPreferences.getHighAmountThreshold()
 
-            // AI ?ë ë¶ë¥ (ì»¤ë¥??AI êµ¬ë???ì©)
-            var merchantName = parsed.merchantName
+            // 거래 상대방 이름 결정
+            // - 입금(INCOME): 보낸 사람(senderName) 사용
+            // - 출금(EXPENSE): 받는 사람/사용처(merchantName) 사용
+            var displayName = if (parsed.type == TransactionType.INCOME) {
+                parsed.senderName.ifBlank { parsed.merchantName }
+            } else {
+                parsed.merchantName.ifBlank { parsed.senderName }
+            }
             var category = ""
 
-            // AIë¡?ê°ë§¹ì ëª?ì¶ì¶ ?ë (?ê·?ì¼ë¡?ëª?ì°¾ì? ê²½ì°)
-            if (merchantName.isBlank()) {
+            // 로컬 서비스로 상대방 이름 추출 시도 (파싱에서 못 찾은 경우)
+            if (displayName.isBlank()) {
                 val extractResult = aiFeatureService.extractMerchantName(notificationText)
                 extractResult.onSuccess { name ->
                     if (name.isNotBlank()) {
-                        merchantName = name
+                        displayName = name
                     }
                 }
             }
 
-            // AI ?ë ì¹´íê³ ë¦¬ ë¶ë¥ (ì§ì¶?ê±°ë??ê²½ì°)
-            if (parsed.type == TransactionType.EXPENSE && merchantName.isNotBlank()) {
+            // 자동 카테고리 분류 (지출 거래인 경우)
+            if (parsed.type == TransactionType.EXPENSE && displayName.isNotBlank()) {
                 val categoryResult = aiFeatureService.autoCategorize(
-                    merchantName = merchantName,
+                    merchantName = displayName,
                     amount = parsed.amount,
                     description = parsed.description
                 )
@@ -126,6 +176,10 @@ class TransactionNotificationListenerService : NotificationListenerService() {
                 }
             }
 
+            // 현재 활성화된 태그 가져오기 (여행/이벤트 등)
+            val activeTagId = userPreferences.getActiveTagId() ?: ""
+            val activeTagName = userPreferences.getActiveTagName() ?: ""
+
             val transaction = Transaction(
                 groupId = user.groupId,
                 userId = userId,
@@ -135,41 +189,49 @@ class TransactionNotificationListenerService : NotificationListenerService() {
                 bankId = parsed.bankConfig.bankId,
                 bankName = parsed.bankConfig.displayName,
                 description = parsed.description,
-                merchantName = merchantName,
+                merchantName = displayName,
                 category = category,
                 source = InputSource.NOTIFICATION,
                 originalText = parsed.originalText,
+                tagId = activeTagId,
+                tagName = activeTagName,
                 transactionDate = Timestamp(Date()),
                 isConfirmed = parsed.amount <= highAmountThreshold
             )
 
-            // ë¨¼ì? ê±°ëë¥??
-val savedTransaction = transactionRepository.addTransactionAndReturn(transaction)
+            // 먼저 거래를 저장
+            val savedTransaction = transactionRepository.addTransactionAndReturn(transaction)
+            Log.d(TAG, "거래 저장 완료 - ID: ${savedTransaction.id}, 금액: ${savedTransaction.amount}")
 
-            // ì¤ë³µ ê°ì? ?ì¸
+            // 중복 감지 확인
             val duplicateResult = duplicateDetectionService.checkAndHandleDuplicate(savedTransaction)
+            Log.d(TAG, "중복 검사 결과: $duplicateResult")
 
             when (duplicateResult) {
                 is DuplicateCheckResult.DuplicateDetected -> {
-                    // ì¤ë³µ??ê°ì???- ?¬ì©?ìê²??ë¦¼
-                showDuplicateNotification(savedTransaction)
+                    // 중복이 감지됨 - 사용자에게 알림
+                    Log.d(TAG, "중복 거래 감지 - 알림 표시")
+                    showDuplicateNotification(savedTransaction)
                 }
                 is DuplicateCheckResult.SkipSecond -> {
-                    // ê·ì¹???°ë¼ ??ë²ì§¸ ê±°ë ?? 
-                transactionRepository.deleteTransaction(savedTransaction.id)
+                    // 규칙에 따라 두 번째 거래 스킵
+                    Log.d(TAG, "중복 규칙: 두 번째 거래 삭제")
+                    transactionRepository.deleteTransaction(savedTransaction.id)
                 }
                 is DuplicateCheckResult.DeleteBoth -> {
-                    // ê·ì¹???°ë¼ ??ê±°ë???? 
-                transactionRepository.deleteTransaction(savedTransaction.id)
+                    // 규칙에 따라 두 거래 모두 삭제
+                    Log.d(TAG, "중복 규칙: 두 거래 모두 삭제")
+                    transactionRepository.deleteTransaction(savedTransaction.id)
                 }
                 else -> {
-                    // NoDuplicate, KeepBoth, KeepSecond - ê±°ë ? ì"
-                if (parsed.amount > highAmountThreshold) {
+                    // NoDuplicate, KeepBoth, KeepSecond - 거래 유지
+                    Log.d(TAG, "거래 유지됨 - 중복 아님 또는 유지 규칙")
+                    if (parsed.amount > highAmountThreshold) {
                         showHighAmountNotification(savedTransaction)
                     }
 
-                    // ?ê¸ ê±°ë??ê²½ì° ëª©í ?ì¶??ë ?°ë ì²ë¦¬
-                if (parsed.type == TransactionType.INCOME) {
+                    // 입금 거래인 경우 목표 저축 자동 연동 처리
+                    if (parsed.type == TransactionType.INCOME) {
                         processAutoDeposit(
                             amount = parsed.amount,
                             senderName = parsed.senderName,
@@ -183,6 +245,7 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
             }
 
         } catch (e: Exception) {
+            Log.e(TAG, "거래 처리 중 오류 발생", e)
             e.printStackTrace()
         }
     }
@@ -205,8 +268,8 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("ê³ ì¡ ê±°ë ê°ì")
-            .setContentText("${formattedAmount}?ì´ ê°ì??ì?µë?? ?ì¸???ì?©ë")
+            .setContentTitle("고액 거래 감지")
+            .setContentText("${formattedAmount}원이 감지되었습니다. 확인해주세요.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
@@ -233,10 +296,10 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
 
         val notification = NotificationCompat.Builder(this, DUPLICATE_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("ì¤ë³µ ê±°ë ê°ì")
-            .setContentText("${formattedAmount}??ê±°ëê° ì¤ë³µ?¼ë¡ ê°ì??ì?µë?? ?ì¸?´ì£¼?¸ì.")
+            .setContentTitle("중복 거래 감지")
+            .setContentText("${formattedAmount}원 거래가 중복으로 감지되었습니다. 확인해주세요.")
             .setStyle(NotificationCompat.BigTextStyle()
-                .bigText("?ì¼??ê¸ì¡??ê±°ëê° ì¹´ë? ??ì???ì??ê°ì??ì?µë?? ?±ì???´ë¤ ê±°ëë¥?? ì?? ì? ? í?´ì£¼?¸ì."))
+                .bigText("동일한 금액의 거래가 카드와 계좌에서 감지되었습니다. 앱에서 어느 거래를 유지할지 선택해주세요."))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
@@ -247,7 +310,7 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
     }
 
     /**
-     * ëª©í ?ì¶??ë ?ê¸ ì²ë¦¬
+     * 목표 저축 자동 입금 처리
      */
     private suspend fun processAutoDeposit(
         amount: Long,
@@ -258,10 +321,10 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
         bankName: String
     ) {
         try {
-            // ê·¸ë£¹ ë©¤ë² ì¡°í
+            // 그룹 멤버 조회
             val groupMembers = userRepository.getGroupMembersFlow(groupId).first()
 
-            // ?ë ?ê¸ ì²ë¦¬
+            // 자동 입금 처리
             val results = savingsAutoDepositService.processDepositNotification(
                 amount = amount,
                 senderName = senderName,
@@ -274,8 +337,8 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
             for (result in results) {
                 when (result) {
                     is SavingsAutoDepositService.DepositProcessResult.AutoProcessed -> {
-                        // ?ë?¼ë¡ ?ì¶ì ë°ì
-                savingsAutoDepositService.saveAutoContribution(result.contribution)
+                        // 자동으로 저축에 반영
+                        savingsAutoDepositService.saveAutoContribution(result.contribution)
                         showSavingsAutoDepositNotification(
                             goalName = result.savingsGoal.name,
                             amount = result.contribution.amount,
@@ -283,8 +346,8 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
                         )
                     }
                     is SavingsAutoDepositService.DepositProcessResult.NeedsConfirmation -> {
-                        // ?¬ì©???ì¸ ?ì ?ë¦¼
-                showSavingsConfirmationNotification(
+                        // 사용자 확인 필요 알림
+                        showSavingsConfirmationNotification(
                             goalName = result.savingsGoal.name,
                             amount = result.amount,
                             detectedName = result.detectedSenderName,
@@ -292,15 +355,15 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
                         )
                     }
                     is SavingsAutoDepositService.DepositProcessResult.NeedsManualInput -> {
-                        // ?ë ?ë ¥ ?ì ?ë¦¼
-                showSavingsManualInputNotification(
+                        // 수동 입력 필요 알림
+                        showSavingsManualInputNotification(
                             goalName = result.savingsGoal.name,
                             amount = result.amount ?: 0L,
                             reason = result.reason
                         )
                     }
                     is SavingsAutoDepositService.DepositProcessResult.NotApplicable -> {
-                        // ?°ë??ëª©í ?ì - ë¬´ì
+                        // 해당 목표 없음 - 무시
                     }
                 }
             }
@@ -330,8 +393,8 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
 
         val notification = NotificationCompat.Builder(this, SAVINGS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("?ì¶??ë ë°ì")
-            .setContentText("$goalName ??${userName}??${formattedAmount}???ì¶??ë£")
+            .setContentTitle("저축 자동 반영")
+            .setContentText("$goalName 에 ${userName}님이 ${formattedAmount}원 저축 완료")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
@@ -363,10 +426,10 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
 
         val notification = NotificationCompat.Builder(this, SAVINGS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("?ì¶??ì¸ ?ì")
-            .setContentText("$goalName: '$detectedName' ${formattedAmount}???ê¸ - ë©¤ë² ?ì¸ ?ì")
+            .setContentTitle("저축 확인 필요")
+            .setContentText("$goalName: '$detectedName' ${formattedAmount}원 입금 - 멤버 확인 필요")
             .setStyle(NotificationCompat.BigTextStyle()
-                .bigText("'$detectedName' ?ì ${formattedAmount}???ê¸??ê°ì??ì?µë?? ${candidateCount}ëªì ?ë³´ ì¤??ê¸?ë? ? í?´ì£¼?¸ì."))
+                .bigText("'$detectedName' 님이 ${formattedAmount}원 입금이 감지되었습니다. ${candidateCount}명의 후보 중 입금자를 선택해주세요."))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
@@ -393,12 +456,12 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val amountText = amount?.let { String.format("%,d", it) } ?: ""
+        val amountText = if (amount > 0) String.format("%,d", amount) else ""
 
         val notification = NotificationCompat.Builder(this, SAVINGS_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("?ì¶??ë ?ì¸ ?ì")
-            .setContentText("$goalName: ${amountText}?ê¸ - $reason")
+            .setContentTitle("저축 자동 확인 필요")
+            .setContentText("$goalName: ${amountText}원 입금 - $reason")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
@@ -412,39 +475,40 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = getSystemService(NotificationManager::class.java)
 
-            // ê³ ì¡ ê±°ë ?ë¦¼ ì±ë
+            // 고액 거래 알림 채널
             val highAmountChannel = NotificationChannel(
                 CHANNEL_ID,
-                "ê³ ì¡ ê±°ë ?ë¦¼",
+                "고액 거래 알림",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = "?¤ì  ê¸ì¡ ?´ì ê±°ë ???ì¸ ?ë¦¼"
+                description = "설정 금액 이상 거래에 대한 확인 알림"
             }
             notificationManager.createNotificationChannel(highAmountChannel)
 
-            // ì¤ë³µ ê±°ë ?ë¦¼ ì±ë
+            // 중복 거래 알림 채널
             val duplicateChannel = NotificationChannel(
                 DUPLICATE_CHANNEL_ID,
-                "ì¤ë³µ ê±°ë ?ë¦¼",
+                "중복 거래 알림",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = "ì¹´ë? ??ì???ì??ê°ì???ì¤ë³µ ê±°ë ?ë¦¼"
+                description = "카드와 계좌에서 감지된 중복 거래 알림"
             }
             notificationManager.createNotificationChannel(duplicateChannel)
 
-            // ëª©í ?ì¶??ë¦¼ ì±ë
+            // 목표 저축 알림 채널
             val savingsChannel = NotificationChannel(
                 SAVINGS_CHANNEL_ID,
-                "ëª©í ?ì¶??ë¦¼",
+                "목표 저축 알림",
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "ëª©í ?ì¶??ë ?ê¸ ?°ë ?ë¦¼"
+                description = "목표 저축 자동 입금 연동 알림"
             }
             notificationManager.createNotificationChannel(savingsChannel)
         }
     }
 
     companion object {
+        private const val TAG = "TxNotificationService"
         private const val CHANNEL_ID = "high_amount_channel"
         private const val DUPLICATE_CHANNEL_ID = "duplicate_channel"
         private const val SAVINGS_CHANNEL_ID = "savings_channel"
@@ -459,4 +523,3 @@ val savedTransaction = transactionRepository.addTransactionAndReturn(transaction
         const val EXTRA_SHOW_SAVINGS_GOAL = "show_savings_goal"
     }
 }
-

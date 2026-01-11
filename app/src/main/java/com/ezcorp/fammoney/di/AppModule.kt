@@ -2,6 +2,8 @@ package com.ezcorp.fammoney.di
 
 import android.content.Context
 import com.ezcorp.fammoney.R
+import com.ezcorp.fammoney.service.ExchangeRateService // Added import
+import com.ezcorp.fammoney.service.NotificationParser // Added import
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -17,6 +19,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import kotlinx.serialization.json.Json // Added import for Json
+import okhttp3.OkHttpClient // Added import for OkHttpClient
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -50,5 +54,41 @@ object AppModule {
             .requestEmail()
             .build()
         return GoogleSignIn.getClient(context, gso)
+    }
+
+    // New providers for OkHttpClient and Json
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideJson(): Json {
+        return Json {
+            ignoreUnknownKeys = true
+            prettyPrint = true
+            isLenient = true
+        }
+    }
+
+    // Provide ExchangeRateService
+    @Provides
+    @Singleton
+    fun provideExchangeRateService(
+        okHttpClient: OkHttpClient,
+        json: Json
+    ): ExchangeRateService {
+        return ExchangeRateService(okHttpClient, json)
+    }
+
+    // Provide NotificationParser
+    @Provides
+    @Singleton
+    fun provideNotificationParser(
+        exchangeRateService: ExchangeRateService // Inject ExchangeRateService
+    ): NotificationParser {
+        return NotificationParser(exchangeRateService)
     }
 }

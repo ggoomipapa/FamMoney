@@ -107,6 +107,12 @@ class UserRepository @Inject constructor(
     }
 
     fun getGroupFlow(groupId: String): Flow<Group?> = callbackFlow {
+        if (groupId.isBlank()) {
+            trySend(null)
+            awaitClose { }
+            return@callbackFlow
+        }
+
         val listener = groupsCollection.document(groupId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -122,6 +128,12 @@ class UserRepository @Inject constructor(
     }
 
     fun getGroupMembersFlow(groupId: String): Flow<List<User>> = callbackFlow {
+        if (groupId.isBlank()) {
+            trySend(emptyList())
+            awaitClose { }
+            return@callbackFlow
+        }
+
         val listener = usersCollection
             .whereEqualTo("groupId", groupId)
             .addSnapshotListener { snapshot, error ->

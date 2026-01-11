@@ -1,5 +1,6 @@
 package com.ezcorp.fammoney.ui.screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import com.ezcorp.fammoney.data.model.Child
 import com.ezcorp.fammoney.data.model.Merchant
 import com.ezcorp.fammoney.data.model.SpendingCategory
 import com.ezcorp.fammoney.data.model.Transaction
+import com.ezcorp.fammoney.data.model.TransactionTag
 import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.ui.screen.components.AIInsightCard
 import com.ezcorp.fammoney.ui.screen.components.AILockedCard
@@ -56,23 +58,34 @@ fun HomeScreen(
     onNavigateToAICoaching: () -> Unit = {},
     onNavigateToSubscription: () -> Unit = {},
     viewModel: MainViewModel = hiltViewModel()
-) {
+)
+{
     val uiState by viewModel.uiState.collectAsState()
     var showHighAmountDialog by remember { mutableStateOf(false) }
     var showAddTransactionDialog by remember { mutableStateOf(false) }
     var showOverflowMenu by remember { mutableStateOf(false) }
     var isAITeaserExpanded by remember { mutableStateOf(false) }
 
-    // ?ë©´ ?¬ê¸° ê°ì?
+    // 선택 모드 상태
+    var isSelectionMode by remember { mutableStateOf(false) }
+    var selectedTransactionIds by remember { mutableStateOf(setOf<String>()) }
+    var showTagPickerDialog by remember { mutableStateOf(false) }
+
+    // 태그 로드
+    LaunchedEffect(Unit) {
+        viewModel.loadTags()
+    }
+
+    // 화면 크기 감지
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
-    val isCompactScreen = screenWidth < 400 // Z?´ë ?í ?í ??ì¢ì? ?ë©´
+    val isCompactScreen = screenWidth < 400 // 접히는 화면 또는 작은 화면
 
     LaunchedEffect(uiState.pendingHighAmountTransaction) {
         showHighAmountDialog = uiState.pendingHighAmountTransaction != null
     }
 
-    // AI ê¸°ë¥ ë¡ë
+    // AI 기능 로드
     LaunchedEffect(uiState.totalExpense, uiState.totalIncome) {
         viewModel.loadAllAIFeatures()
     }
@@ -103,13 +116,86 @@ fun HomeScreen(
         )
     }
 
+    // 태그 선택 다이얼로그
+    if (showTagPickerDialog && selectedTransactionIds.isNotEmpty()) {
+        TagPickerDialog(
+            tags = uiState.tags,
+            onDismiss = { showTagPickerDialog = false },
+            onTagSelected = { tag ->
+                viewModel.applyTagToTransactions(
+                    selectedTransactionIds.toList(),
+                    tag.id,
+                    tag.name
+                )
+                showTagPickerDialog = false
+                isSelectionMode = false
+                selectedTransactionIds = emptySet()
+            },
+            onCreateNewTag = { name, color ->
+                viewModel.createTagAndApply(
+                    tagName = name,
+                    tagColor = color,
+                    transactionIds = selectedTransactionIds.toList(),
+                    onComplete = {
+                        showTagPickerDialog = false
+                        isSelectionMode = false
+                        selectedTransactionIds = emptySet()
+                    }
+                )
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(uiState.currentGroup?.name ?: "팸머니") },
-                actions = {
-                    // 중복 거래 ?ë¦¼ ë°°ì? (중복 거래ê° ?ì ?ë§ ?ì) - ?? ì²?ë²ì§¸???ì
-                if (uiState.pendingDuplicatesCount > 0) {
+            if (isSelectionMode) {
+                // 선택 모드 TopAppBar
+                TopAppBar(
+                    title = { Text("${selectedTransactionIds.size}개 선택됨") },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            isSelectionMode = false
+                            selectedTransactionIds = emptySet()
+                        }) {
+                            Icon(Icons.Default.Close, contentDescription = "선택 취소")
+                        }
+                    },
+                    actions = {
+                        // 전체 선택
+                        IconButton(onClick = {
+                            selectedTransactionIds = if (selectedTransactionIds.size == uiState.transactions.size) {
+                                emptySet()
+                            } else {
+                                uiState.transactions.map { it.id }.toSet()
+                            }
+                        }) {
+                            Icon(
+                                if (selectedTransactionIds.size == uiState.transactions.size)
+                                    Icons.Default.CheckBox
+                                else
+                                    Icons.Default.CheckBoxOutlineBlank,
+                                contentDescription = "전체 선택"
+                            )
+                        }
+                        // 태그 적용 버튼
+                        IconButton(
+                            onClick = { showTagPickerDialog = true },
+                            enabled = selectedTransactionIds.isNotEmpty()
+                        ) {
+                            Icon(Icons.Default.LocalOffer, contentDescription = "태그 적용")
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                )
+            } else {
+                // 일반 TopAppBar
+                TopAppBar(
+                    title = { Text(uiState.currentGroup?.name ?: "팸머니") },
+                    actions = {
+                    // 중복 거래 알림 뱃지 (중복 거래가 있을 때만 표시) - FAB 위 첫 번째 위치
+                    if (uiState.pendingDuplicatesCount > 0) {
                         Box(
                             modifier = Modifier
                                 .padding(end = 4.dp)
@@ -121,8 +207,8 @@ fun HomeScreen(
                                 contentDescription = "중복 거래",
                                 modifier = Modifier.size(24.dp)
                             )
-                            // ë°°ì?ë¥?????ë³´ì´ê²??¤ë¥¸ìª??ì ?ì
-                Box(
+                            // 뱃지 숫자 다른 아이콘 위에 표시
+                            Box(
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
                                     .offset(x = 6.dp, y = (-6).dp)
@@ -144,15 +230,15 @@ fun HomeScreen(
                     }
 
                     if (isCompactScreen) {
-                        // ì¢ì? ?ë©´: 통계확인 설정ë§?ì§ì  ?ì, ?ë¨¸ì§???¤ë²?ë¡??ë©ë´
-                IconButton(onClick = onNavigateToStatistics) {
+                        // 콤팩트 화면: 통계/설정만 직접 표시, 나머지는 오버플로우 메뉴
+                        IconButton(onClick = onNavigateToStatistics) {
                             Icon(Icons.Default.BarChart, contentDescription = "통계")
                         }
                         IconButton(onClick = onNavigateToSettings) {
                             Icon(Icons.Default.Settings, contentDescription = "설정")
                         }
-                        // ?¤ë²?ë¡??ë©ë´
-                Box {
+                        // 오버플로우 메뉴
+                        Box {
                             IconButton(onClick = { showOverflowMenu = true }) {
                                 Icon(Icons.Default.MoreVert, contentDescription = "더보기")
                             }
@@ -187,8 +273,8 @@ fun HomeScreen(
                             }
                         }
                     } else {
-                        // ?ì? ?ë©´: ëª¨ë  ?ì´ì½??ì
-                if (uiState.cashManagementEnabled) {
+                        // 넓은 화면: 모든 아이콘 표시
+                        if (uiState.cashManagementEnabled) {
                             IconButton(onClick = onNavigateToCashManagement) {
                                 Icon(Icons.Default.Payments, contentDescription = "현금 관리")
                             }
@@ -207,6 +293,7 @@ fun HomeScreen(
                     }
                 }
             )
+            } // end of else (normal TopAppBar)
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -250,30 +337,30 @@ fun HomeScreen(
                     )
                 }
 
-                // AI ?¸ì¬?´í¸ ?¹ì (ì»¤ë¥??AI ?ì©)
+                // AI 인사이트 섹션 (컬러링/AI 활용)
                 item {
                     if (uiState.isAIEnabled) {
-                        // êµ¬ë?? 인사이트 AI ê¸°ë¥ ?ì
-                Column(
+                        // 구독형 인사이트 AI 기능 표시
+                        Column(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            // 지출??ì¸¡ ì¹´ë
-                SpendingPredictionCard(
+                            // 지출 예측 카드
+                            SpendingPredictionCard(
                                 prediction = uiState.spendingPrediction,
                                 currentExpense = uiState.totalExpense
                             )
 
-                            // AI ?¸ì¬?´í¸ ì¹´ë
-                AIInsightCard(
+                            // AI 인사이트 카드
+                            AIInsightCard(
                                 insights = uiState.aiInsights,
                                 isLoading = uiState.isLoadingAI,
                                 onSeeMore = onNavigateToAICoaching
                             )
                         }
                     } else {
-                        // ë¬´ë£ ?¬ì©?? ?í ?°ì? (?´ë¦­?ë©´ ?¼ì¹¨)
-                Column(
+                        // 무료 사용자는 숨겨진 AI 티저 (클릭하면 펼침)
+                        Column(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp, vertical = 8.dp)
                                 .animateContentSize()
@@ -284,8 +371,8 @@ fun HomeScreen(
                                 modifier = Modifier.fillMaxWidth()
                             )
 
-                            // ?¼ì³ì§??í?????ì¸ 내용 ?ì
-                androidx.compose.animation.AnimatedVisibility(
+                            // 펼쳐진 상태일 때만 상세 내용 표시
+                            androidx.compose.animation.AnimatedVisibility(
                                 visible = isAITeaserExpanded
                             ) {
                                 AILockedCard(
@@ -298,7 +385,7 @@ fun HomeScreen(
                     }
                 }
 
-                // 목표 저축?ì¹´ë (목표ê° ?ì ?ë§ ?ì)
+                // 목표 저축 카드 (목표가 있을 때만 표시)
                 if (uiState.savingsGoals.isNotEmpty()) {
                     item {
                         SavingsGoalCard(
@@ -311,7 +398,7 @@ fun HomeScreen(
                 item {
                     UserFilterChips(
                         users = uiState.groupMembers,
-                        selectedUserId = uiState.selectedUserFilter ?: "",
+                        selectedUserId = uiState.selectedUserFilter,
                         onUserSelected = viewModel::setUserFilter
                     )
                 }
@@ -325,9 +412,44 @@ fun HomeScreen(
                         items = uiState.transactions,
                         key = { it.id }
                     ) { transaction ->
+                        val currentIndex = uiState.transactions.indexOf(transaction)
                         TransactionItem(
                             transaction = transaction,
-                            onClick = { onNavigateToTransactionDetail(transaction.id) },
+                            isSelectionMode = isSelectionMode,
+                            isSelected = selectedTransactionIds.contains(transaction.id),
+                            onClick = {
+                                if (isSelectionMode) {
+                                    // 선택 모드: 선택/해제
+                                    selectedTransactionIds = if (selectedTransactionIds.contains(transaction.id)) {
+                                        selectedTransactionIds - transaction.id
+                                    } else {
+                                        selectedTransactionIds + transaction.id
+                                    }
+                                } else {
+                                    onNavigateToTransactionDetail(transaction.id)
+                                }
+                            },
+                            onLongClick = {
+                                if (isSelectionMode && selectedTransactionIds.isNotEmpty()) {
+                                    // 선택 모드에서 길게 누르면 범위 선택
+                                    val firstSelectedIndex = uiState.transactions.indexOfFirst {
+                                        selectedTransactionIds.contains(it.id)
+                                    }
+                                    if (firstSelectedIndex >= 0) {
+                                        val startIndex = minOf(firstSelectedIndex, currentIndex)
+                                        val endIndex = maxOf(firstSelectedIndex, currentIndex)
+                                        val rangeIds = uiState.transactions
+                                            .subList(startIndex, endIndex + 1)
+                                            .map { it.id }
+                                            .toSet()
+                                        selectedTransactionIds = selectedTransactionIds + rangeIds
+                                    }
+                                } else {
+                                    // 일반 모드에서 길게 누르면 선택 모드 진입
+                                    isSelectionMode = true
+                                    selectedTransactionIds = setOf(transaction.id)
+                                }
+                            },
                             onDelete = { viewModel.deleteTransaction(transaction.id) }
                         )
                     }
@@ -379,7 +501,7 @@ fun SummaryCard(
     balanceEnabled: Boolean = false,
     currentBalance: Long = 0L
 ) {
-    // ?ë©´ ?¬ê¸°???°ë¼ ?ì¤???¬ê¸° ì¡°ì 
+    // 화면 크기에 따라 텍스트 크기 조절
     val configuration = LocalConfiguration.current
     val isCompactScreen = configuration.screenWidthDp < 400
 
@@ -449,7 +571,7 @@ fun SummaryCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f)
             ) {
-                // 잔고 ê¸°ë¥???ì±?ëë©??ì¬ 잔고 ?ì, ?ëë©?합계 ?ì
+                // 잔고 기능이 활성화되면 현재 잔고 표시, 아니면 합계 표시
                 if (balanceEnabled) {
                     Text(
                         text = "잔고",
@@ -562,7 +684,7 @@ fun SavingsGoalCard(
 @Composable
 fun UserFilterChips(
     users: List<com.ezcorp.fammoney.data.model.User>,
-    selectedUserId: String,
+    selectedUserId: String?,
     onUserSelected: (String?) -> Unit
 ) {
     LazyRow(
@@ -592,12 +714,15 @@ fun UserFilterChips(
 @Composable
 fun TransactionItem(
     transaction: Transaction,
+    isSelectionMode: Boolean = false,
+    isSelected: Boolean = false,
     onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
     onDelete: () -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    // ?ë©´ ?¬ê¸°???°ë¼ ?ì´?ì ì¡°ì 
+    // 화면 크기에 따라 아이템 너비 조절
     val configuration = LocalConfiguration.current
     val isCompactScreen = configuration.screenWidthDp < 400
 
@@ -624,18 +749,36 @@ fun TransactionItem(
         )
     }
 
-    // ì»´í©?¸í ?ì´ë¸??ì ë¦¬ì¤???ì´
-Row(
+    // 콤팩트한 아이템 형식 리스트 레이아웃
+    Row(
         modifier = Modifier
             .fillMaxWidth()
+            .background(
+                if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                else MaterialTheme.colorScheme.surface
+            )
             .combinedClickable(
                 onClick = onClick,
-                onLongClick = { showDeleteDialog = true }
+                onLongClick = {
+                    if (isSelectionMode) {
+                        // 선택 모드에서는 삭제 다이얼로그 표시 안 함
+                    } else {
+                        onLongClick()
+                    }
+                }
             )
             .padding(horizontal = if (isCompactScreen) 12.dp else 16.dp, vertical = if (isCompactScreen) 6.dp else 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // ?¼ìª½: ? ì§/?ê°
+        // 선택 모드일 때 체크박스 표시
+        if (isSelectionMode) {
+            Checkbox(
+                checked = isSelected,
+                onCheckedChange = { onClick() },
+                modifier = Modifier.padding(end = 8.dp)
+            )
+        }
+        // 왼쪽: 날짜/시간
         Column(
             modifier = Modifier.width(if (isCompactScreen) 42.dp else 50.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -651,7 +794,7 @@ Row(
                 )
                 Text(
                     text = timeFormat.format(timestamp.toDate()),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = if (isCompactScreen) MaterialTheme.typography.labelSmall else MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -659,7 +802,7 @@ Row(
 
         Spacer(modifier = Modifier.width(if (isCompactScreen) 8.dp else 12.dp))
 
-        // ê°?´ë°: ?¬ì©ì²?(merchantName ?°ì , ?ì¼ë©?description, ?ì¼ë©?bankName)
+        // 가운데: 사용처(merchantName 우선, 없으면 description, 없으면 bankName)
         Text(
             text = transaction.merchantName.ifBlank {
                 transaction.description.ifBlank { transaction.bankName }
@@ -672,7 +815,7 @@ Row(
 
         Spacer(modifier = Modifier.width(if (isCompactScreen) 8.dp else 12.dp))
 
-        // ?¤ë¥¸ìª? 금액
+        // 오른쪽: 금액
         Text(
             text = "${if (transaction.type == TransactionType.INCOME) "+" else "-"}${String.format("%,d", transaction.amount)}",
             style = if (isCompactScreen) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyMedium,
@@ -681,8 +824,8 @@ Row(
         )
     }
 
-    // êµ¬ë¶
-Divider(
+    // 구분선
+    Divider(
         modifier = Modifier.padding(horizontal = if (isCompactScreen) 12.dp else 16.dp),
         color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
     )
@@ -730,12 +873,12 @@ fun HighAmountConfirmDialog(
         text = {
             Column {
                 Text(
-                    text = "${String.format("%,d", transaction.amount)}?ì´ ê°ì??ì?µë",
+                    text = "${String.format("%,d", transaction.amount)}원이 감지되었습니다",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "이 거래 내역을 삭제하시겠습니까",
+                    text = "이 거래 내역을 확정하시겠습니까?",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -745,7 +888,7 @@ fun HighAmountConfirmDialog(
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = "확인?? ${transaction.bankName}",
+                    text = "은행: ${transaction.bankName}",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -764,8 +907,8 @@ fun HighAmountConfirmDialog(
 }
 
 /**
- * 거래 추가? ë°í??í¸
- * AlertDialog 확인??ModalBottomSheetë¥??¬ì©?ì¬ ?´ë? ? í UI확인??z-index ì¶©ë ë°©ì"
+ * 거래 추가 바텀시트
+ * AlertDialog는 ModalBottomSheet를 사용해야 z-index 충돌 방지
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -783,11 +926,11 @@ fun AddTransactionDialog(
     var selectedMerchantName by remember { mutableStateOf("") }
     var memo by remember { mutableStateOf("") }
 
-    // ?ë? 용돈 ?°ë
+    // 자녀 용돈 연동
     var linkedChildId by remember { mutableStateOf("") }
     var linkedChildName by remember { mutableStateOf("") }
 
-    // ?ì¬ ?ì???ë©´ ?í
+    // 현재 표시 화면 상태
     var currentScreen by remember { mutableStateOf(AddTransactionScreen.MAIN) }
 
     ModalBottomSheet(
@@ -796,7 +939,7 @@ fun AddTransactionDialog(
     ) {
         when (currentScreen) {
             AddTransactionScreen.MAIN -> {
-                // ë©ì¸ 거래 ?ë ¥ ?ë©´
+                // 메인 거래 입력 화면
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -811,8 +954,8 @@ fun AddTransactionDialog(
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    // 수입/지출?? í
-                Row(
+                    // 수입/지출 선택
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -844,19 +987,19 @@ fun AddTransactionDialog(
                         )
                     }
 
-                    // 금액 ?ë ¥
-                OutlinedTextField(
+                    // 금액 입력
+                    OutlinedTextField(
                         value = amountText,
                         onValueChange = { amountText = it.filter { c -> c.isDigit() } },
                         label = { Text("금액") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
-                        suffix = { Text("") },
+                        suffix = { Text("원") },
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    // 내용 ?ë ¥
-                OutlinedTextField(
+                    // 내용 입력
+                    OutlinedTextField(
                         value = description,
                         onValueChange = { description = it },
                         label = { Text("내용") },
@@ -865,7 +1008,7 @@ fun AddTransactionDialog(
                     )
 
                     // 카테고리 선택
-                OutlinedCard(
+                    OutlinedCard(
                         onClick = { currentScreen = AddTransactionScreen.CATEGORY },
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -877,10 +1020,11 @@ fun AddTransactionDialog(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             if (selectedCategory.isNotBlank()) {
-                                // ?ë? 용돈 가이드 목록??ê²½ì° ?¹ë³ ?ì
-                if (linkedChildId.isNotEmpty()) {
+                                // 자녀 용돈 카테고리일 경우 특별 표시
+                                if (linkedChildId.isNotEmpty()) {
                                     Text("👶 $linkedChildName 용돈")
-                                } else {
+                                }
+                                 else {
                                     val category = SpendingCategory.fromString(selectedCategory)
                                     Text("${category.icon} ${category.displayName}")
                                 }
@@ -894,8 +1038,8 @@ fun AddTransactionDialog(
                         }
                     }
 
-                    // 사용처 선택 (지출ì¼ ?ë§)
-                if (transactionType == TransactionType.EXPENSE) {
+                    // 사용처 선택 (지출일 때만)
+                    if (transactionType == TransactionType.EXPENSE) {
                         OutlinedCard(
                             onClick = { currentScreen = AddTransactionScreen.MERCHANT },
                             modifier = Modifier.fillMaxWidth()
@@ -909,7 +1053,8 @@ fun AddTransactionDialog(
                             ) {
                                 if (selectedMerchantName.isNotBlank()) {
                                     Text(selectedMerchantName)
-                                } else {
+                                }
+                                 else {
                                     Text(
                                         "사용처 선택",
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -920,8 +1065,8 @@ fun AddTransactionDialog(
                         }
                     }
 
-                    // 메모 ?ë ¥
-                OutlinedTextField(
+                    // 메모 입력
+                    OutlinedTextField(
                         value = memo,
                         onValueChange = { memo = it },
                         label = { Text("메모 (선택)") },
@@ -931,8 +1076,8 @@ fun AddTransactionDialog(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // ë²í¼
-                Row(
+                    // 버튼
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -959,7 +1104,7 @@ fun AddTransactionDialog(
             }
 
             AddTransactionScreen.CATEGORY -> {
-                // 가이드 목록 ? í ?ë©´
+                // 카테고리 목록 선택 화면
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -985,8 +1130,8 @@ fun AddTransactionDialog(
                         modifier = Modifier.heightIn(max = 450.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // ?ë? 용돈 가이드 목록 (ë§??ì ?ì)
-                if (childIncomeEnabled && children.isNotEmpty()) {
+                        // 자녀 용돈 카테고리 (해당하는 경우만 표시)
+                        if (childIncomeEnabled && children.isNotEmpty()) {
                             item {
                                 ChildAllowanceCategoryGroup(
                                     children = children,
@@ -999,61 +1144,61 @@ fun AddTransactionDialog(
                                 )
                             }
                         }
-                        item { CategoryGroup("?½ï¸??ë¹", SpendingCategory.foodGroup) {
+                        item { CategoryGroup("🍚 식비", SpendingCategory.foodGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("?  ì£¼ê±°", SpendingCategory.housingGroup) {
+                        item { CategoryGroup("🏡 주거", SpendingCategory.housingGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("? êµíµ", SpendingCategory.transportGroup) {
+                        item { CategoryGroup("🚌 교통", SpendingCategory.transportGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("?ï¸??¼í", SpendingCategory.shoppingGroup) {
+                        item { CategoryGroup("🛍️ 쇼핑", SpendingCategory.shoppingGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("?¬ ë¬¸í/?¬ê", SpendingCategory.cultureGroup) {
+                        item { CategoryGroup("🎨 문화/여가", SpendingCategory.cultureGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("?¥ 일정", SpendingCategory.livingGroup) {
+                        item { CategoryGroup("🛒 생활", SpendingCategory.livingGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("?° ê¸ìµ", SpendingCategory.financeGroup) {
+                        item { CategoryGroup("💰 금융", SpendingCategory.financeGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("좋아요 êµì¡", SpendingCategory.educationGroup) {
+                        item { CategoryGroup("🎓 교육", SpendingCategory.educationGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("? ê²½ì¡°", SpendingCategory.eventGroup) {
+                        item { CategoryGroup("💐 경조사", SpendingCategory.eventGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
                             currentScreen = AddTransactionScreen.MAIN
                         } }
-                        item { CategoryGroup("? ê¸°í", SpendingCategory.otherGroup) {
+                        item { CategoryGroup("📝 기타", SpendingCategory.otherGroup) { 
                             selectedCategory = it
                             linkedChildId = ""
                             linkedChildName = ""
@@ -1066,7 +1211,7 @@ fun AddTransactionDialog(
             }
 
             AddTransactionScreen.MERCHANT -> {
-                // 사용처 선택 ?ë©´
+                // 사용처 선택 화면
                 var searchQuery by remember { mutableStateOf("") }
                 val merchants = remember { Merchant.getDefaultMerchants() }
                 val filteredMerchants = remember(searchQuery) {
@@ -1136,7 +1281,7 @@ fun AddTransactionDialog(
     }
 }
 
-// 거래 추가? ?ë©´ ?í
+// 거래 추가 화면 상태
 private enum class AddTransactionScreen {
     MAIN,
     CATEGORY,
@@ -1169,8 +1314,8 @@ private fun CategoryGroup(
 }
 
 /**
- * ?ë? 용돈 가이드 목록 ê·¸ë£¹
- * ?ë? ëª©ë¡?ì ?ì ?¼ë¡ ?ì±?ë 용돈 가이드 목록
+ * 자녀 용돈 카테고리 그룹
+ * 자녀 목록에서 동적으로 생성되는 용돈 카테고리 목록
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -1194,4 +1339,195 @@ private fun ChildAllowanceCategoryGroup(
             }
         }
     }
+}
+
+/**
+ * 태그 선택 다이얼로그
+ * 선택한 거래에 적용할 태그를 선택하거나 새로 생성
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TagPickerDialog(
+    tags: List<TransactionTag>,
+    onDismiss: () -> Unit,
+    onTagSelected: (TransactionTag) -> Unit,
+    onCreateNewTag: (name: String, color: String) -> Unit
+) {
+    var showCreateMode by remember { mutableStateOf(false) }
+    var newTagName by remember { mutableStateOf("") }
+    var selectedColorIndex by remember { mutableIntStateOf(0) }
+
+    val tagColors = listOf(
+        "#4CAF50", // 초록
+        "#2196F3", // 파랑
+        "#FF9800", // 주황
+        "#E91E63", // 분홍
+        "#9C27B0", // 보라
+        "#00BCD4", // 청록
+        "#FF5722", // 주황빨강
+        "#795548"  // 갈색
+    )
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(if (showCreateMode) "새 태그 만들기" else "태그 선택")
+        },
+        text = {
+            if (showCreateMode) {
+                // 새 태그 생성 모드
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    OutlinedTextField(
+                        value = newTagName,
+                        onValueChange = { newTagName = it },
+                        label = { Text("태그 이름") },
+                        placeholder = { Text("예: 강릉 여행") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Text(
+                        text = "색상 선택",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(tagColors.size) { index ->
+                            val color = tagColors[index]
+                            Box(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        androidx.compose.ui.graphics.Color(
+                                            android.graphics.Color.parseColor(color)
+                                        )
+                                    )
+                                    .clickable { selectedColorIndex = index },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (selectedColorIndex == index) {
+                                    Icon(
+                                        Icons.Default.Check,
+                                        contentDescription = "선택됨",
+                                        tint = androidx.compose.ui.graphics.Color.White,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                // 태그 선택 모드
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // 새 태그 만들기 버튼
+                    OutlinedCard(
+                        onClick = { showCreateMode = true },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "새 태그 만들기",
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+
+                    if (tags.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "기존 태그",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    LazyColumn(
+                        modifier = Modifier.heightIn(max = 250.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(tags) { tag ->
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onTagSelected(tag) }
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(12.dp)
+                                            .clip(CircleShape)
+                                            .background(
+                                                androidx.compose.ui.graphics.Color(
+                                                    android.graphics.Color.parseColor(tag.color)
+                                                )
+                                            )
+                                    )
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Text(
+                                        text = tag.name,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            if (showCreateMode) {
+                Button(
+                    onClick = {
+                        if (newTagName.isNotBlank()) {
+                            onCreateNewTag(newTagName, tagColors[selectedColorIndex])
+                        }
+                    },
+                    enabled = newTagName.isNotBlank()
+                ) {
+                    Text("만들기")
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = {
+                if (showCreateMode) {
+                    showCreateMode = false
+                    newTagName = ""
+                } else {
+                    onDismiss()
+                }
+            }) {
+                Text(if (showCreateMode) "뒤로" else "취소")
+            }
+        }
+    )
 }

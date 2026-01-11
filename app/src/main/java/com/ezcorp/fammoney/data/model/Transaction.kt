@@ -28,6 +28,10 @@ data class Transaction(
     val linkedChildId: String = "",      // 연결된 자녀 ID (자녀 용돈 카테고리 선택 시)
     val linkedChildName: String = "",    // 연결된 자녀 이름 (표시용)
 
+    // === 태그/그룹 (여행, 이벤트 등) ===
+    val tagId: String = "",              // 태그 ID
+    val tagName: String = "",            // 태그 이름 (표시용)
+
     @ServerTimestamp
     val createdAt: Timestamp? = null,
     val transactionDate: Timestamp? = null,
@@ -35,6 +39,9 @@ data class Transaction(
 ) {
     // 자녀 용돈에 연결된 거래인지 확인
     val isLinkedToChild: Boolean get() = linkedChildId.isNotEmpty()
+
+    // 태그가 있는 거래인지 확인
+    val hasTag: Boolean get() = tagId.isNotEmpty()
 
     fun toMap(): Map<String, Any?> = mapOf(
         "groupId" to groupId,
@@ -55,6 +62,8 @@ data class Transaction(
         "originalText" to originalText,
         "linkedChildId" to linkedChildId,
         "linkedChildName" to linkedChildName,
+        "tagId" to tagId,
+        "tagName" to tagName,
         "createdAt" to createdAt,
         "transactionDate" to transactionDate,
         "isConfirmed" to isConfirmed
@@ -82,6 +91,8 @@ data class Transaction(
                 originalText = map["originalText"] as? String ?: "",
                 linkedChildId = map["linkedChildId"] as? String ?: "",
                 linkedChildName = map["linkedChildName"] as? String ?: "",
+                tagId = map["tagId"] as? String ?: "",
+                tagName = map["tagName"] as? String ?: "",
                 createdAt = map["createdAt"] as? Timestamp,
                 transactionDate = map["transactionDate"] as? Timestamp,
                 isConfirmed = map["isConfirmed"] as? Boolean ?: true

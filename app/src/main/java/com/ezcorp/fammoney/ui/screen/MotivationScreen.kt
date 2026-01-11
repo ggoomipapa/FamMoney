@@ -1,4 +1,4 @@
-﻿package com.ezcorp.fammoney.ui.screen
+package com.ezcorp.fammoney.ui.screen
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -61,7 +61,7 @@ fun MotivationScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // ?ë²¨ ì¹´ë
+            // 레벨 카드
             item {
                 LevelCard(
                     currentLevel = uiState.currentLevel,
@@ -72,7 +72,7 @@ fun MotivationScreen(
                 )
             }
 
-            // ?´ë² ???ì½
+            // 이번 달 요약
             item {
                 MonthSummaryCard(
                     balance = uiState.currentMonthBalance,
@@ -82,7 +82,7 @@ fun MotivationScreen(
                 )
             }
 
-            // ê²©ë ¤ ë©ìì§
+            // 격려 메시지
             item {
                 val (title, message, icon) = getEncouragementMessage(
                     balance = uiState.currentMonthBalance,
@@ -95,7 +95,7 @@ fun MotivationScreen(
                 )
             }
 
-            // ?¬ì ì¶ì² ?¹ì
+            // 투자 추천 섹션
             item {
                 InvestmentRecommendationCard(
                     recommendation = uiState.investmentRecommendation,
@@ -103,7 +103,7 @@ fun MotivationScreen(
                 )
             }
 
-            // ?ì  ?¹ì
+            // 업적 섹션
             item {
                 Text(
                     text = "🏆 획득한 배지",
@@ -151,7 +151,7 @@ fun MotivationScreen(
                 }
             }
 
-            // ì§í ì¤ì¸ ?ì 
+            // 진행 중인 업적
             item {
                 Text(
                     text = "🎯 진행 중인 업적",
@@ -164,7 +164,7 @@ fun MotivationScreen(
                 AchievementProgressCard(achievement = achievement)
             }
 
-            // ?¤ì ?¨ê³ ?ë´
+            // 다음 단계 안내
             item {
                 NextStepCard(
                     currentBalance = uiState.currentMonthBalance,
@@ -241,8 +241,8 @@ fun LevelCard(
                         }
                     }
 
-                    // ?ë²¨ ë±ì"
-                Box(
+                    // 레벨 뱃지
+                    Box(
                         modifier = Modifier
                             .size(64.dp)
                             .clip(CircleShape)
@@ -258,7 +258,7 @@ fun LevelCard(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // ?ì¬ ?í
+                // 현재 상태
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
@@ -278,8 +278,8 @@ fun LevelCard(
                 if (nextLevel != null) {
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // ?¤ì ?ë²¨ ì§í
-Column {
+                    // 다음 레벨 진행
+                    Column {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -406,7 +406,7 @@ fun MonthSummaryCard(
                     color = textColor
                 )
                 Text(
-                    text = "",
+                    text = "원",
                     style = MaterialTheme.typography.titleLarge,
                     color = textColor
                 )
@@ -480,7 +480,7 @@ fun InvestmentRecommendationCard(
                         verticalAlignment = Alignment.Top
                     ) {
                         Text(
-                            text = "",
+                            text = "✓",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
@@ -553,7 +553,7 @@ fun AchievementProgressCard(achievement: Achievement) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // ë¯¸í´ê¸??ì´ì½?(ë°í¬ëª"
+            // 미해금 아이콘(반투명)
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -718,4 +718,3 @@ private fun getEncouragementMessage(balance: Long, consecutiveMonths: Int): Trip
         )
     }
 }
-

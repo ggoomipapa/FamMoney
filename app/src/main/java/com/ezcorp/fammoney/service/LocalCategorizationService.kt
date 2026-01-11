@@ -15,32 +15,65 @@ class LocalCategorizationService @Inject constructor() {
      * 알림 텍스트에서 가맹점명 추출 (정규식 기반)
      */
     fun extractMerchantName(notificationText: String): String {
-        // 일반적인 은행/카드 알림 패턴들
+        // 일반적인 은행/카드 알림 패턴들 (우선순위 순)
         val patterns = listOf(
-            // [카드사] 날짜 가맹점 금액 패턴
-            Regex("""(?:\d{1,2}[/.-]\d{1,2}|\d{2}:\d{2})\s+([가-힣a-zA-Z0-9\s]+?)\s+[\d,]+원"""),
-            // 가맹점 금액원 승인/결제 패턴
-            Regex("""([가-힣a-zA-Z0-9\s]{2,20})\s+[\d,]+원\s*(?:승인|결제|사용)"""),
-            // 승인 가맹점 금액 패턴
-            Regex("""(?:승인|결제|사용)\s+([가-힣a-zA-Z0-9\s]{2,20})\s+[\d,]+원"""),
-            // 금액원 가맹점 패턴
-            Regex("""[\d,]+원\s+([가-힣a-zA-Z0-9\s]{2,20})(?:\s|$)"""),
-            // 일반 가맹점명 추출 (한글+영문 조합)
-            Regex("""(?:에서|at)\s+([가-힣a-zA-Z0-9\s]{2,20})"""),
+            // === 카드 승인/취소 형식 ===
+            // [카드사] 승인 금액원 사용처
+            Regex("""\[.+?(?:카드|Card)\]\s*(?:승인|취소)\s+[\d,]+원\s+(.+?)(?:\s|$)"""),
+            // 카드사 승인 금액원 사용처 (대괄호 없는 형식)
+            Regex("""(?:신한|KB국민|현대|삼성|롯데|BC|NH|하나|우리)카드\s*(?:승인|취소)\s+[\d,]+원\s+(.+?)(?:\s|$)"""),
+
+            // === KB국민은행 출금 형식 ===
+            Regex("""([가-힣a-zA-Z0-9()]{2,20})\s*(?:체크카드출금|신용카드출금|카드출금)"""),
+
+            // === 법인명 패턴 ===
+            Regex("""(\([주유사재]\)[가-힣a-zA-Z0-9]{1,15})"""),
+
+            // === 토스/카카오페이 형식 ===
+            Regex("""(?:토스|카카오페이)\s*-\s*결제\s+[\d,]+원\s+(.+?)(?:\s|$)"""),
+
+            // === 일반 카드 형식 ===
+            Regex("""(?:승인|결제)\s+[\d,]+원\s+([가-힣a-zA-Z0-9][가-힣a-zA-Z0-9\s]{1,20}?)(?:\s|$)"""),
+            Regex("""([가-힣a-zA-Z][가-힣a-zA-Z0-9\s]{1,20}?)\s+[\d,]+원\s*(?:승인|결제)"""),
+
+            // === 기타 형식 ===
+            Regex("""계좌번호\s+([가-힣a-zA-Z][가-힣a-zA-Z0-9]{0,15})(?:\s|$)"""),
+            Regex("""([가-힣a-zA-Z0-9]{2,15})에서"""),
         )
 
         for (pattern in patterns) {
             val match = pattern.find(notificationText)
             if (match != null) {
                 val merchantName = match.groupValues[1].trim()
-                // 필터링: 제외할 키워드
-                if (!isExcludedKeyword(merchantName)) {
+                // 필터링: 제외할 키워드, 마스킹된 이름, 계좌번호 형식
+                if (!isExcludedKeyword(merchantName) &&
+                    !isMaskedOwnerName(merchantName) &&
+                    !isAccountNumber(merchantName)) {
                     return cleanMerchantName(merchantName)
                 }
             }
         }
 
         return ""
+    }
+
+    /**
+     * 마스킹된 본인 이름인지 확인
+     */
+    private fun isMaskedOwnerName(text: String): Boolean {
+        val maskedNamePatterns = listOf(
+            Regex("""^[가-힣]\*[가-힣]님?$"""),
+            Regex("""^[가-힣]\*[가-힣]{2}님?$"""),
+            Regex("""^[가-힣]{2}\*[가-힣]님?$""")
+        )
+        return maskedNamePatterns.any { it.matches(text) }
+    }
+
+    /**
+     * 계좌번호 형식인지 확인
+     */
+    private fun isAccountNumber(text: String): Boolean {
+        return Regex("""^\d+\*+\d*$""").matches(text)
     }
 
     /**
