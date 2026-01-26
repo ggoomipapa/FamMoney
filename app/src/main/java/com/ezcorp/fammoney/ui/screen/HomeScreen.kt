@@ -880,9 +880,11 @@ fun TransactionItem(
 
     // 콤팩트한 아이템 형식 리스트 레이아웃
     // 롱클릭은 LazyColumn의 detectDragGesturesAfterLongPress에서 처리
+    // 최소 높이를 고정하여 체크박스 유무에 관계없이 동일한 높이 유지
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .defaultMinSize(minHeight = 48.dp)
             .background(
                 if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                 else MaterialTheme.colorScheme.surface
@@ -891,13 +893,17 @@ fun TransactionItem(
             .padding(horizontal = if (isCompactScreen) 12.dp else 16.dp, vertical = if (isCompactScreen) 6.dp else 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // 선택 모드일 때 체크박스 표시
-        if (isSelectionMode) {
-            Checkbox(
-                checked = isSelected,
-                onCheckedChange = { onClick() },
-                modifier = Modifier.padding(end = 8.dp)
-            )
+        // 체크박스 영역 (선택 모드가 아니어도 공간 유지하여 레이아웃 시프트 방지)
+        Box(
+            modifier = Modifier.width(if (isSelectionMode) 48.dp else 0.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            if (isSelectionMode) {
+                Checkbox(
+                    checked = isSelected,
+                    onCheckedChange = { onClick() }
+                )
+            }
         }
         // 왼쪽: 날짜/시간
         Column(
