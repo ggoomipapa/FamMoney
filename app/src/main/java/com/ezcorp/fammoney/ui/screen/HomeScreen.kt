@@ -1,5 +1,6 @@
 package com.ezcorp.fammoney.ui.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -86,6 +87,12 @@ fun HomeScreen(
     // 태그 로드
     LaunchedEffect(Unit) {
         viewModel.loadTags()
+    }
+
+    // 선택 모드에서 뒤로가기 시 선택 모드 해제
+    BackHandler(enabled = isSelectionMode) {
+        isSelectionMode = false
+        selectedTransactionIds = emptySet()
     }
 
     // 화면 크기 감지
