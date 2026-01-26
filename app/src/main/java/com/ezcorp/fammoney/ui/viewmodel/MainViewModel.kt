@@ -1001,6 +1001,25 @@ class MainViewModel @Inject constructor(
     }
 
     /**
+     * 선택된 거래들을 휴지통으로 이동 (30일 보관)
+     */
+    fun deleteSelectedTransactions(transactionIds: Set<String>, onComplete: (Int) -> Unit) {
+        viewModelScope.launch {
+            val transactions = _uiState.value.transactions.filter { it.id in transactionIds }
+            if (transactions.isNotEmpty()) {
+                val result = transactionRepository.moveMultipleToTrash(transactions)
+                result.onSuccess { count ->
+                    onComplete(count)
+                }.onFailure {
+                    onComplete(0)
+                }
+            } else {
+                onComplete(0)
+            }
+        }
+    }
+
+    /**
      * 새 태그 생성 후 거래에 적용
      */
     fun createTagAndApply(

@@ -75,6 +75,7 @@ fun HomeScreen(
     var isSelectionMode by remember { mutableStateOf(false) }
     var selectedTransactionIds by remember { mutableStateOf(setOf<String>()) }
     var showTagPickerDialog by remember { mutableStateOf(false) }
+    var showDeleteConfirmDialog by remember { mutableStateOf(false) }
 
     // 드래그 선택 상태
     var isDragging by remember { mutableStateOf(false) }
@@ -157,6 +158,44 @@ fun HomeScreen(
         )
     }
 
+    // 삭제 확인 다이얼로그
+    if (showDeleteConfirmDialog && selectedTransactionIds.isNotEmpty()) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmDialog = false },
+            title = { Text("삭제 확인") },
+            text = {
+                Column {
+                    Text("${selectedTransactionIds.size}개의 거래 내역을 삭제하시겠습니까?")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "삭제된 거래는 30일간 휴지통에 보관됩니다.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteSelectedTransactions(selectedTransactionIds) { count ->
+                            // 삭제 완료
+                        }
+                        showDeleteConfirmDialog = false
+                        isSelectionMode = false
+                        selectedTransactionIds = emptySet()
+                    }
+                ) {
+                    Text("삭제", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirmDialog = false }) {
+                    Text("취소")
+                }
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             if (isSelectionMode) {
@@ -194,6 +233,20 @@ fun HomeScreen(
                             enabled = selectedTransactionIds.isNotEmpty()
                         ) {
                             Icon(Icons.Default.LocalOffer, contentDescription = "태그 적용")
+                        }
+                        // 삭제 버튼
+                        IconButton(
+                            onClick = { showDeleteConfirmDialog = true },
+                            enabled = selectedTransactionIds.isNotEmpty()
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "삭제",
+                                tint = if (selectedTransactionIds.isNotEmpty())
+                                    MaterialTheme.colorScheme.error
+                                else
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -348,22 +401,34 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .pointerInput(uiState.transactions) {
+                    .pointerInput(uiState.transactions, headerItemCount) {
                         detectDragGesturesAfterLongPress(
                             onDragStart = { offset ->
+                                // 드래그 시작 전 상태 초기화
+                                dragStartIndex = -1
+                                dragCurrentIndex = -1
+
                                 // 드래그 시작점에서 어떤 아이템인지 찾기
                                 val visibleItems = listState.layoutInfo.visibleItemsInfo
+                                // 뷰포트 시작 오프셋 고려
+                                val viewportStartOffset = listState.layoutInfo.viewportStartOffset
+
                                 val draggedItem = visibleItems.find { itemInfo ->
-                                    offset.y >= itemInfo.offset && offset.y < itemInfo.offset + itemInfo.size
+                                    val itemTop = itemInfo.offset - viewportStartOffset
+                                    val itemBottom = itemTop + itemInfo.size
+                                    offset.y >= itemTop && offset.y < itemBottom
                                 }
+
                                 if (draggedItem != null) {
                                     val transactionIndex = draggedItem.index - headerItemCount
                                     if (transactionIndex >= 0 && transactionIndex < uiState.transactions.size) {
-                                        isSelectionMode = true
-                                        isDragging = true
+                                        // 상태 업데이트를 한번에 처리
+                                        val selectedId = uiState.transactions[transactionIndex].id
                                         dragStartIndex = transactionIndex
                                         dragCurrentIndex = transactionIndex
-                                        selectedTransactionIds = setOf(uiState.transactions[transactionIndex].id)
+                                        selectedTransactionIds = setOf(selectedId)
+                                        isSelectionMode = true
+                                        isDragging = true
                                     }
                                 }
                             },
@@ -371,10 +436,14 @@ fun HomeScreen(
                                 if (isDragging) {
                                     change.consume()
                                     val visibleItems = listState.layoutInfo.visibleItemsInfo
+                                    val viewportStartOffset = listState.layoutInfo.viewportStartOffset
+
                                     val currentItem = visibleItems.find { itemInfo ->
-                                        change.position.y >= itemInfo.offset &&
-                                                change.position.y < itemInfo.offset + itemInfo.size
+                                        val itemTop = itemInfo.offset - viewportStartOffset
+                                        val itemBottom = itemTop + itemInfo.size
+                                        change.position.y >= itemTop && change.position.y < itemBottom
                                     }
+
                                     if (currentItem != null) {
                                         val transactionIndex = currentItem.index - headerItemCount
                                         if (transactionIndex >= 0 && transactionIndex < uiState.transactions.size) {
@@ -385,13 +454,16 @@ fun HomeScreen(
                             },
                             onDragEnd = {
                                 isDragging = false
-                                dragStartIndex = -1
-                                dragCurrentIndex = -1
+                                // 드래그 종료 시 인덱스 유지 (선택 상태 유지를 위해)
                             },
                             onDragCancel = {
                                 isDragging = false
                                 dragStartIndex = -1
                                 dragCurrentIndex = -1
+                                // 취소시에만 선택 해제
+                                if (selectedTransactionIds.isEmpty()) {
+                                    isSelectionMode = false
+                                }
                             }
                         )
                     }

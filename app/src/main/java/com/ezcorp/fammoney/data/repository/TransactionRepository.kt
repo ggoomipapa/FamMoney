@@ -1,5 +1,6 @@
 package com.ezcorp.fammoney.data.repository
 
+import com.ezcorp.fammoney.data.model.DeletedTransaction
 import com.ezcorp.fammoney.data.model.Transaction
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,6 +19,7 @@ class TransactionRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
     private val transactionsCollection = firestore.collection("transactions")
+    private val deletedTransactionsCollection = firestore.collection("deletedTransactions")
 
     suspend fun addTransaction(transaction: Transaction): Result<String> {
         return try {
@@ -287,6 +290,200 @@ class TransactionRepository @Inject constructor(
             count
         } catch (e: Exception) {
             android.util.Log.e("TransactionRepository", "updateMerchantNameBatch error", e)
+            0
+        }
+    }
+
+    /**
+     * 중복 거래 확인을 위해 최근 거래 조회
+     * @param groupId 그룹 ID
+     * @param userId 사용자 ID
+     * @param amount 금액
+     * @param withinMinutes 몇 분 이내의 거래를 조회할지
+     * @param excludeTransactionId 제외할 거래 ID
+     * @return 중복 가능성이 있는 거래 목록
+     */
+    suspend fun findRecentDuplicateCandidates(
+        groupId: String,
+        userId: String,
+        amount: Long,
+        withinMinutes: Int = 3,
+        excludeTransactionId: String? = null
+    ): List<Transaction> {
+        return try {
+            val now = System.currentTimeMillis()
+            val windowStart = now - (withinMinutes * 60 * 1000L)
+            val startTimestamp = Timestamp(java.util.Date(windowStart))
+
+            val snapshot = transactionsCollection
+                .whereEqualTo("groupId", groupId)
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("amount", amount)
+                .get()
+                .await()
+
+            snapshot.documents
+                .mapNotNull { doc -> doc.data?.let { Transaction.fromMap(doc.id, it) } }
+                .filter { tx ->
+                    tx.id != excludeTransactionId &&
+                    tx.transactionDate != null &&
+                    tx.transactionDate >= startTimestamp
+                }
+                .sortedByDescending { it.transactionDate?.toDate()?.time ?: 0 }
+        } catch (e: Exception) {
+            android.util.Log.e("TransactionRepository", "findRecentDuplicateCandidates error", e)
+            emptyList()
+        }
+    }
+
+    // ==================== 휴지통 기능 ====================
+
+    /**
+     * 거래를 휴지통으로 이동 (30일 후 자동 삭제)
+     */
+    suspend fun moveToTrash(transaction: Transaction): Result<Unit> {
+        return try {
+            val now = System.currentTimeMillis()
+            val expiresAt = Timestamp(Date(now + DeletedTransaction.RETENTION_MS))
+
+            val deletedTransaction = DeletedTransaction(
+                originalTransaction = transaction.toMap(),
+                groupId = transaction.groupId,
+                userId = transaction.userId,
+                deletedAt = Timestamp.now(),
+                expiresAt = expiresAt
+            )
+
+            // 휴지통에 추가
+            deletedTransactionsCollection.add(deletedTransaction.toMap()).await()
+
+            // 원본 삭제
+            transactionsCollection.document(transaction.id).delete().await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            android.util.Log.e("TransactionRepository", "moveToTrash error", e)
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * 여러 거래를 휴지통으로 이동
+     */
+    suspend fun moveMultipleToTrash(transactions: List<Transaction>): Result<Int> {
+        return try {
+            val now = System.currentTimeMillis()
+            val expiresAt = Timestamp(Date(now + DeletedTransaction.RETENTION_MS))
+            var count = 0
+
+            val batch = firestore.batch()
+
+            transactions.forEach { transaction ->
+                val deletedTransaction = DeletedTransaction(
+                    originalTransaction = transaction.toMap(),
+                    groupId = transaction.groupId,
+                    userId = transaction.userId,
+                    deletedAt = Timestamp.now(),
+                    expiresAt = expiresAt
+                )
+
+                // 휴지통에 추가
+                val newDocRef = deletedTransactionsCollection.document()
+                batch.set(newDocRef, deletedTransaction.toMap())
+
+                // 원본 삭제
+                batch.delete(transactionsCollection.document(transaction.id))
+                count++
+            }
+
+            batch.commit().await()
+            Result.success(count)
+        } catch (e: Exception) {
+            android.util.Log.e("TransactionRepository", "moveMultipleToTrash error", e)
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * 휴지통 목록 조회
+     */
+    fun getDeletedTransactions(groupId: String): Flow<List<DeletedTransaction>> = callbackFlow {
+        val listener = deletedTransactionsCollection
+            .whereEqualTo("groupId", groupId)
+            .orderBy("deletedAt", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(emptyList())
+                    return@addSnapshotListener
+                }
+
+                val deletedTransactions = snapshot?.documents?.mapNotNull { doc ->
+                    doc.data?.let { DeletedTransaction.fromMap(doc.id, it) }
+                } ?: emptyList()
+
+                trySend(deletedTransactions)
+            }
+
+        awaitClose { listener.remove() }
+    }
+
+    /**
+     * 휴지통에서 복원
+     */
+    suspend fun restoreFromTrash(deletedTransaction: DeletedTransaction): Result<Unit> {
+        return try {
+            // 원본 거래 데이터 복원
+            val originalData = deletedTransaction.originalTransaction.toMutableMap()
+
+            // 새 문서로 추가 (원본 ID는 사용할 수 없음)
+            transactionsCollection.add(originalData).await()
+
+            // 휴지통에서 삭제
+            deletedTransactionsCollection.document(deletedTransaction.id).delete().await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            android.util.Log.e("TransactionRepository", "restoreFromTrash error", e)
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * 휴지통에서 영구 삭제
+     */
+    suspend fun permanentlyDelete(deletedTransactionId: String): Result<Unit> {
+        return try {
+            deletedTransactionsCollection.document(deletedTransactionId).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            android.util.Log.e("TransactionRepository", "permanentlyDelete error", e)
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * 휴지통 비우기 (만료된 항목 삭제)
+     */
+    suspend fun cleanupExpiredTrash(): Int {
+        return try {
+            val now = Timestamp.now()
+            val snapshot = deletedTransactionsCollection
+                .whereLessThan("expiresAt", now)
+                .get()
+                .await()
+
+            val batch = firestore.batch()
+            snapshot.documents.forEach { doc ->
+                batch.delete(doc.reference)
+            }
+
+            if (snapshot.documents.isNotEmpty()) {
+                batch.commit().await()
+            }
+
+            snapshot.documents.size
+        } catch (e: Exception) {
+            android.util.Log.e("TransactionRepository", "cleanupExpiredTrash error", e)
             0
         }
     }
