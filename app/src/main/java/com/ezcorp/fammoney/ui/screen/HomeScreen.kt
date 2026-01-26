@@ -80,12 +80,21 @@ fun HomeScreen(
     var dragStartY by remember { mutableFloatStateOf(0f) }
     var isDragThresholdMet by remember { mutableStateOf(false) }
     val dragThreshold = 60f // UI 변경으로 인한 레이아웃 시프트를 무시하기 위한 threshold (픽셀)
+    var pendingScrollToIndex by remember { mutableIntStateOf(-1) }
 
     val listState = rememberLazyListState()
 
     // 태그 로드
     LaunchedEffect(Unit) {
         viewModel.loadTags()
+    }
+
+    // 선택 모드 진입 시 선택된 아이템이 화면에 유지되도록 스크롤 조정
+    LaunchedEffect(pendingScrollToIndex) {
+        if (pendingScrollToIndex >= 0) {
+            listState.scrollToItem(pendingScrollToIndex)
+            pendingScrollToIndex = -1
+        }
     }
 
     // 화면 크기 감지
@@ -425,6 +434,8 @@ fun HomeScreen(
                                         selectedTransactionIds = setOf(selectedId)
                                         isSelectionMode = true
                                         isDragging = true
+                                        // 선택 모드 UI 변경 후 해당 아이템이 보이도록 스크롤 예약
+                                        pendingScrollToIndex = draggedItem.index
                                     }
                                 }
                             },
