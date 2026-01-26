@@ -2,16 +2,13 @@ package com.ezcorp.fammoney.ui.screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,11 +20,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import kotlin.math.abs
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -81,6 +77,10 @@ fun HomeScreen(
     var isDragging by remember { mutableStateOf(false) }
     var dragStartIndex by remember { mutableIntStateOf(-1) }
     var dragCurrentIndex by remember { mutableIntStateOf(-1) }
+    var dragStartY by remember { mutableFloatStateOf(0f) }
+    var isDragThresholdMet by remember { mutableStateOf(false) }
+    val dragThreshold = 60f // UI 변경으로 인한 레이아웃 시프트를 무시하기 위한 threshold (픽셀)
+
     val listState = rememberLazyListState()
 
     // 태그 로드
@@ -382,9 +382,9 @@ fun HomeScreen(
             // MonthSelector(1) + SummaryCard(1) + AI섹션(1) + UserFilterChips(1) + 저축목표(조건부)
             val headerItemCount = 4 + (if (uiState.savingsGoals.isNotEmpty()) 1 else 0)
 
-            // 드래그 중 인덱스 변경 시 선택 업데이트
-            LaunchedEffect(isDragging, dragStartIndex, dragCurrentIndex) {
-                if (isDragging && dragStartIndex >= 0 && dragCurrentIndex >= 0 && uiState.transactions.isNotEmpty()) {
+            // 드래그 중 인덱스 변경 시 선택 업데이트 (threshold를 넘었을 때만)
+            LaunchedEffect(isDragging, dragStartIndex, dragCurrentIndex, isDragThresholdMet) {
+                if (isDragging && isDragThresholdMet && dragStartIndex >= 0 && dragCurrentIndex >= 0 && uiState.transactions.isNotEmpty()) {
                     val startIdx = minOf(dragStartIndex, dragCurrentIndex).coerceIn(0, uiState.transactions.lastIndex)
                     val endIdx = maxOf(dragStartIndex, dragCurrentIndex).coerceIn(0, uiState.transactions.lastIndex)
                     val rangeIds = uiState.transactions
@@ -397,7 +397,7 @@ fun HomeScreen(
 
             LazyColumn(
                 state = listState,
-                userScrollEnabled = !isDragging, // 드래그 중에는 스크롤 비활성화
+                userScrollEnabled = !isDragging,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
@@ -407,22 +407,18 @@ fun HomeScreen(
                                 // 드래그 시작 전 상태 초기화
                                 dragStartIndex = -1
                                 dragCurrentIndex = -1
+                                dragStartY = offset.y
+                                isDragThresholdMet = false
 
                                 // 드래그 시작점에서 어떤 아이템인지 찾기
                                 val visibleItems = listState.layoutInfo.visibleItemsInfo
-                                // 뷰포트 시작 오프셋 고려
-                                val viewportStartOffset = listState.layoutInfo.viewportStartOffset
-
                                 val draggedItem = visibleItems.find { itemInfo ->
-                                    val itemTop = itemInfo.offset - viewportStartOffset
-                                    val itemBottom = itemTop + itemInfo.size
-                                    offset.y >= itemTop && offset.y < itemBottom
+                                    offset.y >= itemInfo.offset && offset.y < itemInfo.offset + itemInfo.size
                                 }
 
                                 if (draggedItem != null) {
                                     val transactionIndex = draggedItem.index - headerItemCount
                                     if (transactionIndex >= 0 && transactionIndex < uiState.transactions.size) {
-                                        // 상태 업데이트를 한번에 처리
                                         val selectedId = uiState.transactions[transactionIndex].id
                                         dragStartIndex = transactionIndex
                                         dragCurrentIndex = transactionIndex
@@ -435,35 +431,39 @@ fun HomeScreen(
                             onDrag = { change, _ ->
                                 if (isDragging) {
                                     change.consume()
-                                    val visibleItems = listState.layoutInfo.visibleItemsInfo
-                                    val viewportStartOffset = listState.layoutInfo.viewportStartOffset
 
-                                    val currentItem = visibleItems.find { itemInfo ->
-                                        val itemTop = itemInfo.offset - viewportStartOffset
-                                        val itemBottom = itemTop + itemInfo.size
-                                        change.position.y >= itemTop && change.position.y < itemBottom
+                                    // threshold 확인: 시작 위치에서 충분히 움직였는지
+                                    val distanceY = abs(change.position.y - dragStartY)
+                                    if (!isDragThresholdMet && distanceY > dragThreshold) {
+                                        isDragThresholdMet = true
                                     }
 
-                                    if (currentItem != null) {
-                                        val transactionIndex = currentItem.index - headerItemCount
-                                        if (transactionIndex >= 0 && transactionIndex < uiState.transactions.size) {
-                                            dragCurrentIndex = transactionIndex
+                                    // threshold를 넘었을 때만 드래그 인덱스 업데이트
+                                    if (isDragThresholdMet) {
+                                        val visibleItems = listState.layoutInfo.visibleItemsInfo
+                                        val currentItem = visibleItems.find { itemInfo ->
+                                            change.position.y >= itemInfo.offset &&
+                                                    change.position.y < itemInfo.offset + itemInfo.size
+                                        }
+
+                                        if (currentItem != null) {
+                                            val transactionIndex = currentItem.index - headerItemCount
+                                            if (transactionIndex >= 0 && transactionIndex < uiState.transactions.size) {
+                                                dragCurrentIndex = transactionIndex
+                                            }
                                         }
                                     }
                                 }
                             },
                             onDragEnd = {
                                 isDragging = false
-                                // 드래그 종료 시 인덱스 유지 (선택 상태 유지를 위해)
+                                isDragThresholdMet = false
                             },
                             onDragCancel = {
                                 isDragging = false
+                                isDragThresholdMet = false
                                 dragStartIndex = -1
                                 dragCurrentIndex = -1
-                                // 취소시에만 선택 해제
-                                if (selectedTransactionIds.isEmpty()) {
-                                    isSelectionMode = false
-                                }
                             }
                         )
                     }
