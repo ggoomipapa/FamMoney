@@ -258,8 +258,8 @@ fun HomeScreen(
                 TopAppBar(
                     title = { Text(uiState.currentGroup?.name ?: "팸머니") },
                     navigationIcon = {
-                        // 선택 모드 TopAppBar와 동일한 레이아웃을 위해 빈 공간 유지
-                        Spacer(modifier = Modifier.width(48.dp))
+                        // 선택 모드 TopAppBar의 IconButton과 동일한 크기 유지
+                        Box(modifier = Modifier.size(48.dp))
                     },
                     actions = {
                     // 중복 거래 알림 뱃지 (중복 거래가 있을 때만 표시) - FAB 위 첫 번째 위치
