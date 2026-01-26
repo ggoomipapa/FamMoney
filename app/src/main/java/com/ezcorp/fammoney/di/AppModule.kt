@@ -2,8 +2,9 @@ package com.ezcorp.fammoney.di
 
 import android.content.Context
 import com.ezcorp.fammoney.R
-import com.ezcorp.fammoney.service.ExchangeRateService // Added import
-import com.ezcorp.fammoney.service.NotificationParser // Added import
+import com.ezcorp.fammoney.data.local.AppDatabase
+import com.ezcorp.fammoney.data.local.LearnedMerchantRuleDao
+import com.ezcorp.fammoney.service.ExchangeRateService
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -19,8 +20,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import kotlinx.serialization.json.Json // Added import for Json
-import okhttp3.OkHttpClient // Added import for OkHttpClient
+import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -83,12 +84,33 @@ object AppModule {
         return ExchangeRateService(okHttpClient, json)
     }
 
-    // Provide NotificationParser
+    // ==================== Room Database ====================
+
+    /**
+     * Room 데이터베이스 인스턴스 제공
+     * 정책 3: LearnedRule 저장/조회를 위한 로컬 DB
+     */
     @Provides
     @Singleton
-    fun provideNotificationParser(
-        exchangeRateService: ExchangeRateService // Inject ExchangeRateService
-    ): NotificationParser {
-        return NotificationParser(exchangeRateService)
+    fun provideAppDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return AppDatabase.getInstance(context)
     }
+
+    /**
+     * LearnedMerchantRule DAO 제공
+     * 정책 3: signature 기반 사용처 학습
+     */
+    @Provides
+    @Singleton
+    fun provideLearnedMerchantRuleDao(
+        database: AppDatabase
+    ): LearnedMerchantRuleDao {
+        return database.learnedMerchantRuleDao()
+    }
+
+    // Note: NotificationParser, MerchantCandidateExtractor, MerchantNormalizer,
+    // LearnedMerchantRuleRepository use @Inject constructor with @Singleton,
+    // so Hilt automatically provides them
 }

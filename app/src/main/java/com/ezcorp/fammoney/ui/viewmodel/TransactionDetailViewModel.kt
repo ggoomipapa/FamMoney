@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ezcorp.fammoney.data.model.PriceHistory
 import com.ezcorp.fammoney.data.model.ReceiptItem
 import com.ezcorp.fammoney.data.model.Transaction
+import com.ezcorp.fammoney.data.repository.LearnedMerchantRuleRepository
 import com.ezcorp.fammoney.data.repository.ReceiptRepository
 import com.ezcorp.fammoney.data.repository.TransactionRepository
 import com.ezcorp.fammoney.service.ParsedReceiptItem
@@ -28,7 +29,8 @@ class TransactionDetailViewModel @Inject constructor(
     private val receiptRepository: ReceiptRepository,
     private val receiptOcrService: ReceiptOcrService,
     private val userPreferences: UserPreferences,
-    private val smartCategorizationService: SmartCategorizationService
+    private val smartCategorizationService: SmartCategorizationService,
+    private val learnedMerchantRuleRepository: LearnedMerchantRuleRepository
 ) : ViewModel() {
 
     private val _transaction = MutableStateFlow<Transaction?>(null)
@@ -102,6 +104,7 @@ class TransactionDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                val originalTransaction = _transaction.value
                 transactionRepository.updateTransaction(transaction)
 
                 // 영수증 항목이 있으면 저장
@@ -110,9 +113,41 @@ class TransactionDetailViewModel @Inject constructor(
                     saveReceiptItems(transaction.id, items, transaction.merchantName)
                 }
 
+                val groupId = userPreferences.getGroupId()
+                val oldMerchantName = originalTransaction?.merchantName
+                val newMerchantName = transaction.merchantName
+
+                // 사용처 변경 시 처리
+                if (groupId != null &&
+                    newMerchantName.isNotBlank() &&
+                    oldMerchantName != newMerchantName
+                ) {
+                    // 1. 학습 저장 (원본 알림 → 사용처 매핑) - 미래 거래에 적용
+                    if (transaction.originalText.isNotBlank()) {
+                        learnedMerchantRuleRepository.learnFromUserCorrection(
+                            groupId = groupId,
+                            originalText = transaction.originalText,
+                            pkg = null,
+                            confirmedMerchant = newMerchantName
+                        )
+                    }
+
+                    // 2. 기존 거래 일괄 업데이트 - 같은 사용처를 가진 과거 거래들도 변경
+                    if (!oldMerchantName.isNullOrBlank()) {
+                        val updatedCount = transactionRepository.updateMerchantNameBatch(
+                            groupId = groupId,
+                            oldMerchantName = oldMerchantName,
+                            newMerchantName = newMerchantName,
+                            excludeTransactionId = transaction.id
+                        )
+                        if (updatedCount > 0) {
+                            android.util.Log.d("TransactionDetail", "일괄 업데이트: $oldMerchantName → $newMerchantName ($updatedCount 건)")
+                        }
+                    }
+                }
+
                 // 사용처와 카테고리 매핑 학습
                 if (transaction.merchantName.isNotBlank() && transaction.category.isNotBlank()) {
-                    val groupId = userPreferences.getGroupId()
                     if (groupId != null) {
                         smartCategorizationService.learn(
                             groupId = groupId,

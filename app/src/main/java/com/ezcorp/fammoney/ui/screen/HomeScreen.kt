@@ -6,10 +6,12 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +23,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -70,6 +75,12 @@ fun HomeScreen(
     var isSelectionMode by remember { mutableStateOf(false) }
     var selectedTransactionIds by remember { mutableStateOf(setOf<String>()) }
     var showTagPickerDialog by remember { mutableStateOf(false) }
+
+    // 드래그 선택 상태
+    var isDragging by remember { mutableStateOf(false) }
+    var dragStartIndex by remember { mutableIntStateOf(-1) }
+    var dragCurrentIndex by remember { mutableIntStateOf(-1) }
+    val listState = rememberLazyListState()
 
     // 태그 로드
     LaunchedEffect(Unit) {
@@ -314,10 +325,76 @@ fun HomeScreen(
                 CircularProgressIndicator()
             }
         } else {
+            // 트랜잭션 아이템 이전의 고정 아이템 수 계산
+            // MonthSelector(1) + SummaryCard(1) + AI섹션(1) + UserFilterChips(1) + 저축목표(조건부)
+            val headerItemCount = 4 + (if (uiState.savingsGoals.isNotEmpty()) 1 else 0)
+
+            // 드래그 중 인덱스 변경 시 선택 업데이트
+            LaunchedEffect(isDragging, dragStartIndex, dragCurrentIndex) {
+                if (isDragging && dragStartIndex >= 0 && dragCurrentIndex >= 0 && uiState.transactions.isNotEmpty()) {
+                    val startIdx = minOf(dragStartIndex, dragCurrentIndex).coerceIn(0, uiState.transactions.lastIndex)
+                    val endIdx = maxOf(dragStartIndex, dragCurrentIndex).coerceIn(0, uiState.transactions.lastIndex)
+                    val rangeIds = uiState.transactions
+                        .subList(startIdx, endIdx + 1)
+                        .map { it.id }
+                        .toSet()
+                    selectedTransactionIds = rangeIds
+                }
+            }
+
             LazyColumn(
+                state = listState,
+                userScrollEnabled = !isDragging, // 드래그 중에는 스크롤 비활성화
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
+                    .pointerInput(uiState.transactions) {
+                        detectDragGesturesAfterLongPress(
+                            onDragStart = { offset ->
+                                // 드래그 시작점에서 어떤 아이템인지 찾기
+                                val visibleItems = listState.layoutInfo.visibleItemsInfo
+                                val draggedItem = visibleItems.find { itemInfo ->
+                                    offset.y >= itemInfo.offset && offset.y < itemInfo.offset + itemInfo.size
+                                }
+                                if (draggedItem != null) {
+                                    val transactionIndex = draggedItem.index - headerItemCount
+                                    if (transactionIndex >= 0 && transactionIndex < uiState.transactions.size) {
+                                        isSelectionMode = true
+                                        isDragging = true
+                                        dragStartIndex = transactionIndex
+                                        dragCurrentIndex = transactionIndex
+                                        selectedTransactionIds = setOf(uiState.transactions[transactionIndex].id)
+                                    }
+                                }
+                            },
+                            onDrag = { change, _ ->
+                                if (isDragging) {
+                                    change.consume()
+                                    val visibleItems = listState.layoutInfo.visibleItemsInfo
+                                    val currentItem = visibleItems.find { itemInfo ->
+                                        change.position.y >= itemInfo.offset &&
+                                                change.position.y < itemInfo.offset + itemInfo.size
+                                    }
+                                    if (currentItem != null) {
+                                        val transactionIndex = currentItem.index - headerItemCount
+                                        if (transactionIndex >= 0 && transactionIndex < uiState.transactions.size) {
+                                            dragCurrentIndex = transactionIndex
+                                        }
+                                    }
+                                }
+                            },
+                            onDragEnd = {
+                                isDragging = false
+                                dragStartIndex = -1
+                                dragCurrentIndex = -1
+                            },
+                            onDragCancel = {
+                                isDragging = false
+                                dragStartIndex = -1
+                                dragCurrentIndex = -1
+                            }
+                        )
+                    }
             ) {
                 item {
                     MonthSelector(
@@ -412,7 +489,6 @@ fun HomeScreen(
                         items = uiState.transactions,
                         key = { it.id }
                     ) { transaction ->
-                        val currentIndex = uiState.transactions.indexOf(transaction)
                         TransactionItem(
                             transaction = transaction,
                             isSelectionMode = isSelectionMode,
@@ -427,27 +503,6 @@ fun HomeScreen(
                                     }
                                 } else {
                                     onNavigateToTransactionDetail(transaction.id)
-                                }
-                            },
-                            onLongClick = {
-                                if (isSelectionMode && selectedTransactionIds.isNotEmpty()) {
-                                    // 선택 모드에서 길게 누르면 범위 선택
-                                    val firstSelectedIndex = uiState.transactions.indexOfFirst {
-                                        selectedTransactionIds.contains(it.id)
-                                    }
-                                    if (firstSelectedIndex >= 0) {
-                                        val startIndex = minOf(firstSelectedIndex, currentIndex)
-                                        val endIndex = maxOf(firstSelectedIndex, currentIndex)
-                                        val rangeIds = uiState.transactions
-                                            .subList(startIndex, endIndex + 1)
-                                            .map { it.id }
-                                            .toSet()
-                                        selectedTransactionIds = selectedTransactionIds + rangeIds
-                                    }
-                                } else {
-                                    // 일반 모드에서 길게 누르면 선택 모드 진입
-                                    isSelectionMode = true
-                                    selectedTransactionIds = setOf(transaction.id)
                                 }
                             },
                             onDelete = { viewModel.deleteTransaction(transaction.id) }
@@ -710,14 +765,12 @@ fun UserFilterChips(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionItem(
     transaction: Transaction,
     isSelectionMode: Boolean = false,
     isSelected: Boolean = false,
     onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {},
     onDelete: () -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -750,6 +803,7 @@ fun TransactionItem(
     }
 
     // 콤팩트한 아이템 형식 리스트 레이아웃
+    // 롱클릭은 LazyColumn의 detectDragGesturesAfterLongPress에서 처리
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -757,16 +811,7 @@ fun TransactionItem(
                 if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
                 else MaterialTheme.colorScheme.surface
             )
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = {
-                    if (isSelectionMode) {
-                        // 선택 모드에서는 삭제 다이얼로그 표시 안 함
-                    } else {
-                        onLongClick()
-                    }
-                }
-            )
+            .clickable(onClick = onClick)
             .padding(horizontal = if (isCompactScreen) 12.dp else 16.dp, vertical = if (isCompactScreen) 6.dp else 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

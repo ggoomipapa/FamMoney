@@ -32,11 +32,20 @@ data class Transaction(
     val tagId: String = "",              // 태그 ID
     val tagName: String = "",            // 태그 이름 (표시용)
 
+    // === N-best 파싱 시스템 (정책 1, 2 관련) ===
+    val confidence: Double = 0.0,        // 파싱 신뢰도 (0.0 ~ 1.0)
+    val merchantCandidates: List<String> = emptyList(),  // 사용처 후보 목록
+
     @ServerTimestamp
     val createdAt: Timestamp? = null,
     val transactionDate: Timestamp? = null,
     val isConfirmed: Boolean = true
 ) {
+    // 검토 필요 여부 (정책 1: confidence < 0.75)
+    val needsReview: Boolean get() = confidence < 0.75 && confidence > 0.0
+
+    // 폴백 UX 필요 여부 (정책 1: confidence < 0.50)
+    val needsFallbackUX: Boolean get() = confidence < 0.50
     // 자녀 용돈에 연결된 거래인지 확인
     val isLinkedToChild: Boolean get() = linkedChildId.isNotEmpty()
 
@@ -64,6 +73,8 @@ data class Transaction(
         "linkedChildName" to linkedChildName,
         "tagId" to tagId,
         "tagName" to tagName,
+        "confidence" to confidence,
+        "merchantCandidates" to merchantCandidates,
         "createdAt" to createdAt,
         "transactionDate" to transactionDate,
         "isConfirmed" to isConfirmed
@@ -93,6 +104,8 @@ data class Transaction(
                 linkedChildName = map["linkedChildName"] as? String ?: "",
                 tagId = map["tagId"] as? String ?: "",
                 tagName = map["tagName"] as? String ?: "",
+                confidence = (map["confidence"] as? Number)?.toDouble() ?: 0.0,
+                merchantCandidates = (map["merchantCandidates"] as? List<*>)?.filterIsInstance<String>() ?: emptyList(),
                 createdAt = map["createdAt"] as? Timestamp,
                 transactionDate = map["transactionDate"] as? Timestamp,
                 isConfirmed = map["isConfirmed"] as? Boolean ?: true

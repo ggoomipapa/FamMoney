@@ -1,7 +1,9 @@
 package com.ezcorp.fammoney.service
 
 import com.ezcorp.fammoney.data.model.BankConfig
+import com.ezcorp.fammoney.data.model.LearnedMerchantRule
 import com.ezcorp.fammoney.data.model.TransactionType
+import com.ezcorp.fammoney.data.repository.LearnedMerchantRuleRepository
 import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,6 +17,12 @@ import javax.inject.Singleton
  * - 간편결제: 카카오페이, 네이버페이, 토스, 삼성페이, 페이코
  */
 
+/**
+ * 파싱 결과 데이터 클래스
+ *
+ * 정책 1 준수: confidence 필드로 자동 확정/검토 필요/폴백 UX 분기
+ * 정책 2 준수: merchantName이 null일 수 있음 (미분류 허용)
+ */
 data class ParsedTransaction(
     val amount: Long,
     val type: TransactionType,
@@ -23,12 +31,18 @@ data class ParsedTransaction(
     val merchantName: String,
     val senderName: String = "",
     val accountNumber: String = "",
-    val originalText: String
+    val originalText: String,
+    // N-best 파싱 관련 필드
+    val confidence: Double = 0.0,  // 신뢰도 (0.0 ~ 1.0)
+    val merchantCandidates: List<String> = emptyList()  // 후보 목록 (Top 5)
 )
 
 @Singleton
 class NotificationParser @Inject constructor(
-    private val exchangeRateService: ExchangeRateService
+    private val exchangeRateService: ExchangeRateService,
+    private val merchantCandidateExtractor: MerchantCandidateExtractor,
+    private val merchantNormalizer: MerchantNormalizer,
+    private val learnedMerchantRuleRepository: LearnedMerchantRuleRepository
 ) {
 
     companion object {
@@ -80,7 +94,7 @@ class NotificationParser @Inject constructor(
             "KB", "국민", "신한", "우리", "하나", "농협", "기업", "SC",
             "카카오뱅크", "토스뱅크", "케이뱅크", "삼성카드", "현대카드",
             "롯데카드", "BC카드", "NH", "IBK", "카카오페이", "네이버페이",
-            "토스", "삼성페이", "페이코", "은행", "카드"
+            "토스", "삼성페이", "페이코", "은행", "카드", "Pay", "페이"
         )
     }
 
@@ -126,18 +140,68 @@ class NotificationParser @Inject constructor(
         // 2. 거래 유형 판별
         val type = determineTransactionType(text, bankConfig)
 
-        // 3. 가맹점/송금인 추출
+        // 3. 가맹점/송금인 추출 (N-best 시스템 적용)
         val merchantName: String
         val senderName: String
+        var confidence = 0.0
+        var merchantCandidates = emptyList<String>()
 
         if (type == TransactionType.INCOME) {
-            // 입금인 경우: 송금인 추출
+            // 입금인 경우: 특별 입금 사유 우선, 없으면 송금인 추출
+            val incomeReason = extractIncomeReason(text)
             senderName = extractSenderName(text)
-            merchantName = if (senderName.isNotBlank()) senderName else extractIncomeReason(text)
+            // 특별 입금 사유(체크할인, 캐시백 등)가 있으면 그것을 사용
+            merchantName = if (incomeReason != "입금") {
+                confidence = 0.9  // 입금 사유 키워드 매칭은 높은 신뢰도
+                incomeReason
+            } else if (senderName.isNotBlank()) {
+                confidence = 0.8  // 송금인 추출도 높은 신뢰도
+                senderName
+            } else {
+                confidence = 0.3  // 기본 "입금"은 낮은 신뢰도
+                "입금"
+            }
         } else {
-            // 출금인 경우: 가맹점 추출
-            merchantName = extractMerchantName(text, isForeign)
+            // 출금인 경우: N-best 후보 추출 + 점수화
             senderName = ""
+
+            // 전처리
+            val cleanText = preprocess(text)
+
+            // 정책 3: 학습된 규칙 우선 조회
+            val signature = LearnedMerchantRule.generateSignature(cleanText, null)
+            val learnedRule = learnedMerchantRuleRepository.findBySignature(signature)
+
+            if (learnedRule != null && learnedRule.merchant.isNotBlank()) {
+                // 학습된 규칙 사용
+                merchantName = learnedRule.merchant
+                confidence = if (learnedRule.isUserConfirmed) {
+                    0.95 + LearnedMerchantRule.confidenceBonus(learnedRule.hitCount)
+                } else {
+                    0.85 + LearnedMerchantRule.confidenceBonus(learnedRule.hitCount)
+                }
+                merchantCandidates = listOf(learnedRule.merchant)
+            } else {
+                // N-best 후보 추출
+                val extractionResult = merchantCandidateExtractor.extract(cleanText)
+
+                confidence = extractionResult.confidence
+                merchantCandidates = extractionResult.candidates.map { it.normalizedText }
+
+                // 정책 2 준수: confidence < 0.50이면 미분류 허용
+                merchantName = if (extractionResult.bestCandidate != null && confidence >= 0.30) {
+                    extractionResult.bestCandidate.normalizedText
+                } else {
+                    // 기존 방식으로 폴백 (호환성 유지)
+                    val fallback = extractMerchantNameLegacy(text, isForeign)
+                    if (fallback.isNotBlank()) {
+                        confidence = 0.4  // 레거시 방식은 중간 신뢰도
+                        fallback
+                    } else {
+                        ""  // 미분류 (정책 2)
+                    }
+                }
+            }
         }
 
         // 4. 계좌번호 추출
@@ -154,7 +218,9 @@ class NotificationParser @Inject constructor(
             merchantName = merchantName,
             senderName = senderName,
             accountNumber = accountNumber,
-            originalText = text
+            originalText = text,
+            confidence = confidence,
+            merchantCandidates = merchantCandidates
         )
     }
 
@@ -241,9 +307,21 @@ class NotificationParser @Inject constructor(
     }
 
     /**
-     * 가맹점명 추출 (출금/결제 시)
+     * 텍스트 전처리 (N-best 추출 전)
      */
-    private fun extractMerchantName(text: String, isForeign: Boolean): String {
+    private fun preprocess(raw: String): String {
+        return raw
+            .replace("\u200B", "")  // zero width space
+            .replace("\u00A0", " ") // nbsp
+            .replace(Regex("[ \t]+"), " ")
+            .replace(Regex("\\n{3,}"), "\n\n")
+            .trim()
+    }
+
+    /**
+     * 가맹점명 추출 (레거시 방식 - 폴백용)
+     */
+    private fun extractMerchantNameLegacy(text: String, isForeign: Boolean): String {
         val lines = text.split("\n", " ")
             .map { it.trim() }
             .filter { it.isNotBlank() && it.length >= 2 }
@@ -320,10 +398,17 @@ class NotificationParser @Inject constructor(
     }
 
     /**
-     * 입금 사유 추출 (출금취소, 환불 등)
+     * 입금 사유 추출 (출금취소, 환불, 체크할인 등)
      */
     private fun extractIncomeReason(text: String): String {
         val incomeReasons = listOf(
+            // 카드 할인/캐시백 (우선순위 높음)
+            "KB체크할인" to "KB체크할인",
+            "체크할인" to "체크할인",
+            "캐시백" to "캐시백",
+            "포인트" to "포인트",
+            "카드입금" to "카드입금",
+            // 기타 입금 사유
             "출금취소" to "출금취소",
             "환불" to "환불",
             "급여" to "급여",

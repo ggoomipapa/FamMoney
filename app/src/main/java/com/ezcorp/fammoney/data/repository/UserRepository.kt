@@ -267,14 +267,18 @@ class UserRepository @Inject constructor(
     suspend fun updateSharingScope(
         userId: String,
         shareFromDate: com.google.firebase.Timestamp?,
-        hiddenTransactionIds: List<String>
+        hiddenTransactionIds: List<String>,
+        shareCashTransactions: Boolean = true,
+        shareAllowance: Boolean = true
     ): Result<Unit> {
         return try {
             usersCollection.document(userId)
                 .update(
                     mapOf(
                         "shareFromDate" to shareFromDate,
-                        "hiddenTransactionIds" to hiddenTransactionIds
+                        "hiddenTransactionIds" to hiddenTransactionIds,
+                        "shareCashTransactions" to shareCashTransactions,
+                        "shareAllowance" to shareAllowance
                     )
                 )
                 .await()

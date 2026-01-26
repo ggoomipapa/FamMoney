@@ -305,9 +305,19 @@ class MainViewModel @Inject constructor(
                         if (transactionOwner != null) {
                             val shareFromDate = transactionOwner.shareFromDate
                             val hiddenIds = transactionOwner.hiddenTransactionIds
+                            val shareCash = transactionOwner.shareCashTransactions
+                            val shareAllowance = transactionOwner.shareAllowance
 
                             // 숨김 목록에 있는 거래는 안 보임
                             if (hiddenIds.contains(transaction.id)) {
+                                false
+                            }
+                            // 현금 거래 공유 설정 확인
+                            else if (!shareCash && isCashTransaction(transaction)) {
+                                false
+                            }
+                            // 용돈 거래 공유 설정 확인
+                            else if (!shareAllowance && transaction.isLinkedToChild) {
                                 false
                             }
                             // 공유 시작일 이전 거래는 안 보임
@@ -344,6 +354,13 @@ class MainViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    // 현금 거래인지 확인하는 헬퍼 함수
+    private fun isCashTransaction(transaction: Transaction): Boolean {
+        return transaction.bankName.isEmpty() ||
+               transaction.bankName.equals("현금", ignoreCase = true) ||
+               transaction.bankName.equals("cash", ignoreCase = true)
     }
 
     fun setUserFilter(userId: String?) {
@@ -443,10 +460,21 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun updateSharingScope(shareFromDate: Timestamp?, hiddenTransactionIds: List<String>) {
+    fun updateSharingScope(
+        shareFromDate: Timestamp?,
+        hiddenTransactionIds: List<String>,
+        shareCashTransactions: Boolean = true,
+        shareAllowance: Boolean = true
+    ) {
         viewModelScope.launch {
             val userId = _uiState.value.currentUser?.id ?: return@launch
-            userRepository.updateSharingScope(userId, shareFromDate, hiddenTransactionIds)
+            userRepository.updateSharingScope(
+                userId,
+                shareFromDate,
+                hiddenTransactionIds,
+                shareCashTransactions,
+                shareAllowance
+            )
         }
     }
 

@@ -377,9 +377,16 @@ fun SettingsScreen(
     // 공유 범위 설정 다이얼로그
     if (showSharingScopeDialog) {
         SharingScopeDialog(
+            currentShareCash = uiState.currentUser?.shareCashTransactions ?: true,
+            currentShareAllowance = uiState.currentUser?.shareAllowance ?: true,
             onDismiss = { showSharingScopeDialog = false },
-            onConfirm = { shareFromDate ->
-                mainViewModel.updateSharingScope(shareFromDate, emptyList())
+            onConfirm = { shareFromDate, shareCash, shareAllowance ->
+                mainViewModel.updateSharingScope(
+                    shareFromDate,
+                    uiState.currentUser?.hiddenTransactionIds ?: emptyList(),
+                    shareCash,
+                    shareAllowance
+                )
                 showSharingScopeDialog = false
                 // 초대 코드 복사
                 uiState.currentGroup?.inviteCode?.let { code ->

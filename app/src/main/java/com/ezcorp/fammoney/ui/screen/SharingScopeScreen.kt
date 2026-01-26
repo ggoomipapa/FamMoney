@@ -31,7 +31,9 @@ import java.util.*
  * @param transactions 사용자의 전체 거래 내역
  * @param currentShareFromDate 현재 공유 시작일
  * @param currentHiddenIds 현재 숨겨진 거래 ID 목록
- * @param onConfirm 확인 버튼 클릭 시 콜백 (시작일, 숨길 거래 ID 목록)
+ * @param currentShareCash 현재 현금 거래 공유 여부
+ * @param currentShareAllowance 현재 용돈 관리 공유 여부
+ * @param onConfirm 확인 버튼 클릭 시 콜백 (시작일, 숨길 거래 ID 목록, 현금 공유, 용돈 공유)
  * @param onCancel 취소 버튼 클릭 시 콜백
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,11 +42,15 @@ fun SharingScopeScreen(
     transactions: List<Transaction>,
     currentShareFromDate: Timestamp?,
     currentHiddenIds: List<String>,
-    onConfirm: (Timestamp?, List<String>) -> Unit,
+    currentShareCash: Boolean = true,
+    currentShareAllowance: Boolean = true,
+    onConfirm: (Timestamp?, List<String>, Boolean, Boolean) -> Unit,
     onCancel: () -> Unit
 ) {
     var selectedDate by remember { mutableStateOf(currentShareFromDate) }
     var hiddenTransactionIds by remember { mutableStateOf(currentHiddenIds.toMutableSet()) }
+    var shareCashTransactions by remember { mutableStateOf(currentShareCash) }
+    var shareAllowance by remember { mutableStateOf(currentShareAllowance) }
     var showDatePicker by remember { mutableStateOf(false) }
     var selectionMode by remember { mutableStateOf(SharingSelectionMode.DATE) }
 
@@ -89,7 +95,12 @@ fun SharingScopeScreen(
                 actions = {
                     TextButton(
                         onClick = {
-                            onConfirm(selectedDate, hiddenTransactionIds.toList())
+                            onConfirm(
+                                selectedDate,
+                                hiddenTransactionIds.toList(),
+                                shareCashTransactions,
+                                shareAllowance
+                            )
                         }
                     ) {
                         Text("완료")
@@ -175,6 +186,130 @@ fun SharingScopeScreen(
                         }
                     )
                 }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 추가 공유 옵션 섹션
+            SharingOptionsSection(
+                shareCashTransactions = shareCashTransactions,
+                shareAllowance = shareAllowance,
+                onShareCashChange = { shareCashTransactions = it },
+                onShareAllowanceChange = { shareAllowance = it }
+            )
+        }
+    }
+}
+
+/**
+ * 추가 공유 옵션 (현금 관리, 용돈 관리)
+ */
+@Composable
+fun SharingOptionsSection(
+    shareCashTransactions: Boolean,
+    shareAllowance: Boolean,
+    onShareCashChange: (Boolean) -> Unit,
+    onShareAllowanceChange: (Boolean) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        Text(
+            text = "추가 공유 설정",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "아래 항목의 공유 여부를 선택하세요",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 현금 관리 공유 옵션
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(
+                        Icons.Default.Payments,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = "현금 거래 공유",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "현금으로 입력한 거래를 공유합니다",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                Switch(
+                    checked = shareCashTransactions,
+                    onCheckedChange = onShareCashChange
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // 용돈 관리 공유 옵션
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(
+                        Icons.Default.ChildCare,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = "용돈 관리 공유",
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "자녀 용돈과 연결된 거래를 공유합니다",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                Switch(
+                    checked = shareAllowance,
+                    onCheckedChange = onShareAllowanceChange
+                )
             }
         }
     }
@@ -460,14 +595,22 @@ fun SelectableTransactionItem(
 
 /**
  * 공유 범위 설정 다이얼로그 (간단한 버전)
+ *
+ * @param currentShareCash 현재 현금 거래 공유 설정
+ * @param currentShareAllowance 현재 용돈 공유 설정
+ * @param onConfirm 확인 시 콜백 (날짜, 현금 공유, 용돈 공유)
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharingScopeDialog(
+    currentShareCash: Boolean = true,
+    currentShareAllowance: Boolean = true,
     onDismiss: () -> Unit,
-    onConfirm: (Timestamp?) -> Unit
+    onConfirm: (Timestamp?, Boolean, Boolean) -> Unit
 ) {
     var selectedDate by remember { mutableStateOf<Timestamp?>(null) }
+    var shareCashTransactions by remember { mutableStateOf(currentShareCash) }
+    var shareAllowance by remember { mutableStateOf(currentShareAllowance) }
     var showDatePicker by remember { mutableStateOf(false) }
 
     if (showDatePicker) {
@@ -544,10 +687,66 @@ fun SharingScopeDialog(
                         Text("모든 거래 공유로 변경")
                     }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Divider()
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // 현금 거래 공유 옵션
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Payments,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "현금 거래 공유",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    Switch(
+                        checked = shareCashTransactions,
+                        onCheckedChange = { shareCashTransactions = it }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // 용돈 관리 공유 옵션
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.ChildCare,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "용돈 관리 공유",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    Switch(
+                        checked = shareAllowance,
+                        onCheckedChange = { shareAllowance = it }
+                    )
+                }
             }
         },
         confirmButton = {
-            Button(onClick = { onConfirm(selectedDate) }) {
+            Button(onClick = { onConfirm(selectedDate, shareCashTransactions, shareAllowance) }) {
                 Text("확인")
             }
         },

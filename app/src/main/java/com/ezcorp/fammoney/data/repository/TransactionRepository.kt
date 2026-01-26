@@ -249,4 +249,45 @@ class TransactionRepository @Inject constructor(
             emptyList()
         }
     }
+
+    /**
+     * 같은 사용처를 가진 거래들의 사용처를 일괄 업데이트
+     * @param groupId 그룹 ID
+     * @param oldMerchantName 기존 사용처 이름
+     * @param newMerchantName 새 사용처 이름
+     * @param excludeTransactionId 제외할 거래 ID (이미 업데이트된 거래)
+     * @return 업데이트된 거래 수
+     */
+    suspend fun updateMerchantNameBatch(
+        groupId: String,
+        oldMerchantName: String,
+        newMerchantName: String,
+        excludeTransactionId: String? = null
+    ): Int {
+        return try {
+            val snapshot = transactionsCollection
+                .whereEqualTo("groupId", groupId)
+                .whereEqualTo("merchantName", oldMerchantName)
+                .get()
+                .await()
+
+            val batch = firestore.batch()
+            var count = 0
+
+            snapshot.documents.forEach { doc ->
+                if (doc.id != excludeTransactionId) {
+                    batch.update(doc.reference, "merchantName", newMerchantName)
+                    count++
+                }
+            }
+
+            if (count > 0) {
+                batch.commit().await()
+            }
+            count
+        } catch (e: Exception) {
+            android.util.Log.e("TransactionRepository", "updateMerchantNameBatch error", e)
+            0
+        }
+    }
 }

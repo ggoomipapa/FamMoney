@@ -195,9 +195,13 @@ class TransactionNotificationListenerService : NotificationListenerService() {
                 originalText = parsed.originalText,
                 tagId = activeTagId,
                 tagName = activeTagName,
+                confidence = parsed.confidence,
+                merchantCandidates = parsed.merchantCandidates,
                 transactionDate = Timestamp(Date()),
                 isConfirmed = parsed.amount <= highAmountThreshold
             )
+
+            Log.d(TAG, "신뢰도: ${parsed.confidence}, 후보 수: ${parsed.merchantCandidates.size}")
 
             // 먼저 거래를 저장
             val savedTransaction = transactionRepository.addTransactionAndReturn(transaction)
