@@ -87,3 +87,5 @@ NUL
 
 # Claude settings
 .claude/
+serviceAccountKey*
+*.zip
