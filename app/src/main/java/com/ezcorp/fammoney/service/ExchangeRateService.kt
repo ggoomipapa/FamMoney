@@ -1,7 +1,7 @@
 package com.ezcorp.fammoney.service
 
-import android.util.Log
 import com.ezcorp.fammoney.BuildConfig
+import com.ezcorp.fammoney.util.AppLogger
 import com.ezcorp.fammoney.di.AppModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,7 +27,7 @@ class ExchangeRateService @Inject constructor(
 
     suspend fun getExchangeRate(baseCurrency: String, targetCurrency: String): Double? {
         if (API_KEY.isEmpty()) {
-            Log.e("ExchangeRateService", "API Key is not set for ExchangeRate-API.com")
+            AppLogger.e("ExchangeRateService", "API Key is not set for ExchangeRate-API.com")
             return null
         }
         if (baseCurrency == targetCurrency) {
@@ -47,22 +47,22 @@ class ExchangeRateService @Inject constructor(
                         if (apiResponse.result == "success") {
                             apiResponse.conversion_rates?.get(targetCurrency)
                         } else {
-                            Log.e("ExchangeRateService", "API Error: ${apiResponse.error_type}")
+                            AppLogger.e("ExchangeRateService", "API Error: ${apiResponse.error_type}")
                             null
                         }
                     } else {
-                        Log.e("ExchangeRateService", "Empty response body from ExchangeRate-API")
+                        AppLogger.e("ExchangeRateService", "Empty response body from ExchangeRate-API")
                         null
                     }
                 } else {
-                    Log.e("ExchangeRateService", "HTTP Error: ${response.code} - ${response.message}")
+                    AppLogger.e("ExchangeRateService", "HTTP Error: ${response.code} - ${response.message}")
                     null
                 }
             } catch (e: IOException) {
-                Log.e("ExchangeRateService", "Network error fetching exchange rate: ${e.message}")
+                AppLogger.e("ExchangeRateService", "Network error fetching exchange rate: ${e.message}")
                 null
             } catch (e: Exception) {
-                Log.e("ExchangeRateService", "Error parsing exchange rate response: ${e.message}")
+                AppLogger.e("ExchangeRateService", "Error parsing exchange rate response: ${e.message}")
                 null
             }
         }

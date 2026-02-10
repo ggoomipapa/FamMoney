@@ -1,5 +1,6 @@
 package com.ezcorp.fammoney.service
 
+import com.ezcorp.fammoney.util.AppLogger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,6 +19,8 @@ import javax.inject.Singleton
 class MerchantNormalizer @Inject constructor() {
 
     companion object {
+        private const val TAG = "MerchantNormalizer"
+
         // 플랫폼/PG 목록 (실가맹점 우선 추출용)
         private val PLATFORM_KEYWORDS = setOf(
             "네이버페이", "카카오페이", "토스", "쿠팡페이",
@@ -97,7 +100,11 @@ class MerchantNormalizer @Inject constructor() {
         // 11. 앞뒤 특수문자 정리
         result = result.trim('[', ']', '(', ')', ' ', '-', '/')
 
-        return result.ifBlank { raw.trim() }
+        val finalResult = result.ifBlank { raw.trim() }
+        if (finalResult != raw.trim()) {
+            AppLogger.d(TAG, "normalize: '$raw' → '$finalResult'")
+        }
+        return finalResult
     }
 
     /**
@@ -124,7 +131,12 @@ class MerchantNormalizer @Inject constructor() {
         // 실가맹점이 있으면 그것 반환, 없으면 원본 반환
         return if (nonPlatformParts.isNotEmpty()) {
             // 가장 길고 의미있는 것 선택
-            nonPlatformParts.maxByOrNull { specificity(it) } ?: text
+            val realMerchant = nonPlatformParts.maxByOrNull { specificity(it) } ?: text
+            val detectedPlatform = parts.firstOrNull { part ->
+                PLATFORM_KEYWORDS.any { platform -> part.contains(platform, ignoreCase = true) }
+            }
+            AppLogger.d(TAG, "extractRealMerchantFromPlatform: 플랫폼='$detectedPlatform' 감지 → 실가맹점='$realMerchant' 추출")
+            realMerchant
         } else {
             // 모두 플랫폼이면 첫 번째 것 반환
             parts.first()

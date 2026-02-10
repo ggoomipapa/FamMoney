@@ -3,10 +3,13 @@ package com.ezcorp.fammoney.service
 import com.ezcorp.fammoney.data.model.Transaction
 import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.data.repository.TransactionRepository
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "TxMigration"
 
 /**
  * 거래내역 마이그레이션 서비스
@@ -36,6 +39,7 @@ class TransactionMigrationService @Inject constructor(
      * - 수정된 거래만 업데이트
      */
     suspend fun migrateTransactions(groupId: String): MigrationResult {
+        AppLogger.i(TAG, "마이그레이션 시작: groupId=$groupId")
         val errors = mutableListOf<String>()
         var totalCount = 0
         var updatedCount = 0
@@ -54,12 +58,14 @@ class TransactionMigrationService @Inject constructor(
             }
 
             totalCount = transactions.size
+            AppLogger.d(TAG, "마이그레이션 대상: totalCount=$totalCount")
 
             // 각 거래에 대해 재판정
             for (transaction in transactions) {
                 try {
                     val result = reParseTransaction(transaction)
                     if (result != null && result.type != transaction.type) {
+                        AppLogger.d(TAG, "유형 변경: txId=${transaction.id}, ${transaction.type} -> ${result.type}")
                         // 유형이 변경된 경우에만 업데이트
                         transactionsCollection.document(transaction.id)
                             .update("type", result.type.name)
@@ -74,13 +80,16 @@ class TransactionMigrationService @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
+                    AppLogger.e(TAG, "거래 마이그레이션 실패: txId=${transaction.id}", e)
                     errors.add("거래 ${transaction.id}: ${e.message}")
                 }
             }
         } catch (e: Exception) {
+            AppLogger.e(TAG, "마이그레이션 전체 실패: groupId=$groupId", e)
             errors.add("마이그레이션 실패: ${e.message}")
         }
 
+        AppLogger.i(TAG, "마이그레이션 완료: totalCount=$totalCount, updatedCount=$updatedCount, incomeFixed=$incomeFixedCount, expenseFixed=$expenseFixedCount, errors=${errors.size}")
         return MigrationResult(
             totalCount = totalCount,
             updatedCount = updatedCount,

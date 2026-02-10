@@ -1,0 +1,1992 @@
+====================================
+TalkTalkReader App Log
+Exported: 2026-02-07 19:27:32
+Total Lines: 1500
+====================================
+
+[17:35:43.217] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:35:43.222] [D] NotificationReader: Notification received from: com.spotify.music
+[17:35:43.225] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:35:43.225] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:35:43.225] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:35:43.225] [D] NotificationReader: Notification received from: com.spotify.music
+[17:35:43.225] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:35:43.225] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:35:43.225] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:35:43.229] [D] NotificationReader: Notification received from: com.spotify.music
+[17:35:43.230] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:35:43.230] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:35:43.230] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:35:43.235] [D] NotificationReader: Notification received from: com.spotify.music
+[17:35:43.235] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:35:43.236] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:35:43.236] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:35:43.237] [D] NotificationReader: Notification received from: com.spotify.music
+[17:35:43.238] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:35:43.238] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:35:43.238] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:35:43.247] [D] NotificationReader: Notification received from: com.spotify.music
+[17:35:43.248] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:35:43.248] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:35:43.248] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:35:43.254] [D] NotificationReader: Notification received from: com.spotify.music
+[17:35:43.261] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:35:43.261] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:35:43.261] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:35:43.261] [D] NotificationReader: Notification received from: com.spotify.music
+[17:35:43.261] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:35:43.261] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:35:43.261] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:36:54.783] [D] NotificationReader: Notification received from: com.google.android.cellbroadcastreceiver
+[17:36:54.784] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:36:54.784] [D] NotificationReader: Checking app selection for: com.google.android.cellbroadcastreceiver, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:36:54.784] [D] NotificationReader: 🚫 App not selected: com.google.android.cellbroadcastreceiver (call=false, ringing=false)
+[17:36:55.339] [D] NotificationReader: Notification received from: com.google.android.cellbroadcastreceiver
+[17:36:55.339] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:36:55.339] [D] NotificationReader: Checking app selection for: com.google.android.cellbroadcastreceiver, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:36:55.339] [D] NotificationReader: 🚫 App not selected: com.google.android.cellbroadcastreceiver (call=false, ringing=false)
+[17:37:23.055] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.055] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.056] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.056] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.057] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.057] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.057] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.057] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.072] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.072] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.072] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.072] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.075] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.077] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.077] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.077] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.081] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.081] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.081] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.081] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.083] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.083] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.083] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.083] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.093] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.093] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.093] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.093] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.093] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.093] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.093] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.093] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.125] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.126] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.126] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.126] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.134] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.134] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.134] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.134] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.137] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.138] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.138] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.138] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:23.139] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:23.139] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:23.139] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:23.139] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:36.580] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:36.587] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:36.587] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:36.588] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:36.588] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:36.592] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:36.593] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:36.593] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:36.593] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:36.596] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:36.596] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:36.596] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:36.596] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:36.598] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:36.598] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:36.598] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:44.249] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:44.253] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:44.253] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:44.253] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:44.253] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:44.253] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:44.253] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:44.253] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:44.257] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:44.258] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:44.258] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:44.258] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:44.263] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:44.264] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:44.264] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:44.264] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:44.908] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:44.985] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:44.985] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:44.985] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:44.985] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:44.988] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:44.989] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:44.989] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:44.989] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:45.001] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:45.001] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:45.001] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:45.001] [D] NotificationReader: Notification received from: com.spotify.music
+[17:37:45.003] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:45.003] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:37:45.003] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:37:45.238] [D] NotificationReader: Notification received from: com.samsung.android.incallui
+[17:37:45.239] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:45.239] [D] NotificationReader: Blocking system notification app: com.samsung.android.incallui
+[17:37:45.239] [D] NotificationReader: 🚫 App not selected: com.samsung.android.incallui (call=false, ringing=false)
+[17:37:45.254] [D] NotificationReader: Notification received from: com.samsung.android.incallui
+[17:37:45.254] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:45.254] [D] NotificationReader: Blocking system notification app: com.samsung.android.incallui
+[17:37:45.254] [D] NotificationReader: 🚫 App not selected: com.samsung.android.incallui (call=false, ringing=false)
+[17:37:45.306] [D] NotificationReader: 📞 Call state changed: 2, isRinging: false, isInCall: true, pendingQueue: 0
+[17:37:45.306] [D] NotificationReader: 📞 Call activity started, stopping current speech
+[17:37:46.926] [D] NotificationReader: Notification received from: com.samsung.android.incallui
+[17:37:46.931] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:46.931] [D] NotificationReader: Blocking system notification app: com.samsung.android.incallui
+[17:37:46.931] [D] NotificationReader: 🚫 App not selected: com.samsung.android.incallui (call=true, ringing=false)
+[17:37:55.123] [D] NotificationReader: Notification received from: com.samsung.android.incallui
+[17:37:55.125] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:55.125] [D] NotificationReader: Blocking system notification app: com.samsung.android.incallui
+[17:37:55.125] [D] NotificationReader: 🚫 App not selected: com.samsung.android.incallui (call=true, ringing=false)
+[17:37:56.119] [D] NotificationReader: Notification received from: com.samsung.android.incallui
+[17:37:56.120] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:37:56.120] [D] NotificationReader: Blocking system notification app: com.samsung.android.incallui
+[17:37:56.120] [D] NotificationReader: 🚫 App not selected: com.samsung.android.incallui (call=true, ringing=false)
+[17:38:18.125] [D] NotificationReader: Notification received from: com.samsung.android.incallui
+[17:38:18.126] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:38:18.126] [D] NotificationReader: Blocking system notification app: com.samsung.android.incallui
+[17:38:18.126] [D] NotificationReader: 🚫 App not selected: com.samsung.android.incallui (call=true, ringing=false)
+[17:38:37.525] [D] NotificationReader: Notification received from: com.samsung.android.incallui
+[17:38:37.526] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:38:37.526] [D] NotificationReader: Blocking system notification app: com.samsung.android.incallui
+[17:38:37.526] [D] NotificationReader: 🚫 App not selected: com.samsung.android.incallui (call=true, ringing=false)
+[17:38:37.602] [D] NotificationReader: 📞 Call state changed: 0, isRinging: false, isInCall: false, pendingQueue: 0
+[17:38:37.602] [D] NotificationReader: 📞 Call ended, will read 0 pending notifications
+[17:38:37.603] [D] NotificationReader: 📢 readPendingNotifications: isReadingPendingNotifications = true
+[17:38:37.895] [D] NotificationReader: Notification received from: com.samsung.android.callassistant
+[17:38:37.899] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:38:37.901] [D] NotificationReader: Checking app selection for: com.samsung.android.callassistant, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:38:37.901] [D] NotificationReader: 🚫 App not selected: com.samsung.android.callassistant (call=false, ringing=false)
+[17:38:38.604] [D] NotificationReader: 📢 readPendingNotifications started: 0 pending notifications
+[17:38:38.604] [D] NotificationReader: 📢 No pending notifications to read
+[17:38:38.604] [D] NotificationReader: 📢 readPendingNotifications: isReadingPendingNotifications = false
+[17:38:39.110] [D] NotificationReader: Notification received from: com.spotify.music
+[17:38:39.118] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:38:39.118] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:38:39.118] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:38:39.120] [D] NotificationReader: Notification received from: com.spotify.music
+[17:38:39.121] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:38:39.121] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:38:39.121] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:38:39.121] [D] NotificationReader: Notification received from: com.spotify.music
+[17:38:39.122] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:38:39.122] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:38:39.122] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:38:39.124] [D] NotificationReader: Notification received from: com.spotify.music
+[17:38:39.125] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:38:39.125] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:38:39.125] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:39:54.645] [D] NotificationReader: Notification received from: com.kakao.talk
+[17:39:54.649] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: com.kakao.talk
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|com.kakao.talk|1|null|10363
+• GroupKey: 0|com.kakao.talk|g:chat_message
+• Category: msg
+• Flags: 512
+  - FLAG_GROUP_SUMMARY: true
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = null
+  • android.reduced.images = true
+  • android.subText = "53개의 안 읽은 메시지"
+  • android.showChronometer = false
+  • android.text = null
+  • android.progress = 0
+  • android.progressMax = 0
+  • android.appInfo = ApplicationInfo{61c9331 com.kakao.talk}
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.infoText = null
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+═══════════════════════════════════════
+
+[17:39:54.649] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.kakao.talk
+[17:39:57.685] [D] NotificationReader: Notification received from: com.spotify.music
+[17:39:57.687] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:39:57.688] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:39:57.688] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:39:57.691] [D] NotificationReader: Notification received from: com.spotify.music
+[17:39:57.691] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:39:57.691] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:39:57.691] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:39:57.704] [D] NotificationReader: Notification received from: com.spotify.music
+[17:39:57.704] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:39:57.705] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:39:57.705] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:39:57.707] [D] NotificationReader: Notification received from: com.spotify.music
+[17:39:57.707] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:39:57.707] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:39:57.707] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.590] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.591] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.592] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.592] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.592] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.592] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.592] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.592] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.604] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.604] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.604] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.604] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.605] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.605] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.605] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.605] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.615] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.615] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.615] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.616] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.618] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.618] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.618] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.618] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.620] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.622] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.622] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.622] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.625] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.628] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.628] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.628] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.629] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.629] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.629] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.629] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.631] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.632] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.632] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.632] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.634] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.634] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.634] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.634] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:04.638] [D] NotificationReader: Notification received from: com.spotify.music
+[17:40:04.639] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:40:04.639] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:40:04.639] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:40:40.319] [D] NotificationReader: Notification received from: com.kakao.talk
+[17:40:40.320] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: com.kakao.talk
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|com.kakao.talk|1|null|10363
+• GroupKey: 0|com.kakao.talk|g:chat_message
+• Category: msg
+• Flags: 512
+  - FLAG_GROUP_SUMMARY: true
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = null
+  • android.reduced.images = true
+  • android.subText = "53개의 안 읽은 메시지"
+  • android.showChronometer = false
+  • android.text = null
+  • android.progress = 0
+  • android.progressMax = 0
+  • android.appInfo = ApplicationInfo{b9c8b57 com.kakao.talk}
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.infoText = null
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+═══════════════════════════════════════
+
+[17:40:40.320] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.kakao.talk
+[17:41:08.694] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.699] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.699] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.699] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.714] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.716] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.716] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.716] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.716] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.716] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.716] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.716] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.721] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.721] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.721] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.721] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.724] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.725] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.725] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.725] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.739] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.740] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.740] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.740] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.745] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.749] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.749] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.752] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.753] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.754] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.754] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.754] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.754] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.754] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.754] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.754] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.754] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.754] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.754] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.754] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.754] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.756] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.756] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.756] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:41:08.757] [D] NotificationReader: Notification received from: com.spotify.music
+[17:41:08.757] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:41:08.757] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:41:08.757] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:44:13.590] [D] NotificationReader: Notification received from: com.spotify.music
+[17:44:13.596] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:44:13.596] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:44:13.596] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:44:13.599] [D] NotificationReader: Notification received from: com.spotify.music
+[17:44:13.600] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:44:13.600] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:44:13.600] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:44:13.607] [D] NotificationReader: Notification received from: com.spotify.music
+[17:44:13.609] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:44:13.609] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:44:13.609] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:44:13.609] [D] NotificationReader: Notification received from: com.spotify.music
+[17:44:13.610] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:44:13.610] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:44:13.610] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.373] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.374] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.374] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.375] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.376] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.376] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.376] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.376] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.384] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.384] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.384] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.384] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.385] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.386] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.386] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.386] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.422] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.423] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.423] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.423] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.429] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.429] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.429] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.429] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.435] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.435] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.435] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.436] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.437] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.437] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.437] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.437] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.437] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.437] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.437] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.437] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.439] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.439] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.439] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.439] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.445] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.446] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.446] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.446] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:45:44.447] [D] NotificationReader: Notification received from: com.spotify.music
+[17:45:44.447] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:45:44.447] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:45:44.447] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.412] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.413] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.413] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.413] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.421] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.421] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.421] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.421] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.429] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.431] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.431] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.431] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.431] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.431] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.431] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.431] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.447] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.447] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.448] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.448] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.452] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.452] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.452] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.453] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.468] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.468] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.469] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.469] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.476] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.478] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.478] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.478] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.481] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.481] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.481] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.481] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.483] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.483] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.483] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.483] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.484] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.484] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.484] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.484] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:46:20.485] [D] NotificationReader: Notification received from: com.spotify.music
+[17:46:20.485] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:46:20.485] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:46:20.485] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.850] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.851] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.851] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.851] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.860] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.860] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.860] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.860] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.864] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.864] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.864] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.864] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.869] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.874] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.875] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.875] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.880] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.880] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.880] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.880] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.888] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.888] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.888] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.888] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.891] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.891] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.891] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.892] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.893] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.893] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.894] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.894] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.895] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.896] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.896] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.896] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.899] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.899] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.899] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.899] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.900] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.900] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.900] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.901] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.901] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.901] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.902] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.902] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.935] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.935] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.935] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.935] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.941] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.942] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.942] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.942] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.943] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.943] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.943] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.943] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:48:53.944] [D] NotificationReader: Notification received from: com.spotify.music
+[17:48:53.944] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:48:53.944] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:48:53.944] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:50:43.591] [D] NotificationReader: Notification received from: com.spotify.music
+[17:50:43.597] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:50:43.597] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:50:43.597] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:50:43.597] [D] NotificationReader: Notification received from: com.spotify.music
+[17:50:43.597] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:50:43.597] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:50:43.597] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:50:43.599] [D] NotificationReader: Notification received from: com.spotify.music
+[17:50:43.599] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:50:43.599] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:50:43.599] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:50:43.601] [D] NotificationReader: Notification received from: com.spotify.music
+[17:50:43.601] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:50:43.602] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:50:43.602] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:50:43.873] [D] NotificationReader: Notification received from: com.spotify.music
+[17:50:43.874] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:50:43.874] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:50:43.874] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:50:43.884] [D] NotificationReader: Notification received from: com.spotify.music
+[17:50:43.884] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:50:43.884] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:50:43.884] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:50:43.885] [D] NotificationReader: Notification received from: com.spotify.music
+[17:50:43.885] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:50:43.885] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:50:43.885] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:50:43.885] [D] NotificationReader: Notification received from: com.spotify.music
+[17:50:43.885] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:50:43.886] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:50:43.886] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.646] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.647] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.647] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.647] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.648] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.650] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.651] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.651] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.657] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.660] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.660] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.660] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.660] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.660] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.660] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.660] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.684] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.684] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.684] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.684] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.695] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.696] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.696] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.696] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.700] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.701] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.701] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.701] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.713] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.713] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.713] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.713] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.717] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.718] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.718] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.719] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.719] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.720] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.720] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.720] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.720] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.720] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.720] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.720] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:52:02.720] [D] NotificationReader: Notification received from: com.spotify.music
+[17:52:02.721] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:52:02.722] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:52:02.722] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.042] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.046] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.047] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.047] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.047] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.048] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.048] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.049] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.052] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.052] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.052] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.052] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.053] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.053] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.054] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.054] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.075] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.075] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.075] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.075] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.076] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.076] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.076] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.076] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.093] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.098] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.099] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.101] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.101] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.103] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.103] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.103] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.106] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.106] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.106] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.106] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.107] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.107] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.107] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.107] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.109] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.109] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.109] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.109] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:53:33.110] [D] NotificationReader: Notification received from: com.spotify.music
+[17:53:33.110] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:53:33.110] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:53:33.110] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:00.608] [D] NotificationReader: Notification received from: com.google.android.googlequicksearchbox
+[17:54:00.608] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.google.android.googlequicksearchbox
+[17:54:00.612] [D] NotificationReader: Notification received from: com.google.android.googlequicksearchbox
+[17:54:00.612] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:00.612] [D] NotificationReader: Blocking system notification app: com.google.android.googlequicksearchbox
+[17:54:00.612] [D] NotificationReader: 🚫 App not selected: com.google.android.googlequicksearchbox (call=false, ringing=false)
+[17:54:50.278] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.283] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.283] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.289] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.289] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.292] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.292] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.292] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.296] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.296] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.296] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.296] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.301] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.301] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.301] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.301] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.313] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.315] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.315] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.315] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.319] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.319] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.320] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.320] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.323] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.323] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.323] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.323] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.323] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.324] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.324] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.324] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.325] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.325] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.325] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.325] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.329] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.329] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.329] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.329] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.329] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.330] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.330] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.330] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:54:50.330] [D] NotificationReader: Notification received from: com.spotify.music
+[17:54:50.330] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:54:50.331] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:54:50.331] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.319] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.324] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.325] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.325] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.327] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.328] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.328] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.328] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.328] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.329] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.329] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.329] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.331] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.331] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.331] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.331] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.343] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.344] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.344] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.344] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.348] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.348] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.348] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.348] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.350] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.351] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.351] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.351] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.355] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.356] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.356] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.356] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.358] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.359] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.359] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.359] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.361] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.361] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.361] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.362] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.367] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.367] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.367] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.367] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:35.367] [D] NotificationReader: Notification received from: com.spotify.music
+[17:56:35.368] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:56:35.368] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:56:35.368] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:56:56.947] [D] NotificationReader: Kakao notification removed: 나만의 미선❤
+[17:56:57.163] [D] NotificationReader: Notification received from: com.kakao.talk
+[17:56:57.163] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: com.kakao.talk
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|com.kakao.talk|1|null|10363
+• GroupKey: 0|com.kakao.talk|g:chat_message
+• Category: msg
+• Flags: 512
+  - FLAG_GROUP_SUMMARY: true
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = null
+  • android.reduced.images = true
+  • android.subText = "53개의 안 읽은 메시지"
+  • android.showChronometer = false
+  • android.text = null
+  • android.progress = 0
+  • android.progressMax = 0
+  • android.appInfo = ApplicationInfo{c8d7fba com.kakao.talk}
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.infoText = null
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+═══════════════════════════════════════
+
+[17:56:57.163] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.kakao.talk
+[17:56:57.164] [D] NotificationReader: Notification received from: com.ezcorp.talktalkreader
+[17:56:57.164] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.ezcorp.talktalkreader
+[17:58:15.303] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.303] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.303] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.303] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.303] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.304] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.304] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.304] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.316] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.316] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.317] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.317] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.318] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.318] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.318] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.319] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.343] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.346] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.346] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.346] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.358] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.359] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.359] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.359] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.364] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.364] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.364] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.364] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.369] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.369] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.369] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.370] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.373] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.374] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.374] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.374] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.375] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.375] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.375] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.376] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.376] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.376] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.376] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.376] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[17:58:15.377] [D] NotificationReader: Notification received from: com.spotify.music
+[17:58:15.377] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[17:58:15.377] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[17:58:15.377] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:00:07.671] [D] NotificationReader: Notification received from: com.spotify.music
+[18:00:07.671] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:00:07.671] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:00:07.671] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:00:07.674] [D] NotificationReader: Notification received from: com.spotify.music
+[18:00:07.675] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:00:07.675] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:00:07.675] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:00:07.678] [D] NotificationReader: Notification received from: com.spotify.music
+[18:00:07.679] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:00:07.679] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:00:07.679] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:00:07.680] [D] NotificationReader: Notification received from: com.spotify.music
+[18:00:07.680] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:00:07.680] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:00:07.681] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:00:07.704] [D] NotificationReader: Notification received from: com.spotify.music
+[18:00:07.705] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:00:07.705] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:00:07.705] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:00:07.707] [D] NotificationReader: Notification received from: com.spotify.music
+[18:00:07.707] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:00:07.707] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:00:07.707] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:00:07.712] [D] NotificationReader: Notification received from: com.spotify.music
+[18:00:07.713] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:00:07.713] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:00:07.713] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:00:07.713] [D] NotificationReader: Notification received from: com.spotify.music
+[18:00:07.713] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:00:07.714] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:00:07.714] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.773] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.774] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.775] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.775] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.781] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.782] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.782] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.782] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.783] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.786] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.787] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.787] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.787] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.788] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.788] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.788] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.803] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.803] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.803] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.803] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.804] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.804] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.805] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.805] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.806] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.812] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.812] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.812] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.815] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.815] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.815] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.815] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.817] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.818] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.818] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.818] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.819] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.819] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.819] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.819] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.820] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.820] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.820] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.820] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:16.821] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:16.821] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:16.821] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:16.821] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:58.736] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:58.737] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:58.737] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:58.737] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:58.744] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:58.745] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:58.746] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:58.746] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:58.746] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:58.746] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:58.746] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:58.746] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:01:58.747] [D] NotificationReader: Notification received from: com.spotify.music
+[18:01:58.748] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:01:58.748] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:01:58.748] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:02:16.953] [D] NotificationReader: Notification received from: com.spotify.music
+[18:02:17.080] [D] NotificationReader: No audio device connected
+[18:02:17.080] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:02:17.080] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:02:17.081] [D] NotificationReader: Notification received from: com.spotify.music
+[18:02:17.083] [D] NotificationReader: No audio device connected
+[18:02:17.083] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:02:17.083] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:02:17.083] [D] NotificationReader: Notification received from: com.spotify.music
+[18:02:17.084] [D] NotificationReader: No audio device connected
+[18:02:17.084] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:02:17.084] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:02:17.084] [D] NotificationReader: Notification received from: com.spotify.music
+[18:02:17.085] [D] NotificationReader: No audio device connected
+[18:02:17.085] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:02:17.085] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:08:08.909] [D] NotificationReader: Notification received from: com.sec.android.daemonapp
+[18:08:08.911] [D] NotificationReader: No audio device connected
+[18:08:08.911] [D] NotificationReader: Checking app selection for: com.sec.android.daemonapp, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:08:08.911] [D] NotificationReader: 🚫 App not selected: com.sec.android.daemonapp (call=false, ringing=false)
+[18:08:09.110] [D] NotificationReader: Notification received from: com.sec.android.daemonapp
+[18:08:09.110] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.sec.android.daemonapp
+[18:13:33.791] [D] NotificationReader: Notification received from: com.spotify.music
+[18:13:33.793] [D] NotificationReader: No audio device connected
+[18:13:33.793] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:13:33.793] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:13:33.796] [D] NotificationReader: Notification received from: com.spotify.music
+[18:13:33.799] [D] NotificationReader: No audio device connected
+[18:13:33.799] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:13:33.799] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:13:33.799] [D] NotificationReader: Notification received from: com.spotify.music
+[18:13:33.800] [D] NotificationReader: No audio device connected
+[18:13:33.800] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:13:33.800] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:13:33.801] [D] NotificationReader: Notification received from: com.spotify.music
+[18:13:33.806] [D] NotificationReader: No audio device connected
+[18:13:33.806] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:13:33.806] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:32:13.334] [D] NotificationReader: Notification received from: com.google.android.googlequicksearchbox
+[18:32:13.334] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.google.android.googlequicksearchbox
+[18:32:13.336] [D] NotificationReader: Notification received from: com.google.android.googlequicksearchbox
+[18:32:13.338] [D] NotificationReader: No audio device connected
+[18:32:13.338] [D] NotificationReader: Blocking system notification app: com.google.android.googlequicksearchbox
+[18:32:13.338] [D] NotificationReader: 🚫 App not selected: com.google.android.googlequicksearchbox (call=false, ringing=false)
+[18:54:08.908] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:08.912] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:08.912] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:08.913] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:08.928] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:08.929] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:08.929] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:08.929] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:08.935] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:08.935] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:08.935] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:08.935] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:08.935] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:08.935] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:08.935] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:08.935] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.085] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.085] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.085] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.085] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.097] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.098] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.098] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.098] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.110] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.110] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.110] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.110] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.121] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.126] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.126] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.126] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.126] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.126] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.126] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.126] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.128] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.128] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.128] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.128] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.132] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.132] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.132] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.132] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.135] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.135] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.135] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.135] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.143] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.144] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.144] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.144] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.147] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.148] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.148] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.148] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.151] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.151] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.151] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.151] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:54:23.152] [D] NotificationReader: Notification received from: com.spotify.music
+[18:54:23.153] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:54:23.153] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:54:23.153] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.023] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.023] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.023] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.023] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.030] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.034] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.034] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.034] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.034] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.034] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.034] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.034] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.034] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.035] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.035] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.035] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.139] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.139] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.139] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.139] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.145] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.145] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.145] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.145] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.151] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.151] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.151] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.151] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.152] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.152] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.152] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.153] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.154] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.155] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.155] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.155] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.159] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.159] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.159] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.159] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.159] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.159] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.159] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.159] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:55:12.161] [D] NotificationReader: Notification received from: com.spotify.music
+[18:55:12.162] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:55:12.162] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:55:12.162] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:57:52.985] [D] NotificationReader: Notification received from: com.spotify.music
+[18:57:52.991] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:57:52.991] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:57:52.991] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:57:52.992] [D] NotificationReader: Notification received from: com.spotify.music
+[18:57:52.992] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:57:52.992] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:57:52.992] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:57:52.992] [D] NotificationReader: Notification received from: com.spotify.music
+[18:57:52.993] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:57:52.993] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:57:52.993] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:57:52.994] [D] NotificationReader: Notification received from: com.spotify.music
+[18:57:52.994] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:57:52.994] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:57:52.994] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.758] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.760] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.760] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.760] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.763] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.763] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.763] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.763] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.767] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.768] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.768] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.769] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.771] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.772] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.772] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.772] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.799] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.799] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.799] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.799] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.808] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.808] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.808] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.808] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.819] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.819] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.819] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.819] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.820] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.820] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.820] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.820] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.822] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.822] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.822] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.822] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.824] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.824] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.824] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.824] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.825] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.825] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.825] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.825] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:58:40.826] [D] NotificationReader: Notification received from: com.spotify.music
+[18:58:40.826] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:58:40.826] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:58:40.826] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.923] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.924] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.924] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.924] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.932] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.933] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.934] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.936] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.937] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.937] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.937] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.938] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.938] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.938] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.938] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.938] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.965] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.966] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.966] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.966] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.967] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.967] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.967] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.967] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.975] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.975] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.975] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.975] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.976] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.976] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.976] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.976] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.979] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.979] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.979] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.979] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.982] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.982] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.982] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.982] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.984] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.984] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.984] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.984] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[18:59:57.984] [D] NotificationReader: Notification received from: com.spotify.music
+[18:59:57.985] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[18:59:57.985] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[18:59:57.985] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.760] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.761] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.761] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.761] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.766] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.766] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.766] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.766] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.777] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.778] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.778] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.778] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.780] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.781] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.781] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.781] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.809] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.809] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.809] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.809] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.814] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.816] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.816] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.816] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.822] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.822] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.822] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.822] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.827] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.828] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.828] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.829] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.829] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.830] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.830] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.830] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.830] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.831] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.831] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.831] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.832] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.832] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.832] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.833] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:02:44.833] [D] NotificationReader: Notification received from: com.spotify.music
+[19:02:44.833] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:02:44.833] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:02:44.833] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:04:09.028] [D] NotificationReader: Notification received from: com.spotify.music
+[19:04:09.028] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:04:09.028] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:04:09.028] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:04:09.033] [D] NotificationReader: Notification received from: com.spotify.music
+[19:04:09.034] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:04:09.034] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:04:09.034] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:04:09.034] [D] NotificationReader: Notification received from: com.spotify.music
+[19:04:09.036] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:04:09.036] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:04:09.036] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:04:09.037] [D] NotificationReader: Notification received from: com.spotify.music
+[19:04:09.037] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:04:09.037] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:04:09.037] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:04:09.061] [D] NotificationReader: Notification received from: com.spotify.music
+[19:04:09.061] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:04:09.061] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:04:09.061] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:04:09.070] [D] NotificationReader: Notification received from: com.spotify.music
+[19:04:09.070] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:04:09.070] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:04:09.070] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:04:09.073] [D] NotificationReader: Notification received from: com.spotify.music
+[19:04:09.073] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:04:09.073] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:04:09.073] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:04:09.074] [D] NotificationReader: Notification received from: com.spotify.music
+[19:04:09.075] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:04:09.075] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:04:09.075] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:27.659] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:27.660] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:27.660] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:27.660] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:27.670] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:27.670] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:27.670] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:27.670] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:27.674] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:27.674] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:27.674] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:27.674] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:27.674] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:27.674] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:27.674] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:27.674] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:27.699] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:27.699] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:27.699] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:27.699] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:27.707] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:27.708] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:27.708] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:27.708] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:27.708] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:27.709] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:27.709] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:27.709] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:27.710] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:27.710] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:27.710] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:27.710] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:48.747] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:48.747] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:48.747] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:48.747] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:48.749] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:48.749] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:48.750] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:48.750] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:48.752] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:48.752] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:48.752] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:48.753] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:48.754] [D] NotificationReader: Notification received from: com.spotify.music
+[19:05:48.755] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:48.755] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:05:48.755] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:05:59.582] [D] NotificationReader: Notification received from: com.google.android.googlequicksearchbox
+[19:05:59.583] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.google.android.googlequicksearchbox
+[19:05:59.585] [D] NotificationReader: Notification received from: com.google.android.googlequicksearchbox
+[19:05:59.585] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:05:59.585] [D] NotificationReader: Blocking system notification app: com.google.android.googlequicksearchbox
+[19:05:59.585] [D] NotificationReader: 🚫 App not selected: com.google.android.googlequicksearchbox (call=false, ringing=false)
+[19:06:24.532] [D] NotificationReader: Notification received from: com.kakao.talk
+[19:06:24.532] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: com.kakao.talk
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|com.kakao.talk|1|null|10363
+• GroupKey: 0|com.kakao.talk|g:chat_message
+• Category: msg
+• Flags: 512
+  - FLAG_GROUP_SUMMARY: true
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = null
+  • android.reduced.images = true
+  • android.subText = "53개의 안 읽은 메시지"
+  • android.showChronometer = false
+  • android.text = null
+  • android.progress = 0
+  • android.progressMax = 0
+  • android.appInfo = ApplicationInfo{7a632dd com.kakao.talk}
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.infoText = null
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+═══════════════════════════════════════
+
+[19:06:24.532] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.kakao.talk
+[19:06:29.677] [D] NotificationReader: Notification received from: com.kakao.talk
+[19:06:29.677] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: com.kakao.talk
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|com.kakao.talk|1|null|10363
+• GroupKey: 0|com.kakao.talk|g:chat_message
+• Category: msg
+• Flags: 512
+  - FLAG_GROUP_SUMMARY: true
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = null
+  • android.reduced.images = true
+  • android.subText = "51개의 안 읽은 메시지"
+  • android.showChronometer = false
+  • android.text = null
+  • android.progress = 0
+  • android.progressMax = 0
+  • android.appInfo = ApplicationInfo{ba1e095 com.kakao.talk}
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.infoText = null
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+═══════════════════════════════════════
+
+[19:06:29.677] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.kakao.talk
+[19:06:34.893] [D] NotificationReader: Notification received from: com.kakao.talk
+[19:06:34.893] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: com.kakao.talk
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|com.kakao.talk|1|null|10363
+• GroupKey: 0|com.kakao.talk|g:chat_message
+• Category: msg
+• Flags: 512
+  - FLAG_GROUP_SUMMARY: true
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = null
+  • android.reduced.images = true
+  • android.subText = "43개의 안 읽은 메시지"
+  • android.showChronometer = false
+  • android.text = null
+  • android.progress = 0
+  • android.progressMax = 0
+  • android.appInfo = ApplicationInfo{2a4d59b com.kakao.talk}
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.infoText = null
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+═══════════════════════════════════════
+
+[19:06:34.893] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.kakao.talk
+[19:06:46.998] [D] NotificationReader: Kakao notification removed: 김일중
+[19:07:46.730] [D] NotificationReader: Notification received from: com.tplink.iot
+[19:07:46.731] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:07:46.731] [D] NotificationReader: Checking app selection for: com.tplink.iot, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:07:46.742] [D] NotificationReader: ReadingRule decision: shouldRead=true, reason=DEFAULT_READ, keywords=[]
+[19:07:46.743] [D] NotificationReader: Processing notification: Tapo, 움직임 감지됨, "2층": 19:07:45에 움직임이 감지되었습니다. (TTS: true, Reply: false)
+[19:07:46.743] [D] NotificationReader: Setting media playback action to: none
+[19:07:46.743] [D] HybridTTSEngine: Media playback action set to: none
+[19:07:46.743] [D] HybridTTSEngine: 🚨 Urgent mode set to: false
+[19:07:46.743] [D] HybridTTSEngine: Settings loaded: speechRate=1.6800001, volume=1.0
+[19:07:46.743] [D] HybridTTSEngine: Media action is 'none', skipping audio focus request
+[19:07:46.782] [D] HybridTTSEngine: Applied saved voice: ko-KR-language
+[19:07:46.782] [D] HybridTTSEngine: 🔊 Volume boost disabled, returning base volume: 1.0
+[19:07:46.805] [D] HybridTTSEngine: Speaking: Tapo, 움직임 감지됨, "2층": 19:07:45에 움직임이 감지되었습니다. with voice: ko-KR-language, volume: 1.0
+[19:07:46.805] [D] NotificationReader: 🔴 isUrgent=false, isSelfSent=false, containsKeyword=false, content=움직임 감지됨 "2층": 19:07:45에 움직임이 감지되었습니다.
+[19:07:46.809] [D] NotificationReader: 📋 Added to pending queue: 움직임 감지됨 - "2층": 19:07:45에 움직임이 감지되었습니다.
+[19:07:46.809] [D] NotificationReader: 📊 Pending count updated: 23
+[19:07:46.809] [D] HybridTTSEngine: 🚨 Urgent mode set to: false
+[19:07:47.017] [D] NotificationReader: Notification received from: com.ezcorp.talktalkreader
+[19:07:47.017] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:07:47.017] [D] NotificationReader: Own app notification allowed (always enabled)
+[19:07:47.017] [D] NotificationReader: Detected masked content for com.ezcorp.talktalkreader
+[19:07:47.017] [D] NotificationReader: 🚫 Skipping own app generic notification: 새 알림, 내용을 확인하세요
+[19:07:47.018] [D] NotificationReader: Notification received from: com.ezcorp.talktalkreader
+[19:07:47.018] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.ezcorp.talktalkreader
+[19:07:47.030] [D] HybridTTSEngine: TTS started: utterance_1770458866805
+[19:07:47.031] [D] NotificationReader: TTS Wake lock acquired
+[19:07:50.013] [D] NotificationReader: 📱 Volume button pressed → TTS Skip
+[19:07:50.013] [D] NotificationReader: Skip current notification triggered by Bluetooth button
+[19:07:50.116] [D] NotificationReader: 📢 readPendingNotifications: isReadingPendingNotifications = true
+[19:07:51.117] [D] NotificationReader: 📢 readPendingNotifications started: 0 pending notifications
+[19:07:51.117] [D] NotificationReader: 📢 No pending notifications to read
+[19:07:51.117] [D] NotificationReader: 📢 readPendingNotifications: isReadingPendingNotifications = false
+[19:07:51.743] [D] NotificationReader: Processing buffered message: parts=1, text="2층": 19:07:45에 움직임이 감지되었습니다....
+[19:08:08.959] [D] NotificationReader: Notification received from: com.sec.android.daemonapp
+[19:08:08.959] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.sec.android.daemonapp
+[19:08:16.548] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.550] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.550] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.550] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.550] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.551] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.551] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.551] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.554] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.554] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.554] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.554] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.554] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.554] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.554] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.554] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.567] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.567] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.568] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.568] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.569] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.569] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.569] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.569] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.579] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.579] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.579] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.579] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.581] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.582] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.582] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.582] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.584] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.584] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.584] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.584] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.584] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.585] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.585] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.585] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.588] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.588] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.588] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.588] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:16.595] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:16.595] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:16.595] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:16.595] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:53.181] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:53.190] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:53.191] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:53.191] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:53.193] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:53.193] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:53.193] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:53.193] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:53.199] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:53.199] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:53.199] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:53.199] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:08:53.199] [D] NotificationReader: Notification received from: com.spotify.music
+[19:08:53.199] [D] NotificationReader: Audio device connected: K5 (type: 7)
+[19:08:53.200] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:08:53.200] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:10:40.103] [D] NotificationReader: Notification received from: com.spotify.music
+[19:10:40.117] [D] NotificationReader: No audio device connected
+[19:10:40.117] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:10:40.117] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:10:40.118] [D] NotificationReader: Notification received from: com.spotify.music
+[19:10:40.119] [D] NotificationReader: No audio device connected
+[19:10:40.119] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:10:40.119] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:10:40.120] [D] NotificationReader: Notification received from: com.spotify.music
+[19:10:40.121] [D] NotificationReader: No audio device connected
+[19:10:40.121] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:10:40.121] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:10:40.121] [D] NotificationReader: Notification received from: com.spotify.music
+[19:10:40.123] [D] NotificationReader: No audio device connected
+[19:10:40.123] [D] NotificationReader: Checking app selection for: com.spotify.music, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:10:40.123] [D] NotificationReader: 🚫 App not selected: com.spotify.music (call=false, ringing=false)
+[19:19:26.934] [D] NotificationReader: Notification received from: org.telegram.messenger
+[19:19:26.935] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: org.telegram.messenger
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|org.telegram.messenger|-567178246|null|10631
+• GroupKey: 0|org.telegram.messenger|c:0channel_private_b9fad_-7113288408190087984
+• Category: msg
+• Flags: 16
+  - FLAG_GROUP_SUMMARY: false
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = "DevPilot"
+  • android.hiddenConversationTitle = null
+  • android.reduced.images = true
+  • android.subText = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_191915_app-debug.apk"
+  • android.template = "android.app.Notification$MessagingStyle"
+  • android.showChronometer = false
+  • android.text = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_191915_app-debug.apk"
+  • android.progress = 0
+  • androidx.core.app.extra.COMPAT_TEMPLATE = "androidx.core.app.NotificationCompat$MessagingStyle"
+  • android.progressMax = 0
+  • android.selfDisplayName = ""
+  • android.conversationUnreadMessageCount = 0
+  • android.appInfo = ApplicationInfo{c9d1d20 org.telegram.messenger}
+  • android.messages = [Array: 1 items]
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.messagingStyleUser = Bundle[mParcelledData.dataSize=144]
+  • android.messagingUser = android.app.Person@34e6d5e1
+  • android.infoText = null
+  • android.wearable.EXTENSIONS = Bundle[mParcelledData.dataSize=552]
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+  • android.isGroupConversation = false
+───────────────────────────────────────
+💬 EXTRA_MESSAGES 상세:
+  [0] sender=DevPilot, text=📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_191915_app-debug.apk
+═══════════════════════════════════════
+
+[19:19:26.943] [D] NotificationReader: No audio device connected
+[19:19:26.943] [D] NotificationReader: Checking app selection for: org.telegram.messenger, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:19:26.943] [D] NotificationReader: 🚫 App not selected: org.telegram.messenger (call=false, ringing=false)
+[19:19:32.569] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:19:32.570] [D] NotificationReader: No audio device connected
+[19:19:32.570] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:19:32.570] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:19:32.903] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:19:32.904] [D] NotificationReader: No audio device connected
+[19:19:32.904] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:19:32.904] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:19:33.391] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:19:33.392] [D] NotificationReader: No audio device connected
+[19:19:33.392] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:19:33.392] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:19:33.393] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:19:33.394] [D] NotificationReader: No audio device connected
+[19:19:33.394] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:19:33.394] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:19:35.410] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:19:35.411] [D] NotificationReader: No audio device connected
+[19:19:35.411] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:19:35.411] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:19:35.413] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:19:35.414] [D] NotificationReader: No audio device connected
+[19:19:35.414] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:19:35.414] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:19:35.902] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:19:35.903] [D] NotificationReader: No audio device connected
+[19:19:35.903] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:19:35.903] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:20:21.173] [D] NotificationReader: Notification received from: org.telegram.messenger
+[19:20:21.174] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: org.telegram.messenger
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|org.telegram.messenger|-567178246|null|10631
+• GroupKey: 0|org.telegram.messenger|c:0channel_private_b9fad_-7113288408190087984
+• Category: msg
+• Flags: 16
+  - FLAG_GROUP_SUMMARY: false
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = "DevPilot"
+  • android.hiddenConversationTitle = null
+  • android.reduced.images = true
+  • android.subText = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192011_app-debug.apk"
+  • android.template = "android.app.Notification$MessagingStyle"
+  • android.showChronometer = false
+  • android.text = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192011_app-debug.apk"
+  • android.progress = 0
+  • androidx.core.app.extra.COMPAT_TEMPLATE = "androidx.core.app.NotificationCompat$MessagingStyle"
+  • android.progressMax = 0
+  • android.selfDisplayName = ""
+  • android.conversationUnreadMessageCount = 0
+  • android.appInfo = ApplicationInfo{5d0549b org.telegram.messenger}
+  • android.messages = [Array: 1 items]
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.messagingStyleUser = Bundle[mParcelledData.dataSize=144]
+  • android.messagingUser = android.app.Person@34e6d5e1
+  • android.infoText = null
+  • android.wearable.EXTENSIONS = Bundle[mParcelledData.dataSize=552]
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+  • android.isGroupConversation = false
+───────────────────────────────────────
+💬 EXTRA_MESSAGES 상세:
+  [0] sender=DevPilot, text=📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192011_app-debug.apk
+═══════════════════════════════════════
+
+[19:20:21.176] [D] NotificationReader: No audio device connected
+[19:20:21.176] [D] NotificationReader: Checking app selection for: org.telegram.messenger, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:20:21.176] [D] NotificationReader: 🚫 App not selected: org.telegram.messenger (call=false, ringing=false)
+[19:21:41.948] [D] NotificationReader: Notification received from: org.telegram.messenger
+[19:21:41.948] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: org.telegram.messenger
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|org.telegram.messenger|-567178246|null|10631
+• GroupKey: 0|org.telegram.messenger|c:0channel_private_b9fad_-7113288408190087984
+• Category: msg
+• Flags: 16
+  - FLAG_GROUP_SUMMARY: false
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = "DevPilot"
+  • android.hiddenConversationTitle = null
+  • android.reduced.images = true
+  • android.subText = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192101_app-debug.apk"
+  • android.template = "android.app.Notification$MessagingStyle"
+  • android.showChronometer = false
+  • android.text = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192101_app-debug.apk"
+  • android.progress = 0
+  • androidx.core.app.extra.COMPAT_TEMPLATE = "androidx.core.app.NotificationCompat$MessagingStyle"
+  • android.progressMax = 0
+  • android.selfDisplayName = ""
+  • android.conversationUnreadMessageCount = 0
+  • android.appInfo = ApplicationInfo{120cd76 org.telegram.messenger}
+  • android.messages = [Array: 1 items]
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.messagingStyleUser = Bundle[mParcelledData.dataSize=144]
+  • android.messagingUser = android.app.Person@34e6d5e1
+  • android.infoText = null
+  • android.wearable.EXTENSIONS = Bundle[mParcelledData.dataSize=552]
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+  • android.isGroupConversation = false
+───────────────────────────────────────
+💬 EXTRA_MESSAGES 상세:
+  [0] sender=DevPilot, text=📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192101_app-debug.apk
+═══════════════════════════════════════
+
+[19:21:41.950] [D] NotificationReader: No audio device connected
+[19:21:41.950] [D] NotificationReader: Checking app selection for: org.telegram.messenger, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:21:41.951] [D] NotificationReader: 🚫 App not selected: org.telegram.messenger (call=false, ringing=false)
+[19:22:30.689] [D] NotificationReader: Notification received from: com.tplink.iot
+[19:22:30.690] [D] NotificationReader: No audio device connected
+[19:22:30.690] [D] NotificationReader: Checking app selection for: com.tplink.iot, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:22:30.704] [D] NotificationReader: ReadingRule decision: shouldRead=true, reason=DEFAULT_READ, keywords=[]
+[19:22:30.704] [D] NotificationReader: No audio device and no voice reply needed, skipping TTS but saving to alerts
+[19:22:30.709] [D] NotificationReader: 📋 Added to pending queue: 움직임 감지됨 - "2층": 19:22:30에 움직임이 감지되었습니다.
+[19:22:30.710] [D] NotificationReader: 📊 Pending count updated: 24
+[19:22:30.925] [D] NotificationReader: Notification received from: com.ezcorp.talktalkreader
+[19:22:30.926] [D] NotificationReader: No audio device connected
+[19:22:30.927] [D] NotificationReader: Own app notification allowed (always enabled)
+[19:22:30.927] [D] NotificationReader: Detected masked content for com.ezcorp.talktalkreader
+[19:22:30.927] [D] NotificationReader: 🚫 Skipping own app generic notification: 새 알림, 내용을 확인하세요
+[19:22:30.927] [D] NotificationReader: Notification received from: com.ezcorp.talktalkreader
+[19:22:30.927] [D] NotificationReader: ⏭️ Skipping GROUP SUMMARY notification from com.ezcorp.talktalkreader
+[19:22:32.414] [D] NotificationReader: Notification received from: org.telegram.messenger
+[19:22:32.414] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: org.telegram.messenger
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|org.telegram.messenger|-567178246|null|10631
+• GroupKey: 0|org.telegram.messenger|c:0channel_private_b9fad_-7113288408190087984
+• Category: msg
+• Flags: 16
+  - FLAG_GROUP_SUMMARY: false
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = "DevPilot"
+  • android.hiddenConversationTitle = null
+  • android.reduced.images = true
+  • android.subText = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: SelectMoney
+파일: app-debug.apk
+크기: 64.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192219_app-debug.apk"
+  • android.template = "android.app.Notification$MessagingStyle"
+  • android.showChronometer = false
+  • android.text = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: SelectMoney
+파일: app-debug.apk
+크기: 64.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192219_app-debug.apk"
+  • android.progress = 0
+  • androidx.core.app.extra.COMPAT_TEMPLATE = "androidx.core.app.NotificationCompat$MessagingStyle"
+  • android.progressMax = 0
+  • android.selfDisplayName = ""
+  • android.conversationUnreadMessageCount = 0
+  • android.appInfo = ApplicationInfo{5fc385a org.telegram.messenger}
+  • android.messages = [Array: 1 items]
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.messagingStyleUser = Bundle[mParcelledData.dataSize=144]
+  • android.messagingUser = android.app.Person@34e6d5e1
+  • android.infoText = null
+  • android.wearable.EXTENSIONS = Bundle[mParcelledData.dataSize=552]
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+  • android.isGroupConversation = false
+───────────────────────────────────────
+💬 EXTRA_MESSAGES 상세:
+  [0] sender=DevPilot, text=📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: SelectMoney
+파일: app-debug.apk
+크기: 64.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192219_app-debug.apk
+═══════════════════════════════════════
+
+[19:22:32.415] [D] NotificationReader: No audio device connected
+[19:22:32.415] [D] NotificationReader: Checking app selection for: org.telegram.messenger, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:22:32.415] [D] NotificationReader: 🚫 App not selected: org.telegram.messenger (call=false, ringing=false)
+[19:22:33.646] [D] NotificationReader: Notification received from: org.telegram.messenger
+[19:22:33.646] [D] NotificationReader: ═══════════════════════════════════════
+📱 알림 진단: org.telegram.messenger
+───────────────────────────────────────
+• UserHandle: UserHandle{0}
+• Key: 0|org.telegram.messenger|-567178246|null|10631
+• GroupKey: 0|org.telegram.messenger|c:0channel_private_b9fad_-7113288408190087984
+• Category: msg
+• Flags: 16
+  - FLAG_GROUP_SUMMARY: false
+  - FLAG_ONGOING_EVENT: false
+  - FLAG_NO_CLEAR: false
+• isClearable: true
+───────────────────────────────────────
+📦 Extras 전체 덤프:
+  • android.title = "DevPilot"
+  • android.hiddenConversationTitle = null
+  • android.reduced.images = true
+  • android.subText = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: 20260207_192156_app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192157_20260207_192156_app-debug.apk"
+  • android.template = "android.app.Notification$MessagingStyle"
+  • android.showChronometer = false
+  • android.text = "📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: 20260207_192156_app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192157_20260207_192156_app-debug.apk"
+  • android.progress = 0
+  • androidx.core.app.extra.COMPAT_TEMPLATE = "androidx.core.app.NotificationCompat$MessagingStyle"
+  • android.progressMax = 0
+  • android.selfDisplayName = ""
+  • android.conversationUnreadMessageCount = 0
+  • android.appInfo = ApplicationInfo{fac1781 org.telegram.messenger}
+  • android.messages = [Array: 2 items]
+  • android.showWhen = true
+  • android.largeIcon = null
+  • android.messagingStyleUser = Bundle[mParcelledData.dataSize=144]
+  • android.messagingUser = android.app.Person@34e6d5e1
+  • android.infoText = null
+  • android.wearable.EXTENSIONS = Bundle[mParcelledData.dataSize=552]
+  • android.progressIndeterminate = false
+  • android.remoteInputHistory = null
+  • android.isGroupConversation = false
+───────────────────────────────────────
+💬 EXTRA_MESSAGES 상세:
+  [0] sender=DevPilot, text=📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: SelectMoney
+파일: app-debug.apk
+크기: 64.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192219_app-debug.apk
+  [1] sender=DevPilot, text=📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: 20260207_192156_app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260207_192157_20260207_192156_app-debug.apk
+═══════════════════════════════════════
+
+[19:22:33.647] [D] NotificationReader: No audio device connected
+[19:22:33.647] [D] NotificationReader: Checking app selection for: org.telegram.messenger, selectedApps: [com.kakao.talk, com.tplink.iot, com.mhe.techcentermanagement]
+[19:22:33.647] [D] NotificationReader: 🚫 App not selected: org.telegram.messenger (call=false, ringing=false)
+[19:22:35.706] [D] NotificationReader: Processing buffered message: parts=1, text="2층": 19:22:30에 움직임이 감지되었습니다....
+[19:22:37.911] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:37.913] [D] NotificationReader: No audio device connected
+[19:22:37.913] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:37.913] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:22:38.244] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:38.245] [D] NotificationReader: No audio device connected
+[19:22:38.245] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:38.245] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:22:38.808] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:38.809] [D] NotificationReader: No audio device connected
+[19:22:38.809] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:38.809] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:22:38.809] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:38.809] [D] NotificationReader: No audio device connected
+[19:22:38.809] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:38.809] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:22:40.815] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:40.817] [D] NotificationReader: No audio device connected
+[19:22:40.817] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:40.817] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:22:40.817] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:40.818] [D] NotificationReader: No audio device connected
+[19:22:40.818] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:40.818] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:22:42.812] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:42.813] [D] NotificationReader: No audio device connected
+[19:22:42.813] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:42.813] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:22:42.814] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:42.814] [D] NotificationReader: No audio device connected
+[19:22:42.814] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:42.814] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:22:46.848] [D] NotificationReader: Notification received from: com.android.providers.downloads
+[19:22:46.849] [D] NotificationReader: No audio device connected
+[19:22:46.849] [D] NotificationReader: Blocking system notification app: com.android.providers.downloads
+[19:22:46.849] [D] NotificationReader: 🚫 App not selected: com.android.providers.downloads (call=false, ringing=false)
+[19:23:30.913] [D] NotificationReader: Notification listener CONNECTED
+[19:23:31.014] [D] NotificationReader: Notification listener CONNECTED

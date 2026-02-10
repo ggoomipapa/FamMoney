@@ -1,8 +1,11 @@
 package com.ezcorp.fammoney.service
 
+import com.ezcorp.fammoney.util.AppLogger
 import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "OccurredAtParser"
 
 /**
  * 알림 본문에서 거래 시각(occurredAt) 추출
@@ -90,27 +93,34 @@ class OccurredAtParser @Inject constructor() {
      * @return ParseResult
      */
     fun parse(text: String, receivedAt: Long): ParseResult {
+        AppLogger.d(TAG, "parse 시작: receivedAt=$receivedAt, text=${text.take(100)}")
+
         // 1. 상대 시간 패턴 (오늘/어제) - 가장 명확
         parseRelativeTime(text, receivedAt)?.let {
+            AppLogger.i(TAG, "parse 결과: source=${it.source}, occurredAt=${it.occurredAt}, confidence=${it.confidence}")
             return it
         }
 
         // 2. 전체 날짜+시간 패턴
         parseFullDatetime(text, receivedAt)?.let {
+            AppLogger.i(TAG, "parse 결과: source=${it.source}, occurredAt=${it.occurredAt}, confidence=${it.confidence}")
             return it
         }
 
         // 3. 짧은 날짜+시간 패턴
         parseShortDatetime(text, receivedAt)?.let {
+            AppLogger.i(TAG, "parse 결과: source=${it.source}, occurredAt=${it.occurredAt}, confidence=${it.confidence}")
             return it
         }
 
         // 4. 시간만 있는 패턴 (라벨 근접 확인)
         parseTimeOnly(text, receivedAt)?.let {
+            AppLogger.i(TAG, "parse 결과: source=${it.source}, occurredAt=${it.occurredAt}, confidence=${it.confidence}")
             return it
         }
 
         // 추출 실패
+        AppLogger.d(TAG, "parse 결과: NOT_FOUND, 시간 패턴 미감지")
         return ParseResult(
             occurredAt = null,
             confidence = 0.0,
@@ -124,6 +134,7 @@ class OccurredAtParser @Inject constructor() {
     private fun parseRelativeTime(text: String, receivedAt: Long): ParseResult? {
         // 오늘
         RELATIVE_TODAY_PATTERN.find(text)?.let { match ->
+            AppLogger.d(TAG, "상대시간 패턴 감지 (오늘): matched=${match.value}")
             val hour = match.groupValues[1].toIntOrNull() ?: return@let
             val minute = match.groupValues[2].toIntOrNull() ?: return@let
 
@@ -146,6 +157,7 @@ class OccurredAtParser @Inject constructor() {
 
         // 어제
         RELATIVE_YESTERDAY_PATTERN.find(text)?.let { match ->
+            AppLogger.d(TAG, "상대시간 패턴 감지 (어제): matched=${match.value}")
             val hour = match.groupValues[1].toIntOrNull() ?: return@let
             val minute = match.groupValues[2].toIntOrNull() ?: return@let
 
@@ -175,6 +187,7 @@ class OccurredAtParser @Inject constructor() {
      */
     private fun parseFullDatetime(text: String, receivedAt: Long): ParseResult? {
         FULL_DATETIME_PATTERN.find(text)?.let { match ->
+            AppLogger.d(TAG, "전체 날짜+시간 패턴 감지: matched=${match.value}")
             val year = match.groupValues[1].toIntOrNull() ?: return@let
             val month = match.groupValues[2].toIntOrNull() ?: return@let
             val day = match.groupValues[3].toIntOrNull() ?: return@let
@@ -213,6 +226,7 @@ class OccurredAtParser @Inject constructor() {
      */
     private fun parseShortDatetime(text: String, receivedAt: Long): ParseResult? {
         SHORT_DATETIME_PATTERN.find(text)?.let { match ->
+            AppLogger.d(TAG, "짧은 날짜+시간 패턴 감지: matched=${match.value}")
             val month = match.groupValues[1].toIntOrNull() ?: return@let
             val day = match.groupValues[2].toIntOrNull() ?: return@let
             val hour = match.groupValues[3].toIntOrNull() ?: return@let
@@ -263,11 +277,13 @@ class OccurredAtParser @Inject constructor() {
     private fun parseTimeOnly(text: String, receivedAt: Long): ParseResult? {
         // 잔액 근처의 시간은 제외
         if (BALANCE_TIME_PATTERN.containsMatchIn(text)) {
+            AppLogger.d(TAG, "잔액 근처 시간 패턴 감지, 스킵")
             return null
         }
 
         // 라벨 근처 시간 우선
         TIME_LABEL_PATTERN.find(text)?.let { match ->
+            AppLogger.d(TAG, "시간 라벨 패턴 감지: matched=${match.value}")
             val hour = match.groupValues[1].toIntOrNull() ?: return@let
             val minute = match.groupValues[2].toIntOrNull() ?: return@let
 
@@ -295,6 +311,7 @@ class OccurredAtParser @Inject constructor() {
 
         // 일반 시간 패턴
         val matches = TIME_ONLY_PATTERN.findAll(text).toList()
+        AppLogger.d(TAG, "일반 시간 패턴 검색: ${matches.size}건 발견")
 
         // 여러 시간이 있으면 첫 번째 것 사용 (보통 거래 시간이 먼저 나옴)
         // 단, 승인번호 근처는 제외

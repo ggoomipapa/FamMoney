@@ -30,6 +30,8 @@ data class User(
     val shareCashTransactions: Boolean = true,
     // 용돈 관리 공유 여부
     val shareAllowance: Boolean = true,
+    // 공유할 은행 ID 목록 (비어있으면 전체 공유)
+    val sharedBankIds: List<String> = emptyList(),
     // 역할 (parent, child)
     val role: String = "parent",
     // 구독 정보
@@ -58,6 +60,7 @@ data class User(
         "hiddenTransactionIds" to hiddenTransactionIds,
         "shareCashTransactions" to shareCashTransactions,
         "shareAllowance" to shareAllowance,
+        "sharedBankIds" to sharedBankIds,
         "role" to role,
         "subscriptionType" to subscriptionType,
         "subscriptionExpiry" to subscriptionExpiry,
@@ -88,6 +91,7 @@ data class User(
                 hiddenTransactionIds = (map["hiddenTransactionIds"] as? List<String>) ?: emptyList(),
                 shareCashTransactions = map["shareCashTransactions"] as? Boolean ?: true,
                 shareAllowance = map["shareAllowance"] as? Boolean ?: true,
+                sharedBankIds = (map["sharedBankIds"] as? List<String>) ?: emptyList(),
                 role = map["role"] as? String ?: "parent",
                 subscriptionType = map["subscriptionType"] as? String ?: "free",
                 subscriptionExpiry = map["subscriptionExpiry"] as? Timestamp,

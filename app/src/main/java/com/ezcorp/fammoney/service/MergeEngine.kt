@@ -1,8 +1,11 @@
 package com.ezcorp.fammoney.service
 
 import com.ezcorp.fammoney.data.model.TransactionType
+import com.ezcorp.fammoney.util.AppLogger
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "MergeEngine"
 
 /**
  * SMS + Notification 병합 엔진
@@ -82,7 +85,9 @@ class MergeEngine @Inject constructor(
     ): String {
         val bucket = (approxTime / 1000L) / BUCKET_SIZE_SEC
         val hint = channelHint?.lowercase()?.take(64) ?: "unknown"
-        return "a=$amount|c=$isCancel|b=$bucket|h=$hint"
+        val key = "a=$amount|c=$isCancel|b=$bucket|h=$hint"
+        AppLogger.d(TAG, "generateMergeKey: amount=$amount, isCancel=$isCancel, approxTime=$approxTime, channelHint=$channelHint -> key=$key")
+        return key
     }
 
     /**
@@ -92,15 +97,19 @@ class MergeEngine @Inject constructor(
      * @return 중복 제거된 목록
      */
     fun deduplicateByRawHash(observations: List<Observation>): List<Observation> {
+        AppLogger.d(TAG, "deduplicateByRawHash: 입력=${observations.size}건")
         val seen = mutableSetOf<String>()
-        return observations.filter { obs ->
+        val result = observations.filter { obs ->
             if (seen.contains(obs.rawHash)) {
+                AppLogger.d(TAG, "중복 제거: id=${obs.id}, rawHash=${obs.rawHash}")
                 false
             } else {
                 seen.add(obs.rawHash)
                 true
             }
         }
+        AppLogger.d(TAG, "deduplicateByRawHash: 결과=${result.size}건 (${observations.size - result.size}건 제거)")
+        return result
     }
 
     /**
@@ -110,6 +119,7 @@ class MergeEngine @Inject constructor(
      * @return 병합 그룹 (같은 거래로 판단된 Observation들)
      */
     fun findMergeGroups(observations: List<Observation>): List<List<Observation>> {
+        AppLogger.d(TAG, "findMergeGroups: 입력=${observations.size}건")
         if (observations.isEmpty()) return emptyList()
 
         val used = mutableSetOf<String>()
@@ -124,11 +134,13 @@ class MergeEngine @Inject constructor(
             }
 
             if (group.isNotEmpty()) {
+                AppLogger.d(TAG, "병합 그룹 발견: size=${group.size}, amount=${obs.amount}, ids=${group.map { it.id }}")
                 groups.add(group)
                 group.forEach { used.add(it.id) }
             }
         }
 
+        AppLogger.d(TAG, "findMergeGroups: 결과=${groups.size}개 그룹")
         return groups
     }
 
@@ -152,8 +164,12 @@ class MergeEngine @Inject constructor(
 
         // 시간 차이 확인
         val timeDiff = kotlin.math.abs(a.receivedAt - b.receivedAt)
-        if (timeDiff > TIME_WINDOW_SEC * 1000) return false
+        if (timeDiff > TIME_WINDOW_SEC * 1000) {
+            AppLogger.d(TAG, "isLooseMatch 불일치: timeDiff=${timeDiff}ms > ${TIME_WINDOW_SEC * 1000}ms, a.id=${a.id}, b.id=${b.id}")
+            return false
+        }
 
+        AppLogger.d(TAG, "isLooseMatch 일치: amount=${a.amount}, timeDiff=${timeDiff}ms, a.id=${a.id}, b.id=${b.id}")
         return true
     }
 
@@ -164,11 +180,15 @@ class MergeEngine @Inject constructor(
      * @return 병합된 거래
      */
     fun mergeGroup(group: List<Observation>): MergedTransaction? {
+        AppLogger.d(TAG, "mergeGroup: 그룹 크기=${group.size}, ids=${group.map { it.id }}")
         if (group.isEmpty()) return null
 
         // 금액이 있는 것만 필터
         val withAmount = group.filter { it.amount != null }
-        if (withAmount.isEmpty()) return null
+        if (withAmount.isEmpty()) {
+            AppLogger.d(TAG, "mergeGroup: 금액 있는 항목 없음, 스킵")
+            return null
+        }
 
         // confidence 높은 순으로 정렬
         val sorted = withAmount.sortedByDescending { it.confidence }
@@ -194,7 +214,7 @@ class MergeEngine @Inject constructor(
             channelHint = best.pkg ?: best.sender
         )
 
-        return MergedTransaction(
+        val merged = MergedTransaction(
             amount = best.amount,
             type = type,
             merchant = merchant,
@@ -204,6 +224,8 @@ class MergeEngine @Inject constructor(
             chosenSource = best.source,
             occurredAt = occurredAt
         )
+        AppLogger.i(TAG, "mergeGroup 결과: amount=${merged.amount}, type=${merged.type}, merchant=${merged.merchant}, confidence=${merged.confidence}, chosenSource=${merged.chosenSource}, observationIds=${merged.observationIds}")
+        return merged
     }
 
     /**
@@ -213,6 +235,8 @@ class MergeEngine @Inject constructor(
      * @return 병합된 거래 목록
      */
     fun merge(observations: List<Observation>): List<MergedTransaction> {
+        AppLogger.i(TAG, "merge 시작: 입력 observations=${observations.size}건")
+
         // 1. rawHash로 중복 제거
         val deduplicated = deduplicateByRawHash(observations)
 
@@ -220,7 +244,9 @@ class MergeEngine @Inject constructor(
         val groups = findMergeGroups(deduplicated)
 
         // 3. 각 그룹을 MergedTransaction으로 변환
-        return groups.mapNotNull { group -> mergeGroup(group) }
+        val result = groups.mapNotNull { group -> mergeGroup(group) }
+        AppLogger.i(TAG, "merge 완료: 결과=${result.size}건 (입력 ${observations.size} -> 중복제거 ${deduplicated.size} -> 병합 ${result.size})")
+        return result
     }
 
     /**
@@ -231,6 +257,7 @@ class MergeEngine @Inject constructor(
      * @return 매칭 여부
      */
     fun matchesExisting(existingMergeKey: String, newObservation: Observation): Boolean {
+        AppLogger.d(TAG, "matchesExisting: existingKey=$existingMergeKey, newObs.id=${newObservation.id}, newObs.amount=${newObservation.amount}")
         if (newObservation.amount == null) return false
 
         // merge key 파싱
@@ -252,8 +279,12 @@ class MergeEngine @Inject constructor(
         // 시간 버킷 비교 (±3 버킷 = ±3분)
         val newBucket = (newObservation.receivedAt / 1000L) / BUCKET_SIZE_SEC
         val bucketDiff = kotlin.math.abs(existingBucket - newBucket)
-        if (bucketDiff > 3) return false
+        if (bucketDiff > 3) {
+            AppLogger.d(TAG, "matchesExisting: 불일치 (bucketDiff=$bucketDiff > 3)")
+            return false
+        }
 
+        AppLogger.d(TAG, "matchesExisting: 일치, amount=$existingAmount, bucketDiff=$bucketDiff")
         return true
     }
 

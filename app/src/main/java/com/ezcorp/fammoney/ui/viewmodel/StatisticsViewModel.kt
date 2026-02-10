@@ -1,18 +1,22 @@
 package com.ezcorp.fammoney.ui.viewmodel
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
+import com.ezcorp.fammoney.util.AppLogger
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ezcorp.fammoney.data.model.Merchant
 import com.ezcorp.fammoney.data.model.SpendingCategory
+import com.ezcorp.fammoney.data.model.Transaction
 import com.ezcorp.fammoney.data.model.TransactionType
+import com.ezcorp.fammoney.data.model.User
 import com.ezcorp.fammoney.data.repository.TransactionRepository
+import com.ezcorp.fammoney.data.repository.UserRepository
 import com.ezcorp.fammoney.service.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -49,6 +53,7 @@ data class StatisticsUiState(
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
+    private val userRepository: UserRepository,
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
@@ -77,25 +82,46 @@ Color(0xFF1DE9B6),  // ë¯¼í¸
 
             try {
                 val groupId = userPreferences.getGroupId()
-                Log.d("StatisticsViewModel", "loadStatistics: groupId=$groupId")
+                AppLogger.d("StatisticsViewModel", "loadStatistics: groupId=$groupId")
                 if (groupId == null) {
-                    Log.e("StatisticsViewModel", "groupId is null, returning")
+                    AppLogger.e("StatisticsViewModel", "groupId is null, returning")
                     _uiState.value = _uiState.value.copy(isLoading = false)
                     return@launch
                 }
+
+                // 현재 사용자 ID와 그룹 멤버 정보 가져오기
+                val currentUserId = userPreferences.getUserId()
+                val groupMembers = userRepository.getGroupMembersFlow(groupId).first()
 
                 // ê¸°ê°???°ë¼ ê±°ë ?´ì­ ì¡°í
                 val year = _uiState.value.selectedYear
                 val month = _uiState.value.selectedMonth
                 val isYearly = _uiState.value.isYearlyMode
-                Log.d("StatisticsViewModel", "loadStatistics: year=$year, month=$month, isYearly=$isYearly")
+                AppLogger.d("StatisticsViewModel", "loadStatistics: year=$year, month=$month, isYearly=$isYearly")
 
-                val transactions = if (isYearly) {
+                val allTransactions = if (isYearly) {
                     transactionRepository.getTransactionsByYear(groupId, year)
                 } else {
                     transactionRepository.getTransactionsByMonthForStats(groupId, year, month)
                 }
-                Log.d("StatisticsViewModel", "loadStatistics: transactions count=${transactions.size}")
+                AppLogger.d("StatisticsViewModel", "loadStatistics: allTransactions count=${allTransactions.size}")
+
+                // 공유 범위 필터링 적용
+                val transactions = allTransactions.filter { transaction ->
+                    // 본인 거래는 항상 보임
+                    if (transaction.userId == currentUserId) {
+                        true
+                    } else {
+                        // 다른 사람의 거래는 그 사람의 공유 범위 설정 확인
+                        val transactionOwner = groupMembers.find { it.id == transaction.userId }
+                        if (transactionOwner != null) {
+                            isTransactionShared(transaction, transactionOwner)
+                        } else {
+                            true
+                        }
+                    }
+                }
+                AppLogger.d("StatisticsViewModel", "loadStatistics: filtered transactions count=${transactions.size}")
 
                 // ì´ì¡ ê³ì°
                 val totalIncome = transactions
@@ -160,7 +186,7 @@ Color(0xFF1DE9B6),  // ë¯¼í¸
                     isLoading = false
                 )
             } catch (e: Exception) {
-                Log.e("StatisticsViewModel", "loadStatistics error", e)
+                AppLogger.e("StatisticsViewModel", "loadStatistics error", e)
                 _uiState.value = _uiState.value.copy(isLoading = false)
             }
         }
@@ -221,5 +247,55 @@ Color(0xFF1DE9B6),  // ë¯¼í¸
             )
         }
         loadStatistics()
+    }
+
+    // 현금 거래인지 확인하는 헬퍼 함수
+    private fun isCashTransaction(transaction: Transaction): Boolean {
+        return transaction.bankId.equals("CASH", ignoreCase = true) ||
+               transaction.bankName.equals("현금", ignoreCase = true) ||
+               transaction.bankName.equals("cash", ignoreCase = true)
+    }
+
+    /**
+     * 거래가 공유 범위에 포함되는지 확인하는 헬퍼 함수
+     */
+    private fun isTransactionShared(transaction: Transaction, owner: User): Boolean {
+        val shareFromDate = owner.shareFromDate
+        val hiddenIds = owner.hiddenTransactionIds
+        val shareCash = owner.shareCashTransactions
+        val shareAllowance = owner.shareAllowance
+        val sharedBankIds = owner.sharedBankIds
+
+        // 숨김 목록에 있는 거래는 안 보임
+        if (hiddenIds.contains(transaction.id)) {
+            return false
+        }
+
+        // 현금 거래 공유 설정 확인
+        if (!shareCash && isCashTransaction(transaction)) {
+            return false
+        }
+
+        // 용돈 거래 공유 설정 확인
+        if (!shareAllowance && transaction.isLinkedToChild) {
+            return false
+        }
+
+        // 공유 시작일 이전 거래는 안 보임
+        if (shareFromDate != null && transaction.transactionDate != null) {
+            if (transaction.transactionDate < shareFromDate) {
+                return false
+            }
+        }
+
+        // 은행별 공유 설정 확인 (sharedBankIds가 비어있으면 전체 공유)
+        if (sharedBankIds.isNotEmpty() && !isCashTransaction(transaction)) {
+            val transactionBankId = transaction.bankId
+            if (transactionBankId.isNotBlank() && !sharedBankIds.contains(transactionBankId)) {
+                return false
+            }
+        }
+
+        return true
     }
 }

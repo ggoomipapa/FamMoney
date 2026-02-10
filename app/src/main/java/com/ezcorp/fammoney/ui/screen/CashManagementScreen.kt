@@ -25,8 +25,11 @@ import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.ui.theme.ExpenseColor
 import com.ezcorp.fammoney.ui.theme.IncomeColor
 import com.ezcorp.fammoney.ui.viewmodel.CashManagementViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val TAG = "CashManagementScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +38,19 @@ fun CashManagementScreen(
     viewModel: CashManagementViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 현금 관리 화면 진입 ==========")
+    }
+
+    // 현금 거래 로드 완료 로그
+    LaunchedEffect(uiState.transactions.size) {
+        if (!uiState.isLoading) {
+            AppLogger.i(TAG, "현금 거래 로드 완료: ${uiState.transactions.size}건")
+        }
+    }
+
     var showAddDialog by remember { mutableStateOf(false) }
 
     Scaffold(

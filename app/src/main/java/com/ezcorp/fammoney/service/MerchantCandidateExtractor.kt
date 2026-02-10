@@ -1,5 +1,6 @@
 package com.ezcorp.fammoney.service
 
+import com.ezcorp.fammoney.util.AppLogger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,6 +21,8 @@ class MerchantCandidateExtractor @Inject constructor(
 ) {
 
     companion object {
+        private const val TAG = "MerchantExtractor"
+
         // 금액 패턴
         private val KRW_AMOUNT = Regex("""(\d{1,3}(?:,\d{3})+|\d+)\s*원""")
 
@@ -100,12 +103,21 @@ class MerchantCandidateExtractor @Inject constructor(
      * @return 추출 결과 (bestCandidate, 전체 후보, 신뢰도)
      */
     fun extract(cleanText: String): ExtractionResult {
+        val truncatedInput = if (cleanText.length > 80) cleanText.take(80) + "..." else cleanText
+        AppLogger.d(TAG, "extract() 입력 텍스트: $truncatedInput")
+
         // 1. 다양한 출처에서 후보 수집
         val rawCandidates = mutableListOf<Candidate>()
 
-        rawCandidates.addAll(extractByLabel(cleanText))
-        rawCandidates.addAll(extractNearAmount(cleanText))
-        rawCandidates.addAll(extractFromFirstLines(cleanText))
+        val labelCandidates = extractByLabel(cleanText)
+        val nearAmountCandidates = extractNearAmount(cleanText)
+        val firstLineCandidates = extractFromFirstLines(cleanText)
+
+        rawCandidates.addAll(labelCandidates)
+        rawCandidates.addAll(nearAmountCandidates)
+        rawCandidates.addAll(firstLineCandidates)
+
+        AppLogger.d(TAG, "원시 후보 수: label=${labelCandidates.size}, nearAmount=${nearAmountCandidates.size}, firstLines=${firstLineCandidates.size}")
 
         // 2. 중복 제거 (정규화된 텍스트 기준)
         val uniqueCandidates = rawCandidates
@@ -115,7 +127,9 @@ class MerchantCandidateExtractor @Inject constructor(
         // 3. 점수 계산
         val scoredCandidates = uniqueCandidates.map { candidate ->
             val (score, reasons) = calculateScore(candidate)
-            candidate.copy(score = score, reasons = reasons)
+            val scored = candidate.copy(score = score, reasons = reasons)
+            AppLogger.d(TAG, "후보 점수: '${scored.normalizedText}' score=${String.format("%.2f", scored.score)} origin=${scored.origin.name} reasons=${scored.reasons}")
+            scored
         }.sortedByDescending { it.score }
 
         // 4. 최고점 후보 선택
@@ -125,6 +139,8 @@ class MerchantCandidateExtractor @Inject constructor(
         // 5. 신뢰도 산출
         val hasAmount = KRW_AMOUNT.containsMatchIn(cleanText)
         val confidence = calculateConfidence(best?.score, second?.score, hasAmount)
+
+        AppLogger.i(TAG, "최종 결과: best='${best?.normalizedText ?: "없음"}' confidence=${String.format("%.2f", confidence)} 총 후보=${scoredCandidates.size}개")
 
         return ExtractionResult(
             bestCandidate = best,
@@ -138,7 +154,7 @@ class MerchantCandidateExtractor @Inject constructor(
      * 예: "가맹점: 스타벅스" → "스타벅스"
      */
     private fun extractByLabel(text: String): List<Candidate> {
-        return MERCHANT_LABEL.findAll(text).map { match ->
+        val results = MERCHANT_LABEL.findAll(text).map { match ->
             val rawText = match.groupValues[2].trim()
             Candidate(
                 text = rawText,
@@ -147,6 +163,8 @@ class MerchantCandidateExtractor @Inject constructor(
                 score = 0.0
             )
         }.toList()
+        AppLogger.d(TAG, "extractByLabel: ${results.size}건 라벨 매칭 발견")
+        return results
     }
 
     /**
@@ -190,6 +208,7 @@ class MerchantCandidateExtractor @Inject constructor(
             }
         }
 
+        AppLogger.d(TAG, "extractNearAmount: ${candidates.size}건 금액주변 후보 발견")
         return candidates
     }
 
@@ -214,7 +233,7 @@ class MerchantCandidateExtractor @Inject constructor(
             .map { it.trim() }
             .filter { it.isNotBlank() }
 
-        return lines.take(3)
+        val results = lines.take(3)
             .filter { it.length in 2..40 && isValidCandidate(it) }
             .map { line ->
                 Candidate(
@@ -224,6 +243,8 @@ class MerchantCandidateExtractor @Inject constructor(
                     score = 0.0
                 )
             }
+        AppLogger.d(TAG, "extractFromFirstLines: ${results.size}건 상단라인 후보 발견")
+        return results
     }
 
     /**
@@ -338,7 +359,10 @@ class MerchantCandidateExtractor @Inject constructor(
         secondScore: Double?,
         hasAmount: Boolean
     ): Double {
-        if (bestScore == null) return 0.0
+        if (bestScore == null) {
+            AppLogger.d(TAG, "calculateConfidence: bestScore=null → confidence=0.0")
+            return 0.0
+        }
 
         val s2 = secondScore ?: (bestScore - 2.0)
         val margin = bestScore - s2
@@ -354,6 +378,8 @@ class MerchantCandidateExtractor @Inject constructor(
         // 금액 추출 성공 시 가산
         if (hasAmount) confidence += 0.1
 
-        return confidence.coerceIn(0.0, 1.0)
+        val result = confidence.coerceIn(0.0, 1.0)
+        AppLogger.d(TAG, "calculateConfidence: bestScore=${String.format("%.2f", bestScore)}, secondScore=${secondScore?.let { String.format("%.2f", it) } ?: "null"}, margin=${String.format("%.2f", margin)}, hasAmount=$hasAmount → confidence=${String.format("%.2f", result)}")
+        return result
     }
 }

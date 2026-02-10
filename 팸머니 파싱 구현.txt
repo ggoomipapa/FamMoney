@@ -1,0 +1,728 @@
+================================================================================
+                         팸머니 파싱 시스템 구현 계획서
+================================================================================
+
+[ 현재 구현 상태 vs 신규 구현 필요 항목 ]
+
+================================================================================
+0. 핵심 운영 정책 (Policy)
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [정책 1] Default 운영 정책 - 보수적 접근                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 초기 운영 철학
+  - 목표: "미분류를 줄이는 것"보다 "오탐 없이 안정적으로 저장"
+  - 자동 확정은 보수적으로 (confidence ≥ 0.75)
+  - 애매하면 반드시 "검토함" 또는 "사용자 선택"으로 넘김
+  - 잘못된 자동 분류보다 사용자에게 물어보는 것이 더 나음
+
+▶ Confidence 기준
+  - ≥ 0.75 : 자동 확정 (높은 확신)
+  - 0.50 ~ 0.75 : 자동 저장 + "검토 필요" 배지 (중간 확신)
+  - < 0.50 : 폴백 UX 표시 (낮은 확신, 사용자 개입 유도)
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [정책 2] 미분류(null merchant) 허용 정책                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 원칙: 억지로 넣지 말고 미분류 허용
+  - 사용처를 못 잡으면 merchant = null 또는 "미분류"로 저장
+  - 이후 사용자 수정으로 학습하여 재발 방지
+  - null merchant는 "정상 상태"로 허용됨 (에러 아님)
+
+▶ 미분류 처리 흐름
+  1. 파싱 실패 또는 confidence < 0.50 → merchant = null
+  2. "검토함" 탭에 거래 표시
+  3. 사용자가 수정 시 → LearnedRule 저장
+  4. 동일 패턴 재발생 시 → 학습된 merchant 자동 적용
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [정책 3] LearnedRule 우선순위 규칙                                           │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 우선순위 (높음 → 낮음)
+  1. User-confirmed LearnedRule (사용자가 직접 수정/확정한 룰)
+  2. Signature-based LearnedRule (자동 학습된 패턴 기반 룰)
+  3. Heuristic parsing (N-best 후보 추출 + 점수화)
+
+▶ 충돌 해결 규칙
+  - 동일 signature에 복수 룰 존재 시: updatedAt이 최신인 것 우선
+  - 사용자 확정 룰은 자동 룰을 덮어씀
+  - hitCount가 높을수록 신뢰도 가점 (+0.05 per 10 hits, max +0.1)
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [정책 4] 사용처 파싱 ↔ 카테고리 분류 분리 원칙                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 분리 이유
+  - 사용처 파싱과 카테고리 분류는 독립적으로 동작
+  - 사용처가 흔들리면 카테고리도 흔들린다
+  - 따라서 사용처 파싱이 먼저 안정되어야 카테고리 품질이 올라감
+
+▶ 처리 순서
+  1단계: 사용처 파싱 (merchant 추출)
+  2단계: 사용처 정규화 (normalization)
+  3단계: 카테고리 분류 (merchant → category)
+
+▶ 의존성
+  - 카테고리 분류는 merchant가 확정된 후에만 실행
+  - merchant = null이면 category = "미분류"
+  - 사용처가 수정되면 카테고리도 재분류 트리거
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [정책 5] 성공 지표(KPI) 정의                                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ Success Metrics (목표)
+
+  1. 자동 확정 비율 (Auto-confirm Rate)
+     - 목표: ≥ 70%
+     - 정의: confidence ≥ 0.75인 거래 / 전체 거래 × 100
+
+  2. 폴백 발생률 (Fallback Rate)
+     - 목표: ≤ 20%
+     - 정의: confidence < 0.50인 거래 / 전체 거래 × 100
+
+  3. 사용자 수정 후 재발 방지율 (Learning Effectiveness)
+     - 목표: ≥ 90%
+     - 정의: 동일 패턴 재발생 시 학습된 merchant 적용 성공 비율
+
+  4. 미분류 비율 (Unclassified Rate)
+     - 목표: ≤ 10%
+     - 정의: merchant = null인 거래 / 전체 거래 × 100
+
+  5. 오분류율 (Misclassification Rate)
+     - 목표: ≤ 5%
+     - 정의: 사용자가 자동 분류된 merchant를 수정한 비율
+
+================================================================================
+1. 현재 구현 상태 분석
+================================================================================
+
+■ NotificationParser.kt (현재)
+  - 단일 후보 추출 방식 (첫 번째 매칭만 사용)
+  - 금액 추출: 기본 패턴 사용 중
+  - 거래 유형 판별: 키워드 기반
+  - 가맹점 추출: 줄 단위 순회, isValidMerchantName 체크
+  - 정규화: 기본적인 정리만 (체크카드출금 제거 등)
+
+■ TransactionNotificationListenerService.kt (현재)
+  - EXTRA_TITLE, EXTRA_TEXT, EXTRA_BIG_TEXT만 사용
+  - 그룹/요약 알림 분해 없음
+  - MessagingStyle, InboxStyle 미지원
+
+■ DuplicateDetectionService.kt (현재)
+  - 메모리 캐시 기반 (userId + amount)
+  - 2분 시간 윈도우
+  - SMS 연동 없음
+
+■ LearningRepository.kt (현재)
+  - 카테고리 학습만 (merchantName → category)
+  - Firestore 저장
+  - signature 기반 사용처 학습 없음
+
+■ LocalCategorizationService.kt (현재)
+  - 키워드 DB 기반 카테고리 분류
+  - 기본 가맹점 추출 패턴
+
+================================================================================
+2. 신규 구현 필요 항목 (팸머니 파싱.txt 기반)
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 1] N-best 후보 추출 + 점수화 시스템                                    │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 파일: service/MerchantCandidateExtractor.kt (신규)
+
+data class Candidate(
+    val text: String,
+    val origin: CandidateOrigin,
+    val score: Double
+)
+
+enum class CandidateOrigin {
+    LABEL_AFTER,      // "가맹점:" 뒤
+    NEAR_AMOUNT,      // 금액 주변 토큰
+    FIRST_LINES,      // 상단 라인
+    HEURISTIC_BLOCK   // 기타 휴리스틱
+}
+
+▶ 후보 추출 패턴 (정규식)
+
+1) 라벨 기반 후보 (가장 강함)
+   - 정규식: (가맹점|사용처|매장|상호)\s*[:：]\s*([^\n]+)
+
+2) 금액 주변 후보
+   - 금액 라인에서 숫자/키워드 제거 후 잔여 텍스트
+   - 인접 라인(위/아래)에서 2~40자 텍스트
+
+3) 상단 라인 후보
+   - 첫 1~2줄에서 2~40자 텍스트
+
+▶ 스코어링 규칙
+
+[감점 규칙]
+- 길이가 2~40자 범위 밖: -2.0
+- 금액 패턴 포함: -3.0
+- 6자리 이상 연속 숫자 포함: -2.5
+- BAD_TOKENS 2개 이상 포함: -2.0
+  BAD_TOKENS = ["승인", "취소", "완료", "정기", "자동이체", "잔액", "한도",
+                "카드", "계좌", "번호", "TID", "MID", "TEL", "고객센터",
+                "사업자", "입금", "출금", "송금"]
+- 숫자 비율 > 35%: -1.5
+
+[가점 규칙]
+- 글자(한글/영문) 2자 이상 포함: +1.0
+- 상호 힌트 포함: +0.8
+  힌트 = ["점", "지점", "스토어", "마켓", "카페", "마트", "약국", "병원", "주유"]
+
+[출처 가중치]
+- LABEL_AFTER: +1.5
+- NEAR_AMOUNT: +0.8
+- FIRST_LINES: +0.4
+- HEURISTIC_BLOCK: +0.2
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 2] 사용처 정규화 강화                                                  │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 파일: service/MerchantNormalizer.kt (신규)
+
+fun normalizeMerchant(raw: String): String {
+    return raw
+        // 괄호 내용 제거: ( ... )
+        .replace(Regex("""\([^)]*\)"""), " ")
+        // 법인 표기 제거: (주), 주식회사, (유), 유한회사
+        .replace(Regex("""(주식회사|\(주\)|유한회사|\(유\))"""), " ")
+        // TID/MID/TEL 제거
+        .replace(Regex("""(TID|MID|TEL)\s*[:：]?\s*\S+""", RegexOption.IGNORE_CASE), " ")
+        // 전화번호 패턴 제거: 000-0000-0000
+        .replace(Regex("""\d{3}-\d{4}-\d{4}"""), " ")
+        // 긴 숫자 제거 (6자리 이상)
+        .replace(Regex("""\d{6,}"""), " ")
+        // 지점명 제거: OOO점, #1234
+        .replace(Regex("""[가-힣a-zA-Z]+점(?=\s|$)"""), " ")
+        .replace(Regex("""#\d+"""), " ")
+        // 다중 공백 정리
+        .replace(Regex("""\s+"""), " ")
+        .trim()
+}
+
+▶ 플랫폼/PG 처리
+
+- 패턴: 네이버페이/OOO커피 → OOO커피 우선
+- 슬래시/하이픈 분리 후 더 상호 같은 쪽 선택
+- 플랫폼 목록: 네이버페이, 카카오페이, 토스, 쿠팡페이, 이니시스, KCP
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 3] 신뢰도(Confidence) 산출                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 파일: service/ConfidenceCalculator.kt (신규)
+
+fun confidence(best: Double, second: Double?, hasAmount: Boolean): Double {
+    val s2 = second ?: (best - 2.0)
+    val margin = best - s2
+    var c = 0.4
+    c += (best / 6.0).coerceIn(0.0, 0.4)
+    c += (margin / 4.0).coerceIn(0.0, 0.3)
+    if (hasAmount) c += 0.1
+    return c.coerceIn(0.0, 1.0)
+}
+
+▶ 신뢰도 기준 (UX 분기)
+
+- confidence >= 0.75 : 자동 확정 저장
+- 0.50 ~ 0.75 : 자동 저장 + "검토 필요" 배지
+- < 0.50 : 폴백 UX (사용자 선택 유도)
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 4] 알림 그룹/요약 분해                                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 파일: service/NotificationExtractor.kt (신규)
+
+fun extractRawMessagesFromSbn(sbn: StatusBarNotification): List<RawMessage>
+
+▶ 수집 우선순위
+
+1. EXTRA_MESSAGES (MessagingStyle)
+2. EXTRA_TEXT_LINES (InboxStyle)
+3. EXTRA_BIG_TEXT
+4. EXTRA_TEXT
+
+▶ 요약 알림 감지
+
+- Notification.FLAG_GROUP_SUMMARY 플래그 확인
+- title에 "외 N건", "N개" 집계 표현 확인
+- 개별 거래 신호 없으면 저장 안 함
+
+▶ 멀티 거래 분해
+
+- 빈줄 기준 분리: \n\s*\n
+- 트리거/금액 반복 기준 절단
+- 분해 결과가 과분해(8자 미만)면 원문 유지
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 5] occurredAt 파싱 (거래 시각)                                         │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 파일: service/OccurredAtParser.kt (신규)
+
+▶ 지원 패턴
+
+1. MM/dd HH:mm (예: 01/20 14:03)
+   - 정규식: (?<!\d)(\d{1,2})[./-](\d{1,2})\s+(\d{1,2}):(\d{2})(?!\d)
+
+2. yyyy-MM-dd HH:mm / yyyy.MM.dd HH:mm
+   - 정규식: (?<!\d)(\d{4})[./-](\d{1,2})[./-](\d{1,2})\s+(\d{1,2}):(\d{2})(?!\d)
+
+3. HH:mm만 있는 경우
+   - 날짜는 receivedAt의 날짜 사용
+   - 정규식: (?<!\d)(\d{1,2}):(\d{2})(?!\d)
+
+4. 상대 표현
+   - 오늘 HH:mm, 어제 HH:mm
+
+▶ 안전 장치
+
+- 숫자 앞뒤 경계(lookaround)로 승인번호 오인 방지
+- receivedAt 대비 ±45일 범위 벗어나면 무효
+- HH:mm만 있을 때 "일시|시간|승인" 라벨 근접도 체크
+- "잔액" 주변의 시간은 감점
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 6] 로컬 룰 학습 (signature 기반)                                       │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 파일: data/model/LearnedRule.kt (신규)
+
+data class LearnedRuleEntity(
+    val id: String,           // UUID
+    val signature: String,    // unique
+    val merchant: String,     // 확정된 사용처
+    val sourceHint: String?,  // pkg or sender
+    val hitCount: Int,
+    val createdAt: Long,
+    val updatedAt: Long
+)
+
+▶ Signature 생성
+
+fun signatureOf(clean: String, raw: RawMessage): String {
+    val base = (raw.pkg ?: raw.sender ?: "unknown") + "|" +
+        clean.replace(KRW_AMOUNT, " ")
+             .replace(Regex("""\d+"""), " ")
+             .replace(Regex("\\s+"), " ")
+             .take(40)
+    return base.lowercase()
+}
+
+▶ 저장소: Room DB (로컬 우선)
+
+- 테이블: learned_rules
+- 인덱스: signature (unique), updatedAt
+- 오래된 룰 정리: 180일 또는 hitCount 낮은 것
+
+▶ 사용 흐름
+
+1. 알림 수신 → signature 생성
+2. learned_rules에서 signature 검색
+3. 매칭되면 학습된 merchant 사용 (confidence = 0.95)
+4. 매칭 안되면 N-best 추출 + 점수화
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 7] 폴백 UX (사용처 선택)                                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 파일: ui/component/MerchantFixBottomSheet.kt (신규)
+
+▶ UX 흐름
+
+1. 신뢰도 < 0.50 → 바텀시트 표시
+2. "사용처를 선택해 주세요"
+3. 후보 Top3 버튼 + "직접 입력"
+4. 사용자 선택/입력 시:
+   - Transaction.merchantName 업데이트
+   - learned_rules에 signature + merchant 저장
+
+▶ 검토함(Inbox) 탭
+
+- 신뢰도 낮은 거래를 별도 목록으로 관리
+- 일괄 확인/수정 기능
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 8] 개인정보 마스킹                                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ 파일: util/PrivacyMasker.kt (신규)
+
+▶ 마스킹 규칙
+
+1. 전화번호
+   - 패턴: 01\d[- ]?\d{3,4}[- ]?\d{4}
+   - 결과: ***-****-****
+
+2. 긴 숫자(카드/계좌)
+   - 패턴: \d{10,19}
+   - 결과: 앞 4자리 + **** + 뒤 4자리
+
+3. 대시 포함 긴 숫자
+   - 패턴: \d{2,6}-(\d{2,6}-){1,3}\d{2,6}
+   - 결과: 가운데 마스킹
+
+4. 인증번호/승인번호
+   - 패턴: (인증번호|OTP|승인번호)\s*[:：]?\s*\d+
+   - 결과: 코드: ****
+
+5. 수취인 라벨
+   - 패턴: (받는분|수취인|예금주|입금자|송금받는분)\s*[:：]\s*([^\n]+)
+   - 결과: 받는분: ***
+
+6. 주소
+   - 패턴: (주소)\s*[:：]\s*([^\n]+)
+   - 결과: 주소: ***
+
+▶ 저장 정책
+
+- 기본: 원문 저장 안 함
+- 옵트인: "파싱 개선을 위한 익명화 원문 제공" 동의 시만 저장
+- 저장 조건: confidence < 0.6 또는 사용자가 수정한 경우만
+- 보관 기간: 로컬 14~30일
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ [핵심 9] SMS + Notification 병합 (선택 사항)                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+▶ Observation과 Transaction 분리
+
+data class Observation(
+    val id: String,
+    val source: SourceType,  // SMS / NOTIFICATION
+    val pkg: String?,
+    val sender: String?,
+    val body: String,
+    val receivedAt: Long,
+    // 파싱 결과
+    val amount: Long?,
+    val merchant: String?,
+    val confidence: Double,
+    val signature: String,
+    val rawHash: String
+)
+
+data class Transaction(
+    // 기존 필드들...
+    val observationIds: List<String>,  // 연결된 Observation들
+    val mergeKey: String,
+    val chosenSource: SourceType
+)
+
+▶ Merge Key 생성
+
+fun mergeKey(
+    amount: Long,
+    isCancel: Boolean,
+    approxTime: Long,
+    windowSec: Long,
+    channelHint: String?
+): String {
+    val bucket = (approxTime / 1000L) / windowSec
+    val hint = channelHint?.lowercase()?.take(64) ?: "unknown"
+    return "a=$amount|c=$isCancel|b=$bucket|h=$hint"
+}
+
+▶ 병합 로직
+
+1. rawHash로 Observation 중복 제거
+2. 느슨한 매칭: amount + isCancel + 시간 ±180초
+3. 후보 중 confidence 높은 쪽에서 merchant 채택
+
+
+================================================================================
+3. 파일 구조 (신규/수정)
+================================================================================
+
+app/src/main/java/com/ezcorp/fammoney/
+├── service/
+│   ├── NotificationParser.kt            [수정] N-best + 점수화 적용
+│   ├── MerchantCandidateExtractor.kt    [신규] 후보 추출
+│   ├── MerchantNormalizer.kt            [신규] 정규화
+│   ├── ConfidenceCalculator.kt          [신규] 신뢰도 산출
+│   ├── NotificationExtractor.kt         [신규] 알림 분해
+│   ├── OccurredAtParser.kt              [신규] 거래 시각 파싱
+│   ├── TransactionNotificationListenerService.kt [수정] 알림 분해 적용
+│   └── LocalCategorizationService.kt    [수정] 기존 유지, 연동
+│
+├── data/
+│   ├── model/
+│   │   ├── LearnedRule.kt               [신규] 로컬 룰 학습 모델
+│   │   ├── RawMessage.kt                [신규] 원문 메시지 모델
+│   │   ├── Candidate.kt                 [신규] 후보 모델
+│   │   └── Transaction.kt               [수정] confidence 필드 추가
+│   │
+│   ├── repository/
+│   │   └── LearnedRuleRepository.kt     [신규] Room 기반 룰 저장소
+│   │
+│   └── local/
+│       └── AppDatabase.kt               [수정] LearnedRule 테이블 추가
+│
+├── util/
+│   └── PrivacyMasker.kt                 [신규] 개인정보 마스킹
+│
+└── ui/
+    ├── component/
+    │   └── MerchantFixBottomSheet.kt    [신규] 사용처 선택 바텀시트
+    │
+    └── screen/
+        └── HomeScreen.kt                [수정] 검토 필요 배지 표시
+
+
+================================================================================
+4. 구현 우선순위
+================================================================================
+
+[Phase 1] 핵심 파싱 개선 (즉시 효과)
+  1. MerchantNormalizer.kt - 정규화 강화
+  2. MerchantCandidateExtractor.kt - N-best 후보 추출
+  3. NotificationParser.kt 수정 - 점수화 적용
+
+[Phase 2] 신뢰도 + 폴백 UX
+  4. ConfidenceCalculator.kt - 신뢰도 산출
+  5. Transaction.kt 수정 - confidence 필드 추가
+  6. MerchantFixBottomSheet.kt - 사용처 선택 UI
+
+[Phase 3] 학습 시스템
+  7. LearnedRule.kt + LearnedRuleRepository.kt - 로컬 룰 학습
+  8. AppDatabase.kt 수정 - Room 테이블 추가
+
+[Phase 4] 알림 분해 개선
+  9. NotificationExtractor.kt - 그룹/요약 분해
+  10. OccurredAtParser.kt - 거래 시각 파싱
+  11. TransactionNotificationListenerService.kt 수정
+
+[Phase 5] 개인정보 보호
+  12. PrivacyMasker.kt - 마스킹 유틸
+  13. 옵트인 설정 UI
+
+[Phase 6] SMS 병합 (선택)
+  14. Observation/Transaction 분리
+  15. MergeEngine.kt
+
+
+================================================================================
+5. 핵심 정규식 패턴 모음
+================================================================================
+
+▶ 금액 패턴
+(\d{1,3}(?:,\d{3})+|\d+)\s*원
+
+▶ 라벨 기반 가맹점
+(가맹점|사용처|매장|상호)\s*[:：]\s*([^\n]+)
+
+▶ 날짜 시간 패턴
+(?<!\d)(\d{1,2})[./-](\d{1,2})\s+(\d{1,2}):(\d{2})(?!\d)
+(?<!\d)(\d{4})[./-](\d{1,2})[./-](\d{1,2})\s+(\d{1,2}):(\d{2})(?!\d)
+(?<!\d)(\d{1,2}):(\d{2})(?!\d)
+
+▶ 전화번호
+01\d[- ]?\d{3,4}[- ]?\d{4}
+
+▶ 긴 숫자 (계좌/카드)
+(?<!\d)\d{10,19}(?!\d)
+(?<!\d)\d{2,6}-(\d{2,6}-){1,3}\d{2,6}(?!\d)
+
+▶ 법인 표기
+(주식회사|\(주\)|유한회사|\(유\))
+
+▶ 부가 정보 제거
+(TID|MID|TEL)\s*[:：]?\s*\S+
+\d{3}-\d{4}-\d{4}
+[가-힣a-zA-Z]+점(?=\s|$)
+#\d+
+
+
+================================================================================
+6. 테스트 케이스 (예시)
+================================================================================
+
+▶ Case 1: KB체크할인 입금
+입력: "입금 420원 김*성님 01/19 18:03 267301-**-***682 KB체크할인 카드입금 잔액185,321,941"
+기대: amount=420, type=INCOME, merchant="KB체크할인"
+
+▶ Case 2: KB Pay 쿠팡이츠
+입력: "KB Pay KB국민카드4045승인 김*성님 22,900원 일시불 01/19 17:59 쿠팡이츠 누적724,921원"
+기대: amount=22900, type=EXPENSE, merchant="쿠팡이츠"
+
+▶ Case 3: 법인명 패턴
+입력: "(주)스타벅스코리아 15,000원 승인 01/20 09:30"
+기대: merchant="스타벅스코리아" (법인 표기 제거됨)
+
+▶ Case 4: 플랫폼 결제
+입력: "네이버페이/커피빈강남점 6,500원 결제"
+기대: merchant="커피빈강남점" (실가맹점 우선)
+
+▶ Case 5: 지점명 제거
+입력: "스타벅스 강남역점 4,500원 승인"
+기대: merchant="스타벅스" (지점명 제거, 정규화 후)
+
+
+================================================================================
+7. 구현 진행 상황
+================================================================================
+
+[2026-01-20 업데이트]
+
+✅ Phase 1: 핵심 파싱 개선 - 완료
+  ✅ 1. MerchantNormalizer.kt - 신규 생성
+     - 법인 표기 제거 ((주), 주식회사 등)
+     - TID/MID/TEL 제거
+     - 전화번호, 긴 숫자 제거
+     - 플랫폼/PG 분리 처리 (실가맹점 우선)
+     - 지점명 제거 옵션
+
+  ✅ 2. MerchantCandidateExtractor.kt - 신규 생성
+     - N-best 후보 추출 (라벨, 금액 주변, 상단 라인)
+     - 점수화 시스템 (감점/가점 규칙)
+     - 신뢰도(Confidence) 산출
+     - Candidate, CandidateOrigin 모델 포함
+
+  ✅ 3. NotificationParser.kt - 수정
+     - MerchantCandidateExtractor 연동
+     - MerchantNormalizer 연동
+     - ParsedTransaction에 confidence, merchantCandidates 필드 추가
+     - preprocess() 전처리 함수 추가
+     - 기존 extractMerchantName → extractMerchantNameLegacy로 폴백 유지
+
+✅ Phase 2: 신뢰도 + 데이터 모델 - 완료
+  ✅ 4. Transaction.kt - 수정
+     - confidence: Double 필드 추가
+     - merchantCandidates: List<String> 필드 추가
+     - needsReview, needsFallbackUX 프로퍼티 추가
+     - toMap(), fromMap() 수정
+
+  ✅ 5. TransactionNotificationListenerService.kt - 수정
+     - confidence, merchantCandidates 저장 연동
+
+✅ Phase 3: 학습 시스템 - 완료
+  ✅ 6. LearnedMerchantRule.kt - 신규 생성
+     - Room Entity (signature unique 인덱스)
+     - generateSignature() 함수
+     - confidenceBonus() 함수 (hitCount 기반)
+     - isUserConfirmed 플래그 (정책 3 우선순위)
+
+  ✅ 7. LearnedMerchantRuleDao.kt - 신규 생성
+     - findBySignature (우선순위 정렬)
+     - saveOrUpdate, purgeOld 메서드
+
+  ✅ 8. LearnedMerchantRuleRepository.kt - 신규 생성
+     - learnFromUserCorrection() - 사용자 수정 학습 (정책 2)
+     - learnFromAutoParsingSuccess() - 자동 파싱 학습
+     - purgeOldRules() - 180일 이상 오래된 규칙 정리
+
+  ✅ 9. AppDatabase.kt - 신규 생성
+     - Room Database 설정
+     - LearnedMerchantRule 테이블 포함
+     - fallbackToDestructiveMigration 적용
+
+  ✅ 10. AppModule.kt - 수정
+     - AppDatabase 인스턴스 DI 제공
+     - LearnedMerchantRuleDao DI 제공
+     - NotificationParser @Inject 자동 주입으로 변경
+
+✅ Phase 4: 알림 분해 개선 - 완료
+  ✅ 11. NotificationExtractor.kt - 신규 생성
+     - MessagingStyle, InboxStyle, BigTextStyle 지원
+     - 그룹/요약 알림 감지 (FLAG_GROUP_SUMMARY)
+     - 멀티 거래 분해 (빈줄 기준, 금액 반복 기준)
+     - 과분해 방지 (MIN_MESSAGE_LENGTH = 8)
+     - rawHash 생성 (중복 제거용)
+     - RawMessage, SourceType 모델 포함
+
+  ✅ 12. OccurredAtParser.kt - 신규 생성
+     - 전체 날짜+시간 파싱 (yyyy-MM-dd HH:mm)
+     - 짧은 날짜+시간 파싱 (MM/dd HH:mm)
+     - 시간만 파싱 (HH:mm, 날짜는 receivedAt 사용)
+     - 상대 시간 파싱 (오늘/어제)
+     - 안전 장치 (±45일 범위, 승인번호 오인 방지)
+     - 라벨 근접 가점, 잔액 근처 감점
+
+✅ Phase 5: 개인정보 보호 - 완료
+  ✅ 13. PrivacyMasker.kt - 신규 생성
+     - 전화번호 마스킹
+     - 긴 숫자 (카드/계좌) 마스킹
+     - 인증번호/승인번호 마스킹
+     - 수취인/주소/이메일 마스킹
+     - 부분 마스킹된 번호 완전 마스킹
+     - anonymize() 완전 익명화 (저장용)
+     - containsSensitiveInfo() 민감정보 확인
+     - canStoreAnonymized() 저장 가능 여부 확인
+
+✅ Phase 6: SMS 병합 - 완료
+  ✅ 14. MergeEngine.kt - 신규 생성
+     - Observation 모델 (SMS/알림 원시 데이터)
+     - MergedTransaction 모델 (병합된 거래)
+     - generateMergeKey() - amount + isCancel + 시간버킷 + 채널힌트
+     - deduplicateByRawHash() - rawHash 기반 중복 제거
+     - findMergeGroups() - 느슨한 매칭으로 병합 그룹 찾기
+     - isLooseMatch() - 금액 + 취소여부 + 시간 ±180초 매칭
+     - mergeGroup() - 그룹에서 confidence 높은 정보 채택
+     - merge() - 전체 병합 프로세스
+     - matchesExisting() - 기존 거래와 새 Observation 매칭
+
+================================================================================
+8. 생성/수정된 파일 목록
+================================================================================
+
+[신규 생성]
+  - service/MerchantNormalizer.kt
+  - service/MerchantCandidateExtractor.kt
+  - service/NotificationExtractor.kt
+  - service/OccurredAtParser.kt
+  - service/MergeEngine.kt
+  - data/model/LearnedMerchantRule.kt
+  - data/local/LearnedMerchantRuleDao.kt
+  - data/local/AppDatabase.kt
+  - data/repository/LearnedMerchantRuleRepository.kt
+  - util/PrivacyMasker.kt
+
+[수정]
+  - service/NotificationParser.kt (N-best 시스템 적용)
+  - service/TransactionNotificationListenerService.kt (confidence 저장)
+  - data/model/Transaction.kt (confidence, merchantCandidates 필드)
+  - di/AppModule.kt (Room Database DI 추가)
+
+================================================================================
+9. 전체 구현 완료
+================================================================================
+
+모든 Phase (1~6) 구현 완료!
+
+총 신규 생성 파일: 10개
+총 수정 파일: 4개
+
+핵심 정책 구현 현황:
+  ✅ 정책 1: Default 운영 정책 (보수적 접근) - confidence 기반 분기
+  ✅ 정책 2: 미분류(null merchant) 허용 - 억지로 넣지 않음
+  ✅ 정책 3: LearnedRule 우선순위 - User-confirmed > Signature > Heuristic
+  ✅ 정책 4: 사용처 파싱 ↔ 카테고리 분리 - 독립 처리
+  ✅ 정책 5: KPI 정의 - 자동확정 ≥70%, 폴백 ≤20%, 학습효과 ≥90%
+
+================================================================================
+                              구현 계획서 끝
+================================================================================

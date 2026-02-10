@@ -17,6 +17,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.ui.viewmodel.BackupViewModel
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "BackupScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,6 +28,12 @@ fun BackupScreen(
     viewModel: BackupViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 백업/복원 화면 진입 ==========")
+    }
+
     var showBackupGuide by remember { mutableStateOf(false) }
     var showRestoreGuide by remember { mutableStateOf(false) }
     var showRestoreConfirmDialog by remember { mutableStateOf(false) }

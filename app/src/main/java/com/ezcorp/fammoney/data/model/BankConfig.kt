@@ -10,6 +10,26 @@ data class BankConfig(
     val iconResId: Int = 0
 ) {
     companion object {
+        /** 카카오 알림톡 발신자로 사용되는 금융기관 이름 목록 */
+        val KAKAO_TALK_FINANCIAL_SENDERS = listOf(
+            "KB국민", "국민은행", "국민카드",
+            "신한은행", "신한카드", "신한",
+            "카카오뱅크",
+            "우리은행", "우리카드",
+            "하나은행", "하나카드",
+            "NH농협", "농협은행", "농협카드",
+            "IBK기업", "기업은행",
+            "토스",
+            "삼성카드",
+            "현대카드",
+            "롯데카드",
+            "BC카드",
+            "케이뱅크", "K뱅크",
+            "SC제일", "제일은행",
+            "수협은행", "수협카드",
+            "씨티은행", "씨티카드"
+        )
+
         fun getDefaultBanks(): List<BankConfig> = listOf(
             BankConfig(
                 bankId = "kb_kookmin",

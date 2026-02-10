@@ -8,12 +8,15 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.ezcorp.fammoney.util.AppLogger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "UserPreferences"
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
@@ -35,31 +38,47 @@ class UserPreferences @Inject constructor(
         preferences[USER_NAME_KEY]
     }
 
-    suspend fun getUserId(): String? = userIdFlow.first()
+    suspend fun getUserId(): String? {
+        val value = userIdFlow.first()
+        AppLogger.d(TAG, "getUserId: value=$value")
+        return value
+    }
 
-    suspend fun getGroupId(): String? = groupIdFlow.first()
+    suspend fun getGroupId(): String? {
+        val value = groupIdFlow.first()
+        AppLogger.d(TAG, "getGroupId: value=$value")
+        return value
+    }
 
-    suspend fun getUserName(): String? = userNameFlow.first()
+    suspend fun getUserName(): String? {
+        val value = userNameFlow.first()
+        AppLogger.d(TAG, "getUserName: value=$value")
+        return value
+    }
 
     suspend fun saveUserId(userId: String) {
+        AppLogger.d(TAG, "saveUserId: value=$userId")
         dataStore.edit { preferences ->
             preferences[USER_ID_KEY] = userId
         }
     }
 
     suspend fun saveGroupId(groupId: String) {
+        AppLogger.d(TAG, "saveGroupId: value=$groupId")
         dataStore.edit { preferences ->
             preferences[GROUP_ID_KEY] = groupId
         }
     }
 
     suspend fun saveUserName(userName: String) {
+        AppLogger.d(TAG, "saveUserName: value=$userName")
         dataStore.edit { preferences ->
             preferences[USER_NAME_KEY] = userName
         }
     }
 
     suspend fun saveUserData(userId: String, groupId: String, userName: String) {
+        AppLogger.d(TAG, "saveUserData: userId=$userId, groupId=$groupId, userName=$userName")
         dataStore.edit { preferences ->
             preferences[USER_ID_KEY] = userId
             preferences[GROUP_ID_KEY] = groupId
@@ -68,6 +87,7 @@ class UserPreferences @Inject constructor(
     }
 
     suspend fun clearUserData() {
+        AppLogger.i(TAG, "clearUserData: 모든 사용자 데이터 초기화")
         dataStore.edit { preferences ->
             preferences.clear()
         }
@@ -107,6 +127,7 @@ class UserPreferences @Inject constructor(
     suspend fun getHighAmountThreshold(): Long = highAmountThresholdFlow.first()
 
     suspend fun saveHighAmountThreshold(amount: Long) {
+        AppLogger.d(TAG, "saveHighAmountThreshold: value=$amount")
         dataStore.edit { preferences ->
             preferences[HIGH_AMOUNT_THRESHOLD_KEY] = amount
         }
@@ -162,6 +183,7 @@ class UserPreferences @Inject constructor(
     suspend fun getDuplicatePreference(): String = duplicatePreferenceFlow.first()
 
     suspend fun saveDuplicatePreference(preference: String) {
+        AppLogger.d(TAG, "saveDuplicatePreference: value=$preference")
         dataStore.edit { preferences ->
             preferences[DUPLICATE_PREFERENCE_KEY] = preference
         }
@@ -181,6 +203,7 @@ class UserPreferences @Inject constructor(
     suspend fun getActiveTagName(): String? = activeTagNameFlow.first()
 
     suspend fun saveActiveTag(tagId: String, tagName: String) {
+        AppLogger.d(TAG, "saveActiveTag: tagId=$tagId, tagName=$tagName")
         dataStore.edit { preferences ->
             preferences[ACTIVE_TAG_ID_KEY] = tagId
             preferences[ACTIVE_TAG_NAME_KEY] = tagName
@@ -188,6 +211,7 @@ class UserPreferences @Inject constructor(
     }
 
     suspend fun clearActiveTag() {
+        AppLogger.d(TAG, "clearActiveTag: 활성 태그 해제")
         dataStore.edit { preferences ->
             preferences.remove(ACTIVE_TAG_ID_KEY)
             preferences.remove(ACTIVE_TAG_NAME_KEY)
@@ -200,6 +224,7 @@ class UserPreferences @Inject constructor(
         userName: String,
         authUid: String
     ) {
+        AppLogger.d(TAG, "saveFullUserData: userId=$userId, groupId=$groupId, userName=$userName, authUid=$authUid")
         dataStore.edit { preferences ->
             preferences[USER_ID_KEY] = userId
             preferences[GROUP_ID_KEY] = groupId

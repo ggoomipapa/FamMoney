@@ -14,6 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.data.model.CustomBankPattern
 import com.ezcorp.fammoney.ui.viewmodel.BankPatternViewModel
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "BankPatternScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,6 +28,18 @@ fun BankPatternScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showResetDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf<String?>(null) }
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== SMS 알림 패턴 관리 화면 진입 ==========")
+    }
+
+    // 패턴 목록 로드 로그
+    LaunchedEffect(uiState.patterns.size, uiState.isLoading) {
+        if (!uiState.isLoading) {
+            AppLogger.i(TAG, "패턴 목록 로드 완료: ${uiState.patterns.size}개")
+        }
+    }
 
     Scaffold(
         topBar = {

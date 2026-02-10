@@ -10,6 +10,7 @@ import com.ezcorp.fammoney.data.model.BankConfig
 import com.ezcorp.fammoney.data.model.CustomBankPattern
 import com.ezcorp.fammoney.data.model.PatternTestResult
 import com.ezcorp.fammoney.data.model.TransactionType
+import com.ezcorp.fammoney.util.AppLogger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -18,6 +19,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "BankPatternRepo"
 
 private val Context.bankPatternDataStore: DataStore<Preferences> by preferencesDataStore(name = "bank_patterns")
 
@@ -37,12 +40,16 @@ class BankPatternRepository @Inject constructor(
     val patternsFlow: Flow<List<CustomBankPattern>> = dataStore.data.map { preferences ->
         val patternsJson = preferences[PATTERNS_KEY]
         if (patternsJson.isNullOrEmpty()) {
+            AppLogger.d(TAG, "patternsFlow: no saved patterns, returning defaults")
             // 기본 패턴 반환
             CustomBankPattern.getDefaultPatterns()
         } else {
             try {
-                json.decodeFromString<List<CustomBankPattern>>(patternsJson)
+                val patterns = json.decodeFromString<List<CustomBankPattern>>(patternsJson)
+                AppLogger.d(TAG, "patternsFlow: loaded ${patterns.size} patterns from DataStore")
+                patterns
             } catch (e: Exception) {
+                AppLogger.e(TAG, "patternsFlow: failed to decode patterns, returning defaults", e)
                 CustomBankPattern.getDefaultPatterns()
             }
         }
@@ -51,49 +58,66 @@ class BankPatternRepository @Inject constructor(
     /**
      * 현재 저장된 패턴 가져오기
      */
-    suspend fun getPatterns(): List<CustomBankPattern> = patternsFlow.first()
+    suspend fun getPatterns(): List<CustomBankPattern> {
+        AppLogger.d(TAG, "getPatterns: fetching current patterns")
+        return patternsFlow.first()
+    }
 
     /**
      * 활성화된 패턴만 가져오기
      */
     suspend fun getEnabledPatterns(): List<CustomBankPattern> {
-        return getPatterns().filter { it.isEnabled }
+        val enabled = getPatterns().filter { it.isEnabled }
+        AppLogger.d(TAG, "getEnabledPatterns: ${enabled.size} enabled patterns")
+        return enabled
     }
 
     /**
      * 활성화된 패턴을 BankConfig로 변환해 가져오기
      */
     suspend fun getEnabledBankConfigs(): List<BankConfig> {
-        return getEnabledPatterns().map { it.toBankConfig() }
+        val configs = getEnabledPatterns().map { it.toBankConfig() }
+        AppLogger.d(TAG, "getEnabledBankConfigs: ${configs.size} configs")
+        return configs
     }
 
     /**
      * 특정 패턴 가져오기
      */
     suspend fun getPattern(patternId: String): CustomBankPattern? {
-        return getPatterns().find { it.id == patternId }
+        AppLogger.d(TAG, "getPattern: patternId=$patternId")
+        val pattern = getPatterns().find { it.id == patternId }
+        if (pattern == null) {
+            AppLogger.w(TAG, "getPattern: pattern not found for id=$patternId")
+        }
+        return pattern
     }
 
     /**
      * 패턴 저장 (전체 목록)
      */
     suspend fun savePatterns(patterns: List<CustomBankPattern>) {
+        AppLogger.d(TAG, "savePatterns: saving ${patterns.size} patterns")
         dataStore.edit { preferences ->
             preferences[PATTERNS_KEY] = json.encodeToString(patterns)
         }
+        AppLogger.i(TAG, "savePatterns: saved ${patterns.size} patterns to DataStore")
     }
 
     /**
      * 단일 패턴 추가/업데이트
      */
     suspend fun savePattern(pattern: CustomBankPattern) {
+        AppLogger.d(TAG, "savePattern: id=${pattern.id}, name=${pattern.displayName}")
         val patterns = getPatterns().toMutableList()
         val existingIndex = patterns.indexOfFirst { it.id == pattern.id }
 
         if (existingIndex >= 0) {
             patterns[existingIndex] = pattern.copy(lastModified = System.currentTimeMillis())
+            AppLogger.d(TAG, "savePattern: updated existing pattern at index=$existingIndex")
         } else {
             patterns.add(pattern.copy(lastModified = System.currentTimeMillis()))
+            AppLogger.d(TAG, "savePattern: added new pattern, total=${patterns.size}")
         }
 
         savePatterns(patterns)
@@ -103,17 +127,22 @@ class BankPatternRepository @Inject constructor(
      * 패턴 삭제
      */
     suspend fun deletePattern(patternId: String) {
+        AppLogger.d(TAG, "deletePattern: patternId=$patternId")
         val patterns = getPatterns().filter { it.id != patternId }
         savePatterns(patterns)
+        AppLogger.i(TAG, "deletePattern: deleted pattern $patternId, remaining=${patterns.size}")
     }
 
     /**
      * 패턴 활성화/비활성화 토글
      */
     suspend fun togglePatternEnabled(patternId: String) {
+        AppLogger.d(TAG, "togglePatternEnabled: patternId=$patternId")
         val patterns = getPatterns().map { pattern ->
             if (pattern.id == patternId) {
-                pattern.copy(isEnabled = !pattern.isEnabled, lastModified = System.currentTimeMillis())
+                val toggled = pattern.copy(isEnabled = !pattern.isEnabled, lastModified = System.currentTimeMillis())
+                AppLogger.d(TAG, "togglePatternEnabled: ${pattern.displayName} -> isEnabled=${toggled.isEnabled}")
+                toggled
             } else {
                 pattern
             }
@@ -125,6 +154,7 @@ class BankPatternRepository @Inject constructor(
      * 기본 패턴으로 초기화
      */
     suspend fun resetToDefaults() {
+        AppLogger.i(TAG, "resetToDefaults: resetting all patterns to defaults")
         savePatterns(CustomBankPattern.getDefaultPatterns())
     }
 
@@ -132,12 +162,14 @@ class BankPatternRepository @Inject constructor(
      * 패턴 테스트 - 입력한 텍스트에서 거래 정보 추출 시도
      */
     fun testPattern(pattern: CustomBankPattern, testText: String): PatternTestResult {
+        AppLogger.d(TAG, "testPattern: pattern=${pattern.displayName}, textLength=${testText.length}")
         return try {
             // 금액 추출 시도
             val amountRegex = Regex(pattern.amountRegex)
             val amountMatch = amountRegex.find(testText)
 
             if (amountMatch == null) {
+                AppLogger.w(TAG, "testPattern: amount not found in text")
                 return PatternTestResult(
                     success = false,
                     errorMessage = "금액을 찾을 수 없습니다. 정규식을 확인해주세요."
@@ -147,13 +179,13 @@ class BankPatternRepository @Inject constructor(
             val amountStr = amountMatch.groupValues.getOrNull(1) ?: return PatternTestResult(
                 success = false,
                 errorMessage = "금액 그룹을 추출할 수 없습니다. 정규식 캡처 그룹 ()이 있는지 확인해주세요."
-            )
+            ).also { AppLogger.w(TAG, "testPattern: amount group extraction failed") }
 
             val amount = amountStr.replace(",", "").replace(" ", "").toLongOrNull()
                 ?: return PatternTestResult(
                     success = false,
                     errorMessage = "금액을 숫자로 변환할 수 없습니다: $amountStr"
-                )
+                ).also { AppLogger.w(TAG, "testPattern: amount conversion failed for '$amountStr'") }
 
             // 거래 유형 판단
             val hasIncomeKeyword = pattern.incomeKeywords.any { testText.contains(it) }
@@ -186,10 +218,12 @@ class BankPatternRepository @Inject constructor(
                         if (!merchantName.isNullOrBlank()) break
                     }
                 } catch (e: Exception) {
+                    AppLogger.w(TAG, "testPattern: invalid merchant regex '$merchantPattern'")
                     // 잘못된 정규식 무시
                 }
             }
 
+            AppLogger.i(TAG, "testPattern: success - amount=$amount, type=$transactionType, merchant=$merchantName")
             PatternTestResult(
                 success = true,
                 amount = amount,
@@ -199,6 +233,7 @@ class BankPatternRepository @Inject constructor(
             )
 
         } catch (e: Exception) {
+            AppLogger.e(TAG, "testPattern: error during pattern test", e)
             PatternTestResult(
                 success = false,
                 errorMessage = "패턴 테스트 중 오류: ${e.message}"
@@ -210,6 +245,7 @@ class BankPatternRepository @Inject constructor(
      * 새 사용자 정의 패턴 생성을 위한 기본 템플릿
      */
     fun createNewPatternTemplate(): CustomBankPattern {
+        AppLogger.d(TAG, "createNewPatternTemplate: creating new template")
         return CustomBankPattern(
             id = "custom_${System.currentTimeMillis()}",
             displayName = "새 패턴",

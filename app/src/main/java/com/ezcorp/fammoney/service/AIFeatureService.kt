@@ -2,9 +2,12 @@ package com.ezcorp.fammoney.service
 
 import com.ezcorp.fammoney.data.repository.BillingRepository
 import com.ezcorp.fammoney.util.AIFeatureConfig
+import com.ezcorp.fammoney.util.AppLogger
 import com.ezcorp.fammoney.util.DebugConfig
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "AIFeature"
 
 /**
  * AI 기능 서비스
@@ -25,9 +28,18 @@ class AIFeatureService @Inject constructor(
      * - 릴리즈 빌드: Gemini 초기화 필요
      */
     fun isAIEnabled(): Boolean {
-        if (!AIFeatureConfig.isAIFeaturesEnabled()) return false
-        if (DebugConfig.isDebugBuild) return true
-        return geminiService.isInitialized()
+        val aiConfigEnabled = AIFeatureConfig.isAIFeaturesEnabled()
+        if (!aiConfigEnabled) {
+            AppLogger.d(TAG, "isAIEnabled: false (AIFeatureConfig 비활성)")
+            return false
+        }
+        if (DebugConfig.isDebugBuild) {
+            AppLogger.d(TAG, "isAIEnabled: true (디버그 빌드)")
+            return true
+        }
+        val initialized = geminiService.isInitialized()
+        AppLogger.d(TAG, "isAIEnabled: $initialized (geminiService.isInitialized)")
+        return initialized
     }
 
     /**
@@ -35,8 +47,14 @@ class AIFeatureService @Inject constructor(
      * Remote Config에서 무료/유료 여부를 동적으로 결정
      */
     fun canUseFeature(featureId: String): Boolean {
-        if (!geminiService.isInitialized()) return false
-        return AIFeatureConfig.canUseFeature(featureId, billingRepository.hasPaidSubscription())
+        if (!geminiService.isInitialized()) {
+            AppLogger.d(TAG, "canUseFeature: featureId=$featureId, result=false (Gemini 미초기화)")
+            return false
+        }
+        val hasPaid = billingRepository.hasPaidSubscription()
+        val result = AIFeatureConfig.canUseFeature(featureId, hasPaid)
+        AppLogger.d(TAG, "canUseFeature: featureId=$featureId, hasPaid=$hasPaid, result=$result")
+        return result
     }
 
     /**
@@ -93,10 +111,13 @@ class AIFeatureService @Inject constructor(
         amount: Long,
         description: String = ""
     ): Result<AutoCategoryResult> {
+        AppLogger.d(TAG, "autoCategorize 호출: merchantName=$merchantName, amount=$amount")
         return try {
             val result = localCategorizationService.categorize(merchantName, amount)
+            AppLogger.d(TAG, "autoCategorize 결과: category=${result.category}, confidence=${result.confidence}, reason=${result.reason}")
             Result.success(result)
         } catch (e: Exception) {
+            AppLogger.e(TAG, "autoCategorize 실패: merchantName=$merchantName", e)
             Result.success(AutoCategoryResult("OTHER", 0.2f, "분류 실패"))
         }
     }
@@ -108,10 +129,13 @@ class AIFeatureService @Inject constructor(
     fun extractMerchantName(
         notificationText: String
     ): Result<String> {
+        AppLogger.d(TAG, "extractMerchantName 호출: text=${notificationText.take(80)}")
         return try {
             val result = localCategorizationService.extractMerchantName(notificationText)
+            AppLogger.d(TAG, "extractMerchantName 결과: merchant=$result")
             Result.success(result)
         } catch (e: Exception) {
+            AppLogger.e(TAG, "extractMerchantName 실패", e)
             Result.success("")
         }
     }
@@ -129,6 +153,7 @@ class AIFeatureService @Inject constructor(
         previousMonthsData: List<MonthlyFinancialData> = emptyList()
     ): Result<SpendingPrediction> {
         val featureId = AIFeatureConfig.Features.SPENDING_PREDICTION
+        AppLogger.d(TAG, "predictMonthlySpending 호출: currentExpense=$currentMonthExpense, day=$dayOfMonth/$daysInMonth")
         if (!canUseFeature(featureId)) {
             return Result.failure(Exception(getFeatureDisabledReason(featureId)))
         }
@@ -150,6 +175,7 @@ class AIFeatureService @Inject constructor(
         savingsGoals: List<Pair<String, Long>> = emptyList()
     ): Result<List<SmartInsight>> {
         val featureId = AIFeatureConfig.Features.SMART_INSIGHTS
+        AppLogger.d(TAG, "generateSmartInsights 호출: featureId=$featureId")
         if (!canUseFeature(featureId)) {
             return Result.failure(Exception(getFeatureDisabledReason(featureId)))
         }
@@ -165,6 +191,7 @@ class AIFeatureService @Inject constructor(
         categoryAverages: Map<String, Long>
     ): Result<AnomalyResult?> {
         val featureId = AIFeatureConfig.Features.ANOMALY_DETECTION
+        AppLogger.d(TAG, "detectAnomalies 호출: featureId=$featureId, recentTxCount=${recentTransactions.size}")
         if (!canUseFeature(featureId)) {
             return Result.success(null) // 비활성화 시 이상 없음
         }
@@ -205,6 +232,7 @@ class AIFeatureService @Inject constructor(
         timeDiffMinutes: Long
     ): Result<DuplicateAnalysis> {
         val featureId = AIFeatureConfig.Features.DUPLICATE_ANALYSIS
+        AppLogger.d(TAG, "analyzeDuplicateTransaction 호출: timeDiffMinutes=$timeDiffMinutes")
         if (!canUseFeature(featureId)) {
             return Result.failure(Exception(getFeatureDisabledReason(featureId)))
         }

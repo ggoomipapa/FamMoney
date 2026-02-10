@@ -30,9 +30,12 @@ import com.ezcorp.fammoney.service.ParsedReceiptItem
 import com.ezcorp.fammoney.ui.theme.ExpenseColor
 import com.ezcorp.fammoney.ui.theme.IncomeColor
 import com.ezcorp.fammoney.ui.viewmodel.TransactionDetailViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val TAG = "TransactionDetailScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +47,19 @@ fun TransactionDetailScreen(
     val context = LocalContext.current
     val transaction by viewModel.transaction.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+
+    // 화면 진입 로그
+    LaunchedEffect(transactionId) {
+        AppLogger.i(TAG, "========== 거래 상세 화면 진입 ==========")
+        AppLogger.d(TAG, "거래 ID: $transactionId")
+    }
+
+    // 거래 로드 완료 로그
+    LaunchedEffect(transaction) {
+        transaction?.let {
+            AppLogger.i(TAG, "거래 로드 완료: ${it.merchantName}, ${it.amount}원, ${it.type}")
+        }
+    }
     val isSaved by viewModel.isSaved.collectAsState()
     val merchantSuggestions by viewModel.merchantSuggestions.collectAsState()
     val receiptItems by viewModel.receiptItems.collectAsState()

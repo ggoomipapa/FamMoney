@@ -14,6 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.data.model.BankConfig
 import com.ezcorp.fammoney.ui.viewmodel.MainViewModel
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "BankSettingsScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +26,18 @@ fun BankSettingsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val currentUser = uiState.currentUser
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 은행 설정 화면 진입 ==========")
+    }
+
+    // 선택된 은행 로그
+    LaunchedEffect(currentUser?.selectedBankIds) {
+        currentUser?.selectedBankIds?.let {
+            AppLogger.d(TAG, "선택된 은행: ${it.size}개")
+        }
+    }
 
     var selectedBankIds by remember(currentUser) {
         mutableStateOf(currentUser?.selectedBankIds?.toSet() ?: emptySet())

@@ -34,7 +34,10 @@ import com.ezcorp.fammoney.ui.theme.ExpenseColor
 import com.ezcorp.fammoney.ui.theme.IncomeColor
 import com.ezcorp.fammoney.ui.viewmodel.CategoryStat
 import com.ezcorp.fammoney.ui.viewmodel.StatisticsViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import java.util.Calendar
+
+private const val TAG = "StatisticsScreen"
 
 // 그래프 타입
 enum class ChartType {
@@ -48,6 +51,18 @@ fun StatisticsScreen(
     viewModel: StatisticsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 통계 화면 진입 ==========")
+    }
+
+    // 통계 로드 완료 로그
+    LaunchedEffect(uiState.categoryStats.size) {
+        if (!uiState.isLoading && uiState.categoryStats.isNotEmpty()) {
+            AppLogger.i(TAG, "통계 로드 완료: ${uiState.categoryStats.size}개 카테고리, 총 지출: ${uiState.totalExpense}원")
+        }
+    }
     var selectedPeriodTab by remember { mutableStateOf(0) } // 0: 월간, 1: 연간
     var selectedCategoryTab by remember { mutableStateOf(0) } // 0: 소비 카테고리, 1: 사용처
     var selectedChartType by remember { mutableStateOf(ChartType.PIE) }

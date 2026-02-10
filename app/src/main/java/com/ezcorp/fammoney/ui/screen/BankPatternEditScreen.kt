@@ -13,6 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.data.model.CustomBankPattern
 import com.ezcorp.fammoney.ui.viewmodel.BankPatternViewModel
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "BankPatternEditScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +26,12 @@ fun BankPatternEditScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 패턴 편집 화면 진입 ==========")
+        AppLogger.d(TAG, "패턴 ID: $patternId (${if (patternId == "new") "새로 생성" else "편집"})")
+    }
 
     LaunchedEffect(patternId) {
         viewModel.loadPattern(patternId)

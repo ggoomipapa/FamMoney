@@ -1,0 +1,495 @@
+가능합니다. “사용처(가맹점명) 파싱”이 잘 안 되는 경우는 보통 문자 원문(알림/문자/푸시)에서 가맹점 후보를 잡아내는 규칙이 약하거나, 금융기관별 포맷 차이를 흡수하지 못해서 발생합니다. 아래는 팸머니에서 바로 적용 가능한, 실전형 접근입니다.
+1) 문제를 두 조각으로 쪼개면 해결이 빨라집니다
+사용처 파싱은 사실 2단계입니다.
+• 거래 정보 블록 추출: 금액/승인·취소/일시/카드·계좌/잔액/해외/할부 등 “거래 한 건”을 정확히 잡기
+• 가맹점(사용처) 추출 + 정규화: 문자열에서 “가맹점 후보”를 뽑고, 브랜드/지점/불필요 토큰을 제거하고, 동일 가맹점으로 묶기
+대부분 앱이 (1)은 어느 정도 되는데, (2)가 허술해서 “사용처”만 흔들립니다.
+2) 사용처 파싱이 망가지는 대표 케이스 10가지
+팸머니가 겪는 유형을 빠르게 진단할 수 있게 체크리스트로 정리했습니다.
+• 가맹점이 맨 앞에 오지 않음 (금액/승인번호 뒤에 위치)
+• 키워드가 여러 언어/기호 섞임 (승인, 승인금액, 승인, APPROVED, 승인완료)
+• 온라인 결제/PG사 마스킹 (네이버페이, 쿠팡페이, 토스페이먼츠, KG이니시스, KCP) → 실제 사용처가 별도 필드/후속 토큰에 있음
+• 배달/플랫폼 중개 (배민, 요기요, 쿠팡이츠) → 가게명은 뒤에 붙거나 별도 줄
+• 해외결제 (통화/환율/해외가맹점 영문 대문자, “해외승인” 표기)
+• 취소/부분취소 → “취소”가 가맹점처럼 잡히거나, 원거래 가맹점이 다른 위치로 이동
+• 통신/정기결제 → “자동이체/정기결제”가 가맹점으로 잡힘
+• 계좌이체/송금 → “받는분/입금자/출금계좌”가 가맹점으로 혼재
+• 지점/단말기/사업자번호 꼬리표 (OOO점, TID, MID, 사업자, TEL)가 붙어 매칭이 깨짐
+• 멀티라인/줄바꿈 → 1줄 기준 파서면 실패
+3) 추천하는 “안전한” 파싱 전략 (규칙 + 점수화)
+정규식만 늘리면 금방 한계가 오므로, 후보를 여러 개 뽑고 점수로 1개를 고르는 방식이 안정적입니다.
+3-1. 후보 추출 (N-best)
+알림 원문에서 아래를 “가맹점 후보”로 수집합니다.
+• 승인|결제|사용|출금|이체|입금 같은 트리거 주변의 인접 토큰(앞/뒤 1~3개)
+• 줄바꿈 기준 1~3번째 라인(기관별로 가맹점이 특정 라인에 고정되는 경우 많음)
+• 가맹점|사용처|매장|상호 같은 명시 라벨 뒤 토큰
+3-2. 후보 점수 규칙(간단하지만 강력)
+각 후보에 점수를 매겨 최고점 채택:
+가점(+)
+• 한글/영문 상호 형태(2~25자)이며 숫자 비율 낮음
+• 점|지점|스토어|마켓|커피|마트|약국|병원|주유 등 상호 단서 포함
+• 승인금액 라인과 가까움
+감점(-)
+• 금액/통화/승인번호/잔액/할부/카드번호/계좌번호 패턴 포함
+• 승인|취소|완료|자동이체|정기결제|출금|입금 같은 행위 단어만 있는 경우
+• TEL|TID|MID|사업자|고객센터 포함
+• 길이가 너무 짧거나(1~2자) 너무 김(30자+)
+3-3. 정규화(가맹점명 다듬기)
+채택된 사용처에서 아래를 제거/정리하면 정확도가 크게 올라갑니다.
+• 괄호 부가정보 제거: (주), (유), (… )
+• 불필요 꼬리표 제거: OOO점, #1234, TID:, MID:, TEL, 사업자번호
+• 다중 공백/특수문자 정리
+• 플랫폼/PG 매핑: 네이버페이 → “네이버페이”는 결제수단, 실가맹점이 같이 있으면 실가맹점 우선 
+• 예: 네이버페이/OOO커피면 OOO커피를 사용처로
+4) 디버깅을 가장 빨리 끝내는 방법: “원문 로그 50개만”
+지금 상태에서 제가 바로 개선안을 “팸머니에 맞춘 룰”로 만들어드리려면, 실제 실패한 원문이 필요합니다.
+아래 형태로 개인정보 마스킹해서 30~50개만 붙여 주세요.
+• 카드번호/계좌번호: 뒤 4자리만 남기기
+• 이름/전화번호/주소: *** 처리
+• 원문은 줄바꿈 포함해서 그대로
+예시(형식)
+• [기관] / [채널: 푸시 or 문자]
+• 원문: ... 
+이렇게 주시면 제가:
+• 실패 유형 분류(기관/케이스별)
+• 사용처 후보 룰 + 점수화 규칙 세트
+• 정규화 사전(불필요 토큰/PG/플랫폼 매핑)
+• 테스트 케이스(입력→기대 사용처)까지 한 번에 드릴 수 있습니다.
+5) 당장 팸머니에 넣을 “임시 안전장치”
+원문 없이도 바로 효과가 나는 방어로직입니다.
+• 사용처가 비거나 점수 낮으면: “미분류(사용처 확인 필요)”로 저장하고, 
+• UI에서 사용자가 한번만 수정하면
+• 다음부터 동일 패턴(기관+문구+토큰)에서는 자동 보정(로컬 룰 학습)
+• “PG/플랫폼 결제”는 별도 배지로 표시하고, 가능하면 실가맹점 우선 규칙 적용
+원하시면, 다음 메시지로 실패한 알림 원문 10개만 먼저 보내세요. 그 10개로도 “왜 안 잡히는지”와 “바로 고칠 룰”을 구체적으로 만들어 드릴 수 있습니다.
+
+이 경우에는 “모든 은행 원문”을 모으려는 방향을 버리고, **팸머니가 당장 잘해야 하는 범위(당신이 실제로 쓰는 기관 + 가장 흔한 포맷)**를 먼저 1차로 완성하는 게 비용 대비 효과가 가장 큽니다. 원문이 부족해도 정확도를 올릴 수 있는 현실적인 방법을 정리합니다.
+1) 원문이 적어도 성능이 올라가는 설계: “기관 불명(Unknown) 강건 파서”
+핵심은 은행/카드사별 전용 룰에 과의존하지 않고, “거래 알림”에서 공통으로 반복되는 신호로 사용처를 잡는 것입니다.
+공통 신호(대부분 알림에 존재)
+• 금액 패턴: \d{1,3}(,\d{3})+원 또는 \d+원
+• 승인/취소 트리거: 승인|결제|사용|취소|환불|승인취소|승인완료
+• 시간/일자: \d{1,2}:\d{2}, \d{2}/\d{2}, \d{4}-\d{2}-\d{2}
+• 잔액/한도/계좌: 잔액|한도|출금계좌|입금|송금
+이 신호를 기준으로 “사용처 후보”를 여러 개 만들고, 점수로 고르는 방식이면 기관별 원문이 많이 없어도 안정적으로 동작합니다.
+2) “원문이 없어서 학습이 불가”를 깨는 데이터 수집 3가지 (현실적인 옵션)
+옵션 A) 앱 내부에서 “사용자 제공 샘플”을 받는 흐름 추가 (추천)
+팸머니에 기능을 하나 넣습니다.
+• 파싱 실패 시: “사용처를 선택/수정해 주세요”
+• 동시에: 원문(민감정보 자동 마스킹 후) 저장 동의 토글
+• 동의한 사용자만 원문이 서버/로컬에 쌓임
+이 방식의 장점:
+• 당신이 모든 은행을 안 써도, 사용자가 쓰는 은행/카드사의 원문이 자연스럽게 누적됩니다.
+• 개인정보 이슈를 줄일 수 있습니다(마스킹 필수).
+마스킹 규칙 예시(자동):
+• 카드/계좌번호: 숫자 8자리 이상 연속이면 가운데 마스킹
+• 전화번호 패턴 마스킹
+• 사람 이름은 완전 자동이 어려우니 “받는분:” 같은 라벨 뒤는 전부 마스킹
+옵션 B) “지인/테스터 모집”으로 1~2주 샘플 수집
+가장 빠르게 품질을 끌어올리는 방법입니다.
+• 구글폼/오픈채팅에 “원문 복붙” 받기(마스킹 가이드 제공)
+• 최소 기관별 20~30건이면 전용 룰을 만들기에 충분합니다.
+옵션 C) 본인 폰에서 “알림 로그”로 과거 것을 긁어오기(가능하면)
+안드로이드라면 NotificationListenerService를 이미 쓰고 있을 가능성이 큽니다.
+• 향후 1~2주만이라도 팸머니에 “원문 샘플 수집(로컬)” 모드를 켜두면,
+• 당신이 쓰는 기관은 금방 커버됩니다.
+3) 원문이 적을 때 우선순위: “사용처 정규화”가 더 중요합니다
+원문이 다양해도, 실사용에서 체감 품질은 “가맹점명이 일관되게 묶이느냐”가 좌우합니다.
+정규화로 체감 개선이 큰 것들
+• OOO점/OOO지점 제거해서 본점명으로 묶기
+• (주), 주식회사, 유한회사 제거
+• TID/MID/전화번호/사업자번호 제거
+• PG/플랫폼(네이버페이·쿠팡페이·토스페이먼츠 등) 등장 시: 
+• 문자열에 실가맹점 후보가 같이 있으면 실가맹점 우선
+• 없으면 플랫폼명을 사용처로 저장하되 “플랫폼 결제” 배지 표시
+이건 특정 은행 원문이 없어도 적용 가능합니다.
+4) 파싱 실패를 “데이터로 전환”하는 UX(꼭 넣는 게 좋습니다)
+• 파싱 신뢰도(score)가 낮으면 자동 저장하지 말고: 
+• “사용처 후보 3개”를 버튼으로 제시
+• 사용자가 탭하면 확정
+• 사용자가 확정한 결과를 기반으로: 
+• “이 패턴(원문 특징)에서는 앞으로 이 사용처로” 룰을 자동 생성(로컬 우선)
+이렇게 하면 원문이 적어도 시간이 갈수록 정확도가 올라갑니다.
+5) 지금 당장 제가 도와드릴 수 있는 최소 입력
+“모든 은행”이 아니라도 괜찮습니다. 당신이 실제로 쓰는 기관 몇 개만으로도 1차 품질을 크게 올릴 수 있습니다.
+아래 중 하나만 주세요(가능한 것):
+• (A) 당신 폰에 실제로 오는 알림 원문 10~20개(마스킹해서)
+• (B) 아니면, 지금 팸머니에서 실패한 원문 5개만(최소로도 진단 가능)
+• (C) 원문이 정말 어렵다면: 팸머니의 현재 파싱 규칙(정규식/토큰화 로직) 일부
+주시면 그 데이터만으로도 “기관 불명 강건 파서 + 정규화 규칙 + 신뢰도 스코어링”을 바로 맞춰 드릴 수 있습니다.
+
+가능은 한데, “모든 금융사 알림 원문”이 공식적으로 한 번에 공개된 형태로 존재하는 경우는 드뭅니다. 대신 현실적으로 쓸 수 있는 대체 재료가 2가지가 있습니다.
+1) 공개된 “원문(또는 원문에 준하는 샘플)”을 얻을 수 있는 경로
+A. 오픈소스: 카드 승인 SMS 파서 저장소(샘플 메시지/정규식 포함)
+국내에서 가장 유명했던 레퍼런스가 있습니다.
+• kakao/credit-card-sms-parser: 카드사 SMS 문자열에서 상호명/금액 등을 추출하는 라이브러리(현재는 deprecated/archived). 메시지 포맷 대응 아이디어와 카드사별 파싱 룰을 참고할 수 있습니다. 
+• SuchangKo/card-sms-parser: “카드 결제 문자 파싱”을 목표로 한 Java 기반 라이브러리(지원 카드 목록/규칙 접근을 참고 가능). 
+이 계열은 “실제 원문”이 많이 들어있다기보다, **원문을 다루는 방식(룰 구조, 토큰 처리, 예외 케이스)**이 도움이 됩니다.
+B. 공식 안내 페이지(서비스 소개) — “문자/알림을 준다” 수준의 근거
+개별 금융사/카드사 페이지에는 “승인내역을 푸시·카카오톡·SMS로 제공” 같은 안내가 있습니다. 다만 문구 템플릿(원문)을 그대로 공개하는 경우는 흔치 않습니다.
+예: 신한카드의 카드사용알림 서비스 안내. 
+예: BC카드의 바로알림서비스(휴대폰메시지) 안내. 
+C. 원문 대신 “정산/명세서/청구서 파싱”으로 우회(가맹점명 확보)
+알림 원문은 못 모아도, 명세서/청구서는 상대적으로 샘플/파서가 존재합니다.
+• 카드 명세서(청구서) 파싱 오픈소스: 가맹점/이용일/금액 같은 구조화에 초점. 
+즉, “실시간 알림 파싱”은 아니지만 가맹점명 정규화 사전/매칭 사전을 만드는 데는 꽤 유용합니다.
+2) “공유된 원문 모음”을 찾을 때 주의할 점 (실무적으로 중요)
+• 누군가가 커뮤니티/블로그에 올린 원문은 **개인정보(카드번호, 전화번호, 이름, 계좌 등)**가 섞여 있을 수 있어, 그대로 수집/저장/배포하면 리스크가 큽니다.
+• 특히 상용 앱이라면 “원문 수집”은 자동 마스킹 + 사용자 동의 + 보관 기간/목적 제한이 들어가야 안전합니다.
+3) 결론: “외부 원문 수급”보다 더 확실한 방법
+원문을 외부에서 완벽히 모으는 것보다, 팸머니에 아래를 넣으면 기관을 다 안 써도 데이터가 자동으로 쌓입니다.
+• 파싱 실패 시 “사용처 선택/수정” UI
+• (선택) “원문 제공 동의” 토글
+• 저장 시 민감정보 자동 마스킹(카드/계좌/전화/이름 라벨 기반)
+• 사용자가 확정한 결과를 기반으로 패턴-룰 자동 생성(로컬 우선)
+이 방식은 시간이 갈수록 정확도가 선형으로 좋아집니다.
+4) 바로 다음 액션(가장 빠른 진행)
+원문을 “외부에서” 최대한 끌어오되, 실제 적용 가능성을 높이려면:
+• 위 오픈소스 2개(카카오/SoChangKo)에서 룰 구조를 참고해 “기관 불명 강건 파서(N-best 후보 + 점수화)”로 바꾸고 
+• 명세서 파서에서 가맹점 정규화 사전 아이디어를 가져와서 “OOO점/주식회사/PG 꼬리표 제거”를 강화하는 흐름이 효율적입니다. 
+원하시면, 제가 위 저장소들을 기준으로 **팸머니에 맞는 파싱 파이프라인(후보 추출 → 점수화 → 정규화 → 신뢰도 → 폴백 UX)**를 Kotlin/Android 기준으로 설계해 드리겠습니다. 현재 팸머니가 “문자(SMS) 기반”인지 “알림(NotificationListener) 기반”인지에 따라 훅 지점이 달라집니다.
+
+아래는 팸머니에 바로 적용 가능한 형태로, 후보 추출 → 점수화 → 정규화 → 신뢰도 → 폴백 UX 파이프라인을 Kotlin/Android 기준으로 설계한 것입니다. SMS 기반/NotificationListener 기반 모두 커버하되, 훅 지점과 데이터 모델을 분리하는 방식으로 구성합니다.
+0) 전체 아키텍처 개요
+입력 소스(훅)
+• SMS 기반: SmsRetriever / ContentObserver(Telephony.Sms.Inbox) / 권한 기반 SMS 읽기
+• 알림 기반: NotificationListenerService에서 StatusBarNotification 수신
+공통 처리 파이프라인(핵심)
+• 원문 정리(정규화 전 전처리)
+• 거래 타입/금액/시간/통화 등 구조화 필드 추출
+• 사용처 후보 N개 추출
+• 후보 스코어링 및 Best 선택
+• 사용처 정규화(정리/매핑)
+• 신뢰도(confidence) 산출
+• 신뢰도 낮으면 폴백 UX + (옵션) 사용자 피드백 기반 룰 학습
+1) 데이터 모델(필수)
+data class RawMessage( val source: SourceType, // SMS or NOTIFICATION val pkg: String?, // 알림이면 packageName val sender: String?, // SMS면 발신번호 val title: String?, // 알림 title val text: String, // 본문(가능하면 full) val receivedAt: Long // epoch millis ) enum class SourceType { SMS, NOTIFICATION } data class ParsedTransaction( val amount: Long?, val currency: String?, // "KRW", "USD"... val isCancel: Boolean?, val approvedAt: Long?, // 추정 시간 val merchant: String?, // 최종 사용처 val confidence: Double, // 0.0~1.0 val merchantCandidates: List<Candidate> = emptyList(), val debug: DebugInfo? = null ) data class Candidate( val text: String, val origin: CandidateOrigin, val score: Double ) enum class CandidateOrigin { LABEL_AFTER, // "가맹점:" 뒤 NEAR_AMOUNT, // 금액 주변 토큰 FIRST_LINES, // 상단 라인 HEURISTIC_BLOCK // 기타 휴리스틱 } data class DebugInfo( val cleanedText: String, val tokens: List<String>, val reasons: List<String> ) 
+2) 훅 지점 설계
+2-1) NotificationListenerService 훅
+• 알림은 제조사/앱에 따라 EXTRA_TEXT, EXTRA_BIG_TEXT, EXTRA_TEXT_LINES가 다릅니다.
+• 가능한 한 bigText/textLines 우선으로 합쳐야 파싱 성공률이 올라갑니다.
+fun extractRawFromSbn(sbn: StatusBarNotification): RawMessage? { val n = sbn.notification val extras = n.extras val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() val lines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES) ?.joinToString("\n") { it.toString() } val body = listOfNotNull(lines, bigText, text) .distinct() .joinToString("\n") .trim() if (body.isBlank()) return null return RawMessage( source = SourceType.NOTIFICATION, pkg = sbn.packageName, sender = null, title = title, text = body, receivedAt = sbn.postTime ) } 
+2-2) SMS 훅
+• SMS는 기본적으로 텍스트가 짧고, 멀티라인이 적지만 기관별 포맷은 다양합니다.
+• 발신번호(sender)는 “기관 추정”에 쓰되, 과의존하지 않도록 설계합니다.
+3) 전처리(원문 정리) — 성공률을 좌우
+목표: “후보 추출/스코어링이 잘 되도록” 텍스트를 정돈합니다.
+• 제로폭/특수 공백 제거
+• 연속 공백 정리
+• 줄바꿈 유지(라인 기반 힌트가 큼)
+• 일부 기호 통일(원화 ‘₩’ → ‘원’, 콤마 유지)
+fun preprocess(raw: RawMessage): String { return raw.text .replace("\u200B", "") // zero width .replace("\u00A0", " ") // nbsp .replace(Regex("[ \t]+"), " ") .replace(Regex("\\n{3,}"), "\n\n") .trim() } 
+4) 구조화 필드(금액/취소/시간 등) 추출
+사용처가 흔들릴수록 금액/취소 판정이 먼저 정확해야 후보 추출이 안정됩니다.
+4-1) 금액
+• 원화: 12,345원, 12345원
+• 해외: $12.34, USD 12.34 같은 케이스는 별도 처리 가능(초기에는 단순화 가능)
+private val KRW_AMOUNT = Regex("""(\d{1,3}(?:,\d{3})+|\d+)\s*원""") fun extractAmount(clean: String): Long? { val m = KRW_AMOUNT.find(clean) ?: return null val num = m.groupValues[1].replace(",", "") return num.toLongOrNull() } fun detectCancel(clean: String): Boolean { return Regex("""취소|승인취소|결제취소|환불|VOID""", RegexOption.IGNORE_CASE).containsMatchIn(clean) } 
+4-2) 시간/일시(가능하면)
+처음엔 “정확 파싱”까지 욕심내기보다, receivedAt(알림 도착 시각) 보조로 가도 충분합니다.
+5) 사용처 후보 추출(N-best) — 기관 원문이 없어도 되는 핵심
+후보를 “하나만” 뽑으려 하지 말고, 다수 후보를 수집합니다.
+5-1) 라벨 기반 후보(가장 강함)
+가맹점, 사용처, 매장, 상호 등 뒤를 우선 후보로.
+private val MERCHANT_LABEL = Regex("""(가맹점|사용처|매장|상호)\s*[:：]\s*([^\n]+)""") fun candidatesByLabel(clean: String): List<Candidate> = MERCHANT_LABEL.findAll(clean).map { Candidate( text = it.groupValues[2].trim(), origin = CandidateOrigin.LABEL_AFTER, score = 0.0 ) }.toList() 
+5-2) 금액 주변 후보(실전에서 강력)
+금액이 나온 라인의 앞/뒤 토큰 또는 인접 라인에서 후보 생성.
+fun candidatesNearAmount(clean: String): List<Candidate> { val lines = clean.split("\n") val out = mutableListOf<Candidate>() for ((i, line) in lines.withIndex()) { if (KRW_AMOUNT.containsMatchIn(line)) { // 현재 라인에서 숫자/키워드 제거한 잔여 텍스트를 후보로 val residual = line .replace(KRW_AMOUNT, " ") .replace(Regex("""승인|결제|사용|금액|원|일시|할부|잔액|카드|계좌|번호"""), " ") .replace(Regex("[^0-9A-Za-z가-힣 ]"), " ") .replace(Regex("\\s+"), " ") .trim() if (residual.isNotBlank()) { out += Candidate(residual, CandidateOrigin.NEAR_AMOUNT, 0.0) } // 인접 라인(위/아래) listOf(i - 1, i + 1).filter { it in lines.indices }.forEach { idx -> val c = lines[idx].trim() if (c.length in 2..40) out += Candidate(c, CandidateOrigin.NEAR_AMOUNT, 0.0) } } } return out } 
+5-3) 상단 라인 후보(특히 알림에서 유효)
+알림은 “첫 줄이 상호”인 경우가 꽤 있습니다.
+fun candidatesFromFirstLines(clean: String): List<Candidate> { val lines = clean.split("\n").map { it.trim() }.filter { it.isNotBlank() } return lines.take(2) .filter { it.length in 2..40 } .map { Candidate(it, CandidateOrigin.FIRST_LINES, 0.0) } } 
+6) 스코어링(점수화) — 규칙은 단순하지만 “감점”이 중요
+핵심은 ‘가맹점이 아닌 것’을 강하게 배제하는 것입니다.
+6-1) 감점/가점 룰(권장 기본)
+• 감점: 금액/통화/승인번호/잔액/카드번호/계좌번호/고객센터/TID/MID 등 포함
+• 감점: “승인/취소/완료/정기결제/자동이체” 같은 행위 단어만 있음
+• 가점: 한글/영문 상호 형태, 숫자 비율 낮음, 점/지점/스토어/마켓 등 단서
+private val BAD_TOKENS = listOf( "승인", "취소", "완료", "정기", "자동이체", "잔액", "한도", "카드", "계좌", "번호", "TID", "MID", "TEL", "고객센터", "사업자", "입금", "출금", "송금" ) private val NUMBER_RUN = Regex("""\d{6,}""") // 긴 숫자 덩어리 private val HAS_AMOUNT = KRW_AMOUNT fun scoreCandidate(c: Candidate): Pair<Double, List<String>> { var score = 0.0 val reasons = mutableListOf<String>() val t = c.text.trim() if (t.length !in 2..40) { score -= 2.0; reasons += "length_out_of_range" } if (HAS_AMOUNT.containsMatchIn(t)) { score -= 3.0; reasons += "contains_amount" } if (NUMBER_RUN.containsMatchIn(t)) { score -= 2.5; reasons += "contains_long_number" } val badHits = BAD_TOKENS.count { t.contains(it, ignoreCase = true) } if (badHits >= 2) { score -= 2.0; reasons += "many_bad_tokens:$badHits" } val letterCount = t.count { it.isLetter() } val digitCount = t.count { it.isDigit() } val ratio = if (t.isNotEmpty()) digitCount.toDouble() / t.length else 1.0 if (ratio > 0.35) { score -= 1.5; reasons += "too_many_digits" } if (letterCount >= 2) { score += 1.0; reasons += "has_letters" } if (Regex("""점|지점|스토어|마켓|카페|마트|약국|병원|주유""").containsMatchIn(t)) { score += 0.8; reasons += "merchant_hint" } // 출처 가중치 score += when (c.origin) { CandidateOrigin.LABEL_AFTER -> 1.5 CandidateOrigin.NEAR_AMOUNT -> 0.8 CandidateOrigin.FIRST_LINES -> 0.4 CandidateOrigin.HEURISTIC_BLOCK -> 0.2 } return score to reasons } 
+7) 정규화(merchant normalization)
+정규화는 “정확도”뿐 아니라 “동일 가맹점 묶기”에 결정적입니다.
+7-1) 기본 정규화
+• 괄호 내용 제거
+• (주), 주식회사 등 제거
+• TID/MID/TEL/사업자번호 꼬리 제거
+• 연속 공백 정리
+fun normalizeMerchant(raw: String): String { return raw .replace(Regex("""\([^)]*\)"""), " ") // ( ... ) .replace(Regex("""(주식회사|\(주\)|유한회사|\(유\))"""), " ") .replace(Regex("""(TID|MID|TEL)\s*[:：]?\s*\S+""", RegexOption.IGNORE_CASE), " ") .replace(Regex("""\d{3}-\d{4}-\d{4}"""), " ") // phone .replace(Regex("""\d{6,}"""), " ") // long digits .replace(Regex("""\s+"""), " ") .trim() } 
+7-2) 플랫폼/PG 처리(선택)
+예: 네이버페이/OOO커피 → OOO커피 우선, 없으면 네이버페이
+• 초기에는 “슬래시/하이픈 분리 후 더 상호 같은 쪽 선택”으로 충분합니다.
+8) 신뢰도(confidence) 산출
+신뢰도는 UX를 갈라주는 기준입니다.
+권장 방식(단순):
+• 후보 최고점 s1, 2등 s2
+• margin = s1 - s2 가 크면 확신
+• 금액이 추출되었고, 후보가 감점 규칙을 거의 안 맞았으면 가산
+fun confidence(best: Double, second: Double?, hasAmount: Boolean): Double { val s2 = second ?: (best - 2.0) val margin = best - s2 var c = 0.4 c += (best / 6.0).coerceIn(0.0, 0.4) c += (margin / 4.0).coerceIn(0.0, 0.3) if (hasAmount) c += 0.1 return c.coerceIn(0.0, 1.0) } 
+실무 기준(추천)
+• confidence >= 0.75 : 자동 확정 저장
+• 0.50 ~ 0.75 : 자동 저장은 하되 “검토 필요” 배지
+• < 0.50 : 폴백 UX(사용자 선택 유도)
+9) 폴백 UX(핵심: 실패를 데이터로 바꾸기)
+신뢰도 낮으면 “그냥 미분류”로 끝내지 말고, 사용자가 1초 안에 확정하게 만듭니다.
+UX 흐름(추천)
+• “사용처를 선택해 주세요” 바텀시트
+• 후보 Top3 버튼 + “직접 입력”
+• 사용자가 확정하면: 
+• 해당 원문(또는 마스킹 원문)과 함께 로컬 룰/매핑 학습 저장
+로컬 학습(초기 MVP)
+• Key: signature = (pkg 또는 sender) + 핵심 토큰(금액 제거 후 상단 30자) 해시
+• Value: 확정 merchant
+• 다음 번 동일 signature면 후보 스킵하고 바로 적용
+data class LearnedRule(val signature: String, val merchant: String, val updatedAt: Long) fun signatureOf(clean: String, raw: RawMessage): String { val base = (raw.pkg ?: raw.sender ?: "unknown") + "|" + clean.replace(KRW_AMOUNT, " ") .replace(Regex("""\d+"""), " ") .replace(Regex("\\s+"), " ") .take(40) return base.lowercase() } 
+10) 엔드투엔드 파서 조립(가이드)
+class TransactionParser( private val ruleStore: RuleStore // 룰 학습/조회(로컬 DB) ) { fun parse(raw: RawMessage, debug: Boolean = false): ParsedTransaction { val clean = preprocess(raw) val sig = signatureOf(clean, raw) ruleStore.find(sig)?.let { learned -> return ParsedTransaction( amount = extractAmount(clean), currency = "KRW", isCancel = detectCancel(clean), approvedAt = raw.receivedAt, merchant = learned.merchant, confidence = 0.95, debug = if (debug) DebugInfo(clean, tokenize(clean), listOf("learned_rule_hit")) else null ) } val amount = extractAmount(clean) val isCancel = detectCancel(clean) val candidates = buildList { addAll(candidatesByLabel(clean)) addAll(candidatesNearAmount(clean)) addAll(candidatesFromFirstLines(clean)) }.distinctBy { it.text } val scored = candidates.map { c -> val (s, reasons) = scoreCandidate(c) c.copy(score = s) to reasons }.sortedByDescending { it.first.score } val best = scored.firstOrNull()?.first val second = scored.drop(1).firstOrNull()?.first val bestText = best?.text?.let(::normalizeMerchant)?.takeIf { it.isNotBlank() } val conf = if (best != null) confidence(best.score, second?.score, amount != null) else 0.0 return ParsedTransaction( amount = amount, currency = "KRW", isCancel = isCancel, approvedAt = raw.receivedAt, merchant = bestText, confidence = conf, merchantCandidates = scored.take(5).map { it.first }, debug = if (debug) DebugInfo( cleanedText = clean, tokens = tokenize(clean), reasons = scored.take(3).flatMap { it.second } ) else null ) } private fun tokenize(clean: String): List<String> = clean.replace(Regex("[^0-9A-Za-z가-힣\\n ]"), " ") .split(Regex("\\s+")) .filter { it.isNotBlank() } } 
+11) 운영 팁(팸머니 관점에서 꼭 필요한 것)
+• 알림 기반이면 “패키지명(pkg)”이 최상위 분기 키입니다. 같은 금융사라도 채널(은행앱/카드앱/간편결제)이 달라져서 포맷이 갈립니다.
+• 디버그 모드에서 cleanedText / 후보 Top5 / 스코어 이유를 저장하면, 룰 튜닝 속도가 10배 빨라집니다.
+• “정규식 늘리기”보다 먼저: 
+• 후보 추출을 넓히고
+• 감점 규칙을 강하게 하고
+• 정규화를 촘촘히 하는 쪽이 체감 품질이 큽니다.
+12) SMS 기반 vs Notification 기반: 훅 지점 정리(결론)
+• SMS 기반: 입력 텍스트 품질은 상대적으로 일정하지만(짧음), 은행/카드사마다 발신번호가 달라 “sender 기반 분기”가 가능
+• Notification 기반: 텍스트가 길고 정보가 많아(성공률↑), 대신 EXTRA_* 조합이 중요하며 pkg 기반 분기가 매우 효과적
+팸머니가 어느 쪽이든, 위 구조는 RawMessage만 만들면 나머지는 동일하게 돌아가도록 설계되어 있습니다.
+원하시면, 다음 중 하나를 기준으로 “실제 구현 수준”까지 더 구체화하겠습니다(질문이 아니라 선택지입니다).
+• (A) 팸머니가 NotificationListenerService를 이미 쓰고 있다 → extractRawFromSbn()과 채널/그룹 알림(요약 알림) 처리까지 포함해 정리
+• (B) 팸머니가 SMS 위주다 → 권한/수집 안정화(중복 방지, MMS/긴문자, 리시버/옵저버)까지 포함해 정리
+• (C) 둘 다 수집한다 → 소스 우선순위/중복 거래 병합 키까지 설계
+
+아래는 “SMS + Notification”을 동시에 수집하는 팸머니 기준으로, 소스 우선순위 정책과 중복 거래 병합 키(merge key), 그리고 병합 알고리즘/데이터모델까지 포함한 설계안입니다. 목표는 (1) 중복 저장을 막고, (2) 더 품질 좋은 소스에서 사용처를 확정하며, (3) 추후에도 튜닝 가능하도록 로그와 결정을 남기는 것입니다.
+1) 기본 원칙: “하나의 거래 = 하나의 Transaction”
+• SMS와 알림은 동일 거래를 서로 다른 채널로 중복 전달하는 경우가 많습니다.
+• 따라서 DB에 저장되는 최종 엔티티는 단일 Transaction이어야 하고,
+• SMS/알림은 “원천 이벤트(Observation)”로 별도 보관하거나, 최소한 Transaction에 연결된 형태로 보관합니다.
+2) 모델: Observation(원천)과 Transaction(결과) 분리
+data class Observation( val id: String, // UUID val source: SourceType, // SMS / NOTIFICATION val pkg: String?, // 알림 package val sender: String?, // SMS 발신 val title: String?, val body: String, val receivedAt: Long, // 파싱 결과(관측치 단위) val amount: Long?, val currency: String?, val isCancel: Boolean?, val merchant: String?, val confidence: Double, val signature: String, // dedup/merge용 val rawHash: String // 동일 원문 중복 방지 ) data class Transaction( val id: String, // UUID val amount: Long, val currency: String, val isCancel: Boolean, val occurredAt: Long, // 거래 시각(추정) val merchant: String?, val merchantConfidence: Double, val chosenSource: SourceType, // 최종 채택 소스 val observationIds: List<String>, val mergeKey: String, // 중복 병합 키 val createdAt: Long, val updatedAt: Long ) 
+Observation 저장을 권장하는 이유:
+• 중복/병합이 잘못될 때 재현이 가능하고,
+• 룰 개선이 쉬우며,
+• 사용자의 “원문 제공 동의”가 있을 때만 body를 보관(또는 마스킹 보관)하도록 제어할 수 있습니다.
+3) 소스 우선순위 정책(결정 규칙)
+“항상 알림이 우선” 또는 “항상 SMS 우선” 같은 단일 규칙은 현실에서 자주 깨집니다. 대신 아래처럼 조건부 우선순위 + 점수화로 가는 것이 안정적입니다.
+3-1) 기본 우선순위(추천)
+• Notification이 ‘금액+상호’ 둘 다 잡혔고 confidence가 높으면 Notification 우선
+• Notification이 상호를 못 잡았거나 confidence가 낮으면 SMS를 비교
+• 둘 다 애매하면 “후보 Top3 + 폴백 UX”로 사용자 확정
+3-2) 목적별 우선순위 (실무 팁)
+• 상호(merchant): 보통 알림이 더 정보가 많아 유리하지만, 카드사에 따라 SMS가 더 깔끔할 때가 있음 → “confidence + margin”으로 결정
+• 취소/환불 판정: 문구가 명확한 쪽(취소 키워드 강함)을 우선
+• 거래시각(occurredAt): 가능하면 본문에 시각이 있으면 그걸 쓰고, 없으면 receivedAt 사용. 채널별 지연이 달라서 receivedAt은 보조로만.
+4) 중복 거래 병합 키(merge key) 설계
+병합 키는 “완전 동일”이 아니라 “같은 거래로 볼 수 있을 확률”을 반영해야 합니다. 핵심은 다음 3요소입니다.
+• 금액(amount)
+• 거래 타입(isCancel)
+• 시간(occurredAt 또는 receivedAt 기반 윈도우)
+• (가능하면) 소스 식별자: pkg 또는 sender, 혹은 기관 추정(아래 참고)
+4-1) 시간 윈도우(버킷) 방식
+서로 다른 채널로 같은 거래가 들어올 때 보통 수 초~수 분 차이가 납니다.
+• 카드 승인/취소 알림: 0~60초 흔함
+• 은행 출금/이체: 0~5분도 발생 가능
+따라서 merge key에 “시간 버킷”을 포함합니다.
+추천 기본값:
+• 카드/결제류: 90초 버킷
+• 계좌이체/출금류: 300초 버킷
+초기에는 단순히 120초로 시작해도 됩니다.
+fun timeBucket(t: Long, windowSec: Long): Long = (t / 1000L) / windowSec 
+4-2) 기관/채널 힌트
+• Notification: pkg
+• SMS: sender
+• 추가로 “기관 추정값(institutionId)”을 만들면 정확도가 더 올라갑니다. 
+• 예: pkg=com.shcard.smartpay → “SHINHAN_CARD”
+• 예: sender가 단축번호/대표번호인 경우 매핑 테이블
+하지만 “모든 기관 매핑”이 없더라도, 최소한 pkg/sender 자체를 키의 일부로 넣으면 중복 병합 안정성이 올라갑니다.
+4-3) Merge Key 생성식(권장)
+fun mergeKey( amount: Long, isCancel: Boolean, approxTime: Long, // occurredAt가 있으면 그걸, 없으면 receivedAt windowSec: Long, channelHint: String? // pkg or sender (없으면 "unknown") ): String { val bucket = timeBucket(approxTime, windowSec) val hint = channelHint?.lowercase()?.take(64) ?: "unknown" return "a=$amount|c=$isCancel|b=$bucket|h=$hint" } 
+이 키는 “동일 채널에서의 중복”도 막아주고, 서로 다른 채널(SMS vs 알림)이면 hint가 달라져서 병합이 안 될 수 있습니다. 그래서 2단계 병합이 필요합니다.
+5) 2단계 병합: “정확 키” + “느슨한 매칭”
+5-1) 1차(정확) 병합 키: 동일 채널 중복 제거
+• 같은 pkg에서 같은 알림이 여러 번 들어오거나,
+• SMS가 재수신/복구로 중복 들어오는 것을 방지.
+정확 키:
+• rawHash = sha256(cleanedText + sender/pkg + receivedAtRounded)
+• 동일 rawHash면 Observation 중복으로 처리.
+5-2) 2차(느슨한) 병합: SMS와 알림의 동일 거래 병합
+서로 다른 채널이므로 hint가 다릅니다. 따라서 아래 조건으로 후보 Transaction을 탐색합니다.
+느슨한 매칭 조건(추천)
+• amount 동일
+• isCancel 동일
+• receivedAt 차이 <= Δt (예: 180초)
+• (가능하면) merchant가 둘 다 있고 normalize 후 유사하면 가점
+• (가능하면) currency 동일
+이 조건을 만족하는 “최근 N분 내 Transaction”을 조회해서 병합 여부를 결정합니다.
+6) 병합 알고리즘(실전형)
+6-1) 처리 흐름
+• Observation 생성(파싱 포함)
+• rawHash로 Observation 중복 제거
+• “느슨한 매칭”으로 기존 Transaction 후보 탐색
+• 후보가 있으면 병합, 없으면 신규 Transaction 생성
+• 병합 시 “최종 merchant 선택” 및 chosenSource 업데이트
+6-2) 후보 탐색 쿼리(개념)
+• amount + isCancel + 시간범위로 좁히면 인덱스가 잘 탑니다.
+예:
+• WHERE amount = ? AND isCancel = ? AND occurredAt BETWEEN (t-180s) AND (t+180s)
+• occurredAt가 없으면 receivedAt 기반으로 저장한 필드를 함께 둡니다.
+7) 병합 시 “최종 merchant” 선택 로직
+Observation 두 개(또는 그 이상)가 하나의 Transaction에 붙을 때, merchant를 무엇으로 확정할지 규칙이 필요합니다.
+7-1) 기본 규칙(추천)
+• merchant 후보가 둘 다 있을 때: 
+• confidence 높은 쪽 선택
+• confidence가 비슷하면(차이 < 0.1) 정규화 후 더 구체적인 쪽(길이/토큰 수) 선택
+• 한쪽만 merchant가 있으면 그걸 선택
+• 둘 다 없으면 null, confidence 낮음 → 폴백 UX 대상으로 남김
+7-2) “구체성” 판단 예시
+• 네이버페이 vs OOO커피 → OOO커피 우선
+• 쿠팡 vs 쿠팡이츠 OOO치킨 → 후자 우선
+이는 정규화 단계에서 “플랫폼/PG 토큰”을 별도로 태그로 남기면 더 정밀해집니다.
+8) Kotlin 수준 병합 코드 스켈레톤
+class MergeEngine( private val txRepo: TransactionRepository, private val obsRepo: ObservationRepository ) { private val DEDUP_WINDOW_MS = 180_000L // 3분 private val LOOSE_MATCH_MS = 180_000L // 3분 fun ingest(raw: RawMessage): Transaction { val obs = obsRepo.createObservation(raw) // preprocess+parse+signature+rawHash 포함 // 1) observation rawHash 중복 제거 val existingObs = obsRepo.findByRawHash(obs.rawHash) if (existingObs != null && existingObs.id != obs.id) { // 이미 저장된 관측치면 해당 관측치가 연결된 Transaction을 반환 return txRepo.findByObservationId(existingObs.id)!! } val t = obs.receivedAt val amount = obs.amount ?: return createUnmerged(obs) // 금액 없으면 병합 불가, 별도 정책 // 2) 느슨한 매칭으로 기존 거래 찾기 val candidates = txRepo.findCandidates( amount = amount, isCancel = obs.isCancel ?: false, timeMin = t - LOOSE_MATCH_MS, timeMax = t + LOOSE_MATCH_MS ) val best = candidates.maxByOrNull { matchScore(it, obs) } return if (best != null && matchScore(best, obs) >= 0.75) { mergeInto(best, obs) } else { txRepo.createFromObservation(obs) } } private fun matchScore(tx: Transaction, obs: Observation): Double { var s = 0.0 if (tx.amount == obs.amount) s += 0.5 if (tx.isCancel == (obs.isCancel ?: false)) s += 0.2 val dt = kotlin.math.abs(tx.occurredAt - obs.receivedAt) s += (1.0 - (dt.toDouble() / LOOSE_MATCH_MS)).coerceIn(0.0, 0.2) // merchant 유사도(있으면 가점) val m1 = tx.merchant?.let(::normalizeMerchant) val m2 = obs.merchant?.let(::normalizeMerchant) if (!m1.isNullOrBlank() && !m2.isNullOrBlank()) { if (m1 == m2) s += 0.2 else if (m1.contains(m2) || m2.contains(m1)) s += 0.1 } return s.coerceIn(0.0, 1.0) } private fun mergeInto(tx: Transaction, obs: Observation): Transaction { val chosen = chooseMerchant(tx, obs) val updated = tx.copy( merchant = chosen.merchant, merchantConfidence = chosen.confidence, chosenSource = chosen.source, observationIds = (tx.observationIds + obs.id).distinct(), updatedAt = System.currentTimeMillis() ) txRepo.update(updated) obsRepo.linkToTransaction(obs.id, tx.id) return updated } private data class Choice(val merchant: String?, val confidence: Double, val source: SourceType) private fun chooseMerchant(tx: Transaction, obs: Observation): Choice { val current = tx.merchant val currentC = tx.merchantConfidence val obsM = obs.merchant val obsC = obs.confidence // obs가 더 자신있고, merchant가 더 구체적이면 교체 if (!obsM.isNullOrBlank()) { if (current.isNullOrBlank()) return Choice(obsM, obsC, obs.source) if (obsC > currentC + 0.1) return Choice(obsM, obsC, obs.source) val nCur = normalizeMerchant(current) val nObs = normalizeMerchant(obsM) val curSpecific = specificityScore(nCur) val obsSpecific = specificityScore(nObs) if (obsC >= currentC - 0.05 && obsSpecific > curSpecific) { return Choice(obsM, maxOf(currentC, obsC), obs.source) } } return Choice(current, currentC, tx.chosenSource) } private fun specificityScore(m: String): Int { val len = m.length val tokens = m.split(" ").count { it.isNotBlank() } val platformOnly = Regex("""네이버페이|카카오페이|토스|쿠팡페이|이니시스|KCP""").matches(m) return (len / 5) + tokens - if (platformOnly) 2 else 0 } private fun createUnmerged(obs: Observation): Transaction { // 금액이 없으면 매칭도 어렵고 거래로서 가치가 낮을 수 있으니 // 별도 Inbox(검토함)로 보내는 정책을 추천 return txRepo.createFromObservation(obs) } } 
+9) 소스 우선순위를 “정책 객체”로 분리(유지보수 포인트)
+나중에 금융사별로 “이 pkg는 SMS가 더 정확” 같은 지식이 생기면 정책만 바꾸면 됩니다.
+interface SourcePolicy { fun preferredForMerchant(obsList: List<Observation>): Observation? } 
+초기에는 “confidence 기반”으로, 이후에는 pkg/sender별 override로 확장합니다.
+10) 중복 병합의 함정과 방어책
+• 같은 금액이 연속으로 결제되는 경우(커피 4,500원 2번) 
+• 시간 윈도우를 너무 크게 잡으면 오병합됩니다.
+• 방어: 카드결제류는 60~120초로 시작, 은행이체만 300초.
+• 취소 vs 승인이 서로 연결되어야 하는 경우 
+• 취소는 원거래를 찾아 연결(별도 링크)하는 기능이 필요할 수 있습니다.
+• 1차 MVP에서는 “취소도 별도 거래”로 저장하고, UI에서 묶어보이기만 해도 충분합니다.
+• 알림 텍스트가 그룹 요약 알림(여러 건 묶음)인 경우 
+• NotificationListener에서 EXTRA_TEXT_LINES가 여러 건일 수 있음 → Observation을 여러 개로 분할 생성해야 합니다.
+11) 추천 DB 인덱스(성능 필수)
+• Observation: rawHash unique
+• Transaction: (amount, isCancel, occurredAt) 인덱스
+• Transaction-Observation 링크 테이블: observationId 인덱스
+12) 폴백 UX까지 병합과 연결하는 방식
+• 병합된 Transaction의 merchantConfidence가 낮으면 “검토함” 탭에 쌓기
+• 사용자 수정 시: 
+• Transaction merchant 확정
+• 해당 Transaction에 연결된 Observations의 signature를 룰로 저장(재발 방지)
+원하면 다음 단계로, “실전에서 바로 쓰는” 형태로 더 내려드릴 수 있습니다.
+• 알림 그룹/요약 알림 분해 로직(특히 삼성/카카오/은행앱에서 흔함)
+• occurredAt 파싱(본문에 시각이 있을 때 우선 적용하는 안전한 파서)
+• 룰 학습 저장소(Room 기반) 스키마 및 마이그레이션 초안
+• 개인정보 마스킹(자동) 규칙과 저장 정책(옵트인) 설계
+
+아래는 “SMS + Notification 동시 수집”을 전제로, 요청하신 4가지를 Kotlin/Android 실구현 관점에서 바로 적용 가능한 수준으로 정리한 설계안입니다.
+• 알림 그룹/요약 알림 분해 로직
+• occurredAt 파싱(본문 우선, 안전한 파서)
+• 룰 학습 저장소(Room) 스키마 + 마이그레이션 초안
+• 개인정보 마스킹(자동) 규칙 + 저장 정책(옵트인)
+1) 알림 그룹/요약 알림 분해 로직
+1-1. 왜 분해가 필요한가
+은행/카드/삼성(One UI) 환경에서 아래가 흔합니다.
+• 그룹 요약(aggregate) 알림: “OOO 외 2건” 같은 summary
+• inbox 스타일: EXTRA_TEXT_LINES에 여러 건이 줄 단위로 들어감
+• MessagingStyle: 대화형 형식으로 여러 메시지가 쌓임
+팸머니는 “Observation 1개 = 거래 1개”로 두는 편이 안정적이므로, Notification 1개에서 Observation N개를 생성할 수 있어야 합니다.
+1-2. 수집 우선순위(권장)
+• EXTRA_MESSAGES (MessagingStyle)
+• EXTRA_TEXT_LINES (InboxStyle)
+• EXTRA_BIG_TEXT
+• EXTRA_TEXT
+그리고 아래 조건이면 “요약 알림일 가능성”이 높습니다.
+• Notification.FLAG_GROUP_SUMMARY 설정
+• title에 “외 N건”, “N개” 같은 집계 표현
+• 본문이 개별 거래가 아니라 “새 알림이 있습니다”류
+요약 알림은 “개별 거래를 포함하지 않는 경우”가 많아 그 자체는 저장하지 않거나 낮은 우선순위로 처리하는 것이 좋습니다.
+1-3. 구현 스켈레톤: Notification → List
+fun extractRawMessagesFromSbn(sbn: StatusBarNotification): List<RawMessage> { val n = sbn.notification val e = n.extras val pkg = sbn.packageName val postTime = sbn.postTime // 0) 그룹 요약이면 우선 분해 시도하되, 요약 자체는 기본적으로 버림(옵션) val isGroupSummary = (n.flags and Notification.FLAG_GROUP_SUMMARY) != 0 // 1) MessagingStyle: EXTRA_MESSAGES val messaging = e.getParcelableArray(Notification.EXTRA_MESSAGES) if (!messaging.isNullOrEmpty()) { val out = messaging.mapNotNull { p -> val b = p as? Bundle ?: return@mapNotNull null val text = b.getCharSequence("text")?.toString()?.trim().orEmpty() val time = b.getLong("time", postTime) if (text.isBlank()) null else RawMessage( source = SourceType.NOTIFICATION, pkg = pkg, sender = null, title = e.getCharSequence(Notification.EXTRA_TITLE)?.toString(), text = text, receivedAt = time ) } if (out.isNotEmpty()) return out } // 2) InboxStyle: EXTRA_TEXT_LINES val lines = e.getCharSequenceArray(Notification.EXTRA_TEXT_LINES) ?.map { it.toString().trim() } ?.filter { it.isNotBlank() } if (!lines.isNullOrEmpty()) { // lines 각각이 거래 1건인 경우가 많음. // 다만 라인이 너무 짧거나 요약성 라인만 있으면 fallback. val out = lines.map { line -> RawMessage( source = SourceType.NOTIFICATION, pkg = pkg, sender = null, title = e.getCharSequence(Notification.EXTRA_TITLE)?.toString(), text = line, receivedAt = postTime ) } // 그룹 요약 알림인데 lines가 “실거래”로 보이면 사용, 아니면 버림 if (!isGroupSummary || out.any { looksLikeTransactionText(it.text) }) return out } // 3) bigText/text fallback val bigText = e.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()?.trim() val text = e.getCharSequence(Notification.EXTRA_TEXT)?.toString()?.trim() val merged = listOfNotNull(bigText, text).distinct().joinToString("\n").trim() if (merged.isBlank()) return emptyList() // bigText에 여러 건이 줄바꿈으로 포함될 수 있어 2차 분해 val split = splitIfMultiTransaction(merged) val out = split.map { body -> RawMessage( source = SourceType.NOTIFICATION, pkg = pkg, sender = null, title = e.getCharSequence(Notification.EXTRA_TITLE)?.toString(), text = body, receivedAt = postTime ) } // 요약 자체를 버리고 싶으면 여기서 필터 return if (isGroupSummary) out.filter { looksLikeTransactionText(it.text) } else out } private fun looksLikeTransactionText(t: String): Boolean { // 초기에 단순 신호만: 금액 + 승인/취소/사용/출금 등 val hasAmount = Regex("""(\d{1,3}(?:,\d{3})+|\d+)\s*원""").containsMatchIn(t) val hasTrigger = Regex("""승인|결제|사용|취소|환불|출금|입금|이체""").containsMatchIn(t) return hasAmount && hasTrigger } /** * bigText가 여러 거래를 포함하는 경우를 분해. * 규칙: 빈줄 기준 / "승인" 같은 트리거 반복 / 금액 패턴 반복 등을 이용. */ private fun splitIfMultiTransaction(text: String): List<String> { val blocks = text.split(Regex("""\n\s*\n""")).map { it.trim() }.filter { it.isNotBlank() } if (blocks.size >= 2) return blocks // 한 블록인데 안에 여러 건이 섞인 경우: 트리거/금액 반복을 기준으로 절단(보수적으로) val lines = text.split("\n").map { it.trim() }.filter { it.isNotBlank() } if (lines.size <= 2) return listOf(text) val out = mutableListOf<String>() val cur = StringBuilder() for (line in lines) { val boundary = looksLikeTransactionText(line) && cur.isNotEmpty() if (boundary) { out += cur.toString().trim() cur.clear() } if (cur.isNotEmpty()) cur.append("\n") cur.append(line) } if (cur.isNotEmpty()) out += cur.toString().trim() // 분해 결과가 너무 과분해(한 글자/요약)면 원문 유지 return if (out.size >= 2 && out.all { it.length >= 8 }) out else listOf(text) } 
+운영 팁
+• “요약 알림”은 가급적 저장하지 말고, 개별 알림이 들어왔을 때만 거래를 저장하도록 하는 것이 중복/오탐을 크게 줄입니다.
+• 다만 일부 앱은 개별이 아닌 summary만 남는 경우도 있어, 위처럼 “실거래 신호가 있으면 허용”이 안전합니다.
+2) occurredAt 파싱: 본문 우선, 안전한 파서
+2-1. 설계 목표
+• 본문에 날짜/시간이 있으면 그것을 우선 사용
+• 없거나 불확실하면 receivedAt로 폴백
+• “오늘/어제” 같은 상대 표현도 최소 지원(안전하게)
+• 오탐(예: 승인번호 123456을 시각으로 착각)을 강하게 방지
+2-2. 지원 패턴(권장 MVP)
+• MM/dd HH:mm (예: 01/20 14:03)
+• yyyy-MM-dd HH:mm / yyyy.MM.dd HH:mm
+• HH:mm만 있는 경우: 날짜는 receivedAt의 날짜를 사용
+• 상대표현: 오늘 HH:mm, 어제 HH:mm
+2-3. 구현 스켈레톤
+class OccurredAtParser( private val zoneId: ZoneId = ZoneId.of("Asia/Seoul") ) { private val p1 = Regex("""(?<!\d)(\d{1,2})[./-](\d{1,2})\s+(\d{1,2}):(\d{2})(?!\d)""") // MM/dd HH:mm private val p2 = Regex("""(?<!\d)(\d{4})[./-](\d{1,2})[./-](\d{1,2})\s+(\d{1,2}):(\d{2})(?!\d)""") private val pTime = Regex("""(?<!\d)(\d{1,2}):(\d{2})(?!\d)""") private val pToday = Regex("""오늘\s*(\d{1,2}):(\d{2})""") private val pYesterday = Regex("""어제\s*(\d{1,2}):(\d{2})""") fun parse(cleanText: String, receivedAt: Long): Long { val receivedZdt = Instant.ofEpochMilli(receivedAt).atZone(zoneId) // 1) yyyy-MM-dd HH:mm p2.find(cleanText)?.let { m -> val y = m.groupValues[1].toInt() val mo = m.groupValues[2].toInt() val d = m.groupValues[3].toInt() val h = m.groupValues[4].toInt() val mi = m.groupValues[5].toInt() return safeZdt(y, mo, d, h, mi, receivedZdt)?.toInstant()?.toEpochMilli() ?: receivedAt } // 2) MM/dd HH:mm (연도는 receivedAt 연도 추정) p1.find(cleanText)?.let { m -> val mo = m.groupValues[1].toInt() val d = m.groupValues[2].toInt() val h = m.groupValues[3].toInt() val mi = m.groupValues[4].toInt() val y = receivedZdt.year // 연초에 전년도 말 거래가 들어오는 케이스 방지: 발생 시각이 receivedAt보다 너무 미래면 연도-1 시도 val z1 = safeZdt(y, mo, d, h, mi, receivedZdt) if (z1 != null) { val t1 = z1.toInstant().toEpochMilli() if (t1 > receivedAt + 2 * 24 * 3600_000L) { val z0 = safeZdt(y - 1, mo, d, h, mi, receivedZdt) return z0?.toInstant()?.toEpochMilli() ?: t1 } return t1 } } // 3) 오늘/어제 HH:mm pToday.find(cleanText)?.let { m -> val h = m.groupValues[1].toInt() val mi = m.groupValues[2].toInt() val z = receivedZdt.withHour(h).withMinute(mi).withSecond(0).withNano(0) return z.toInstant().toEpochMilli() } pYesterday.find(cleanText)?.let { m -> val h = m.groupValues[1].toInt() val mi = m.groupValues[2].toInt() val z = receivedZdt.minusDays(1).withHour(h).withMinute(mi).withSecond(0).withNano(0) return z.toInstant().toEpochMilli() } // 4) HH:mm만 있는 경우(오탐 방지: 주변에 일시/시간/승인일시 같은 라벨이 있으면 가점) val timeMatches = pTime.findAll(cleanText).toList() val chosen = chooseBestTimeToken(cleanText, timeMatches) if (chosen != null) { val h = chosen.groupValues[1].toInt() val mi = chosen.groupValues[2].toInt() // 하루 경계: 00:xx 등은 receivedAt 날짜가 다를 수 있음. 큰 차이면 +/- 1일 보정 val candidate = receivedZdt.withHour(h).withMinute(mi).withSecond(0).withNano(0) val t = candidate.toInstant().toEpochMilli() val dt = kotlin.math.abs(t - receivedAt) if (dt <= 20 * 3600_000L) return t // 20시간 이내면 수용 // receivedAt이 새벽이고 본문이 전날 밤인 경우 val minus1 = candidate.minusDays(1).toInstant().toEpochMilli() val plus1 = candidate.plusDays(1).toInstant().toEpochMilli() val best = listOf(t, minus1, plus1).minBy { kotlin.math.abs(it - receivedAt) } return best } return receivedAt } private fun safeZdt(y: Int, mo: Int, d: Int, h: Int, mi: Int, received: ZonedDateTime): ZonedDateTime? { if (mo !in 1..12 || d !in 1..31 || h !in 0..23 || mi !in 0..59) return null return try { ZonedDateTime.of(y, mo, d, h, mi, 0, 0, zoneId) } catch (_: Exception) { null }?.let { z -> // 안전장치: receivedAt 기준 +/- 45일 범위를 벗어나면 의심 val diffDays = kotlin.math.abs(Duration.between(z, received).toDays()) if (diffDays > 45) null else z } } private fun chooseBestTimeToken(text: String, ms: List<MatchResult>): MatchResult? { if (ms.isEmpty()) return null // "일시|시간|승인일시|거래시간" 주변에 가까운 HH:mm을 우선 val anchors = listOf("일시", "시간", "승인", "거래", "결제") fun score(m: MatchResult): Int { val idx = m.range.first val windowStart = (idx - 12).coerceAtLeast(0) val windowEnd = (idx + 12).coerceAtMost(text.length) val ctx = text.substring(windowStart, windowEnd) var s = 0 if (anchors.any { ctx.contains(it) }) s += 2 // 본문에 여러 HH:mm이 있을 때 “잔액” 주변은 피하고 싶음 if (ctx.contains("잔액")) s -= 2 return s } return ms.maxByOrNull(::score) } } 
+이 파서는 “오탐 방지”를 위해:
+• 숫자 앞뒤 경계(lookaround)로 승인번호 오인 감소
+• receivedAt 대비 날짜가 너무 멀면 무효
+• HH:mm만 있을 때는 라벨 근접도를 사용
+3) 룰 학습 저장소(Room) 스키마 및 마이그레이션 초안
+3-1. 학습 대상(최소 MVP)
+초기 MVP는 “패턴 → merchant 고정”만 있어도 큰 효과가 납니다.
+• signature: (pkg 또는 sender) + 핵심 텍스트(금액/숫자 제거 후 앞 40자)
+• merchant: 사용자가 확정한 사용처
+• hitCount: 얼마나 자주 맞았는지
+• updatedAt: 최신성
+추후 확장(옵션)
+• amountRange 적용(특정 금액대만 룰 적용)
+• isCancel 구분
+• “플랫폼/PG” 처리 룰
+3-2. Room 엔티티/DAO
+@Entity( tableName = "learned_rules", indices = [ Index(value = ["signature"], unique = true), Index(value = ["updatedAt"]) ] ) data class LearnedRuleEntity( @PrimaryKey val id: String, // UUID val signature: String, // unique val merchant: String, val sourceHint: String?, // pkg or sender (옵션) val hitCount: Int, val createdAt: Long, val updatedAt: Long ) @Dao interface LearnedRuleDao { @Query("SELECT * FROM learned_rules WHERE signature = :sig LIMIT 1") suspend fun find(sig: String): LearnedRuleEntity? @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insert(rule: LearnedRuleEntity) @Query(""" UPDATE learned_rules SET merchant = :merchant, hitCount = hitCount + 1, updatedAt = :updatedAt WHERE signature = :sig """) suspend fun updateHit(sig: String, merchant: String, updatedAt: Long) @Query("DELETE FROM learned_rules WHERE updatedAt < :threshold") suspend fun purgeOld(threshold: Long) } 
+3-3. DB 및 마이그레이션 초안
+v1: learned_rules만 존재
+v2: “pattern_version”, “isCancel” 등을 추가한다고 가정한 마이그레이션 예시
+@Database( entities = [LearnedRuleEntity::class], version = 2 ) abstract class AppDb : RoomDatabase() { abstract fun learnedRuleDao(): LearnedRuleDao } val MIGRATION_1_2 = object : Migration(1, 2) { override fun migrate(db: SupportSQLiteDatabase) { // 예: isCancel, patternVersion 추가 db.execSQL("ALTER TABLE learned_rules ADD COLUMN isCancel INTEGER NOT NULL DEFAULT 0") db.execSQL("ALTER TABLE learned_rules ADD COLUMN patternVersion INTEGER NOT NULL DEFAULT 1") db.execSQL("CREATE INDEX IF NOT EXISTS index_learned_rules_updatedAt ON learned_rules(updatedAt)") } } 
+운영 팁
+• 룰은 무한정 쌓이면 품질이 떨어질 수 있어, purgeOld(예: 180일) 또는 hitCount 낮은 룰 정리 권장
+• signature 생성 로직이 바뀌면 patternVersion으로 구분해 점진 전환
+4) 개인정보 마스킹(자동) 규칙과 저장 정책(옵트인)
+4-1. 저장 정책(권장)
+팸머니가 원문을 저장하는 것은 민감도가 높으므로, 아래 정책을 권장합니다.
+기본값(옵트아웃이 아니라 옵트인)
+• 기본: 원문 저장 안 함
+• 사용자 설정에서 “파싱 개선을 위한 익명화 원문 제공”에 동의한 경우만 저장
+• 저장 형태는 2단계: 
+• 로컬 저장: 디버그/품질개선용(최소 기간, 예: 7~30일)
+• 서버 전송(선택): 더 강한 동의 + 명확한 고지 + 마스킹된 텍스트만
+보관 기간
+• 로컬: 14~30일 추천
+• 서버: 30~90일 + 목적 달성 시 폐기 (정책 문구에 명시)
+사용자 권리
+• “지금까지 제공한 익명화 데이터 삭제” 버튼 제공(로컬 즉시 삭제, 서버는 요청/반영)
+4-2. 마스킹 기본 원칙
+• “원문을 그대로”는 절대 저장하지 않음
+• 필요 최소 정보만 남긴다: 파싱에 중요한 건 금액/트리거/가맹점 후보/시간 패턴이므로
+• 카드번호/계좌/전화/인증코드/주민번호 등은 강하게 마스킹
+• 사람 이름은 완전 자동이 어렵지만, **라벨 기반(받는분/예금주/입금자/홍길동님)**은 마스킹 가능
+4-3. 자동 마스킹 규칙(권장 세트)
+아래는 “오탐을 줄이면서” 강하게 보호하는 규칙입니다.
+• 전화번호
+• 01[0-9]-?\d{3,4}-?\d{4} → ***-****-****
+• 카드번호/계좌번호처럼 긴 숫자열
+• \d{10,19} 또는 \d{3,6}-\d{2,6}-\d{2,6,} 등 → 가운데 마스킹
+• 인증코드/승인번호(짧은 숫자)
+• 인증번호|OTP|승인번호 라벨 뒤 숫자는 전부 ****
+• 이름/수취인 라벨 기반
+• (받는분|수취인|예금주|입금자|송금받는분)\s*[:：]\s*[^\n]+ → 라벨 뒤 ***
+• 주소(완전 자동 어렵지만 라벨 기반 가능)
+• 주소: 뒤 라인을 ***
+금액은 파싱에 필요하므로 보통 유지하지만, 사용자가 원치 않으면 “금액도 구간화(예: 1만원대)” 옵션을 둘 수 있습니다.
+4-4. Kotlin 마스커 예시
+object PrivacyMasker { private val phone = Regex("""01\d[- ]?\d{3,4}[- ]?\d{4}""") private val longDigits = Regex("""(?<!\d)\d{10,19}(?!\d)""") private val dashedLong = Regex("""(?<!\d)\d{2,6}-(\d{2,6}-){1,3}\d{2,6}(?!\d)""") private val authLabeled = Regex("""(인증번호|OTP|승인번호)\s*[:：]?\s*\d+""") private val personLabeled = Regex("""(받는분|수취인|예금주|입금자|송금받는분)\s*[:：]\s*([^\n]+)""") private val addrLabeled = Regex("""(주소)\s*[:：]\s*([^\n]+)""") fun mask(text: String): String { var t = text // 라벨 기반 먼저(의미 있는 구조 보존) t = t.replace(personLabeled) { m -> "${m.groupValues[1]}: ***" } t = t.replace(addrLabeled) { m -> "${m.groupValues[1]}: ***" } t = t.replace(authLabeled) { m -> val label = Regex("""(인증번호|OTP|승인번호)""").find(m.value)?.value ?: "코드" "$label: ****" } // 패턴 기반 t = t.replace(phone, "***-****-****") t = t.replace(dashedLong) { maskMiddle(it.value) } t = t.replace(longDigits) { maskMiddle(it.value) } return t } private fun maskMiddle(s: String): String { // 앞 2~4 + 뒤 2~4만 남기고 가운데 마스킹 val keepHead = minOf(4, maxOf(2, s.length / 4)) val keepTail = minOf(4, maxOf(2, s.length / 4)) if (keepHead + keepTail >= s.length) return "*".repeat(s.length) val head = s.take(keepHead) val tail = s.takeLast(keepTail) return head + "*".repeat(s.length - keepHead - keepTail) + tail } } 
+4-5. 저장 시점: “파싱 실패/저신뢰”만 저장하는 것이 효율적
+옵트인한 사용자라도 모든 원문을 저장할 필요는 없습니다.
+권장:
+• confidence < 0.6 또는 “사용자가 사용처를 수정한 경우”에만 마스킹 원문 저장
+• 저장 시 pkg/sender, receivedAt, maskedBody, parsedAmount, chosenMerchant 정도만 남기기
+연결: 네 요소를 하나의 운영 루프로 묶기
+• 알림 수신 → 그룹/요약 분해 → RawMessage N개
+• 각 RawMessage에 대해 parse → occurredAt 우선 파싱
+• 병합 엔진으로 중복 제거/병합
+• 신뢰도 낮으면 폴백 UX
+• 사용자가 확정/수정하면: 
+• 룰(Room)에 upsert
+• (옵트인) 마스킹 원문 저장(저신뢰/수정 케이스만)
+원하시면, 다음 단계로 “팸머니에 바로 붙일 수 있는 패키지 구조”까지 내려드리겠습니다.
+• notification/NotificationIngestor.kt (분해 포함)
+• parser/TransactionParser.kt + parser/OccurredAtParser.kt
+• merge/MergeEngine.kt
+• learning/RuleStore(Room).kt
+• privacy/PrivacyMasker.kt
+• ui/MerchantFixBottomSheet.kt (Top3 후보 선택 UX)
+이 구성을 기준으로, 현재 팸머니 코드가 MVVM/Compose/XML 중 어느 스타일이든 큰 수정 없이 들어갑니다.

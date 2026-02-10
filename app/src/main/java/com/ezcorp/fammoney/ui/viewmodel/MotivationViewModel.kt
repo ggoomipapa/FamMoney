@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ezcorp.fammoney.data.model.*
 import com.ezcorp.fammoney.data.repository.TransactionRepository
 import com.ezcorp.fammoney.service.UserPreferences
+import com.ezcorp.fammoney.util.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -32,18 +33,27 @@ class MotivationViewModel @Inject constructor(
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
+    companion object {
+        private const val TAG = "MotivationVM"
+    }
+
     private val _uiState = MutableStateFlow(MotivationUiState())
     val uiState: StateFlow<MotivationUiState> = _uiState.asStateFlow()
 
     init {
+        AppLogger.i(TAG, "ViewModel 초기화")
         loadData()
     }
 
     private fun loadData() {
+        AppLogger.d(TAG, "동기부여 데이터 로드 시작")
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val groupId = userPreferences.getGroupId() ?: return@launch
+            val groupId = userPreferences.getGroupId() ?: run {
+                AppLogger.w(TAG, "데이터 로드 중단: groupId 없음")
+                return@launch
+            }
             val calendar = Calendar.getInstance()
             val currentYear = calendar.get(Calendar.YEAR)
             val currentMonth = calendar.get(Calendar.MONTH) + 1
@@ -141,6 +151,7 @@ class MotivationViewModel @Inject constructor(
                     investmentRecommendation = investmentRec
                 )
             }
+            AppLogger.i(TAG, "동기부여 데이터 로드 완료: level=${_uiState.value.currentLevel.title}, savingsRate=${_uiState.value.savingsRate}%, surplus=${_uiState.value.consecutiveSurplusMonths}개월, achievements=${_uiState.value.unlockedAchievements.size}개")
         }
     }
 
@@ -201,6 +212,7 @@ listOf(
     }
 
     fun refresh() {
+        AppLogger.userAction(TAG, "새로고침")
         loadData()
     }
 }

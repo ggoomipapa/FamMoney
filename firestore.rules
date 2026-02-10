@@ -1,9 +1,94 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // 임시로 모든 컬렉션 접근 허용 (SHA-1 등록 후 원래대로 복구 필요)
-    match /{document=**} {
-      allow read, write: if true;
+
+    // 인증된 사용자인지 확인하는 함수
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // 사용자 컬렉션 - 인증된 사용자만 접근
+    match /users/{userId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 그룹 컬렉션 - 인증된 사용자만 접근
+    match /groups/{groupId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 거래 관련 컬렉션 - 인증된 사용자만 접근
+    match /transactions/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /deletedTransactions/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 자녀 관련 컬렉션
+    match /children/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /childIncomes/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /childExpenses/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 용돈 컬렉션
+    match /allowances/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 학습 관련 컬렉션
+    match /learned_mappings/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /learned_deposit_patterns/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 태그 컬렉션
+    match /transaction_tags/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 저축 관련 컬렉션
+    match /savings_goals/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /savings_contributions/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 중복 관련 컬렉션
+    match /pending_duplicates/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /duplicate_rules/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 영수증 관련 컬렉션
+    match /receipt_items/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /price_history/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // 앱 업데이트 정보 - 읽기만 허용 (누구나)
+    match /app_updates/{docId} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }

@@ -17,13 +17,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.ezcorp.fammoney.data.model.BankConfig
 import com.ezcorp.fammoney.data.model.Transaction
 import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.ui.theme.ExpenseColor
 import com.ezcorp.fammoney.ui.theme.IncomeColor
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val TAG = "SharingScopeScreen"
 
 /**
  * 공유 범위 설정 화면
@@ -53,6 +57,12 @@ fun SharingScopeScreen(
     var shareAllowance by remember { mutableStateOf(currentShareAllowance) }
     var showDatePicker by remember { mutableStateOf(false) }
     var selectionMode by remember { mutableStateOf(SharingSelectionMode.DATE) }
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 공유 범위 설정 화면 진입 ==========")
+        AppLogger.d(TAG, "현재 설정 - 현금공유: $currentShareCash, 용돈공유: $currentShareAllowance, 숨김: ${currentHiddenIds.size}개")
+    }
 
     // 날짜 선택기
     if (showDatePicker) {
@@ -598,20 +608,32 @@ fun SelectableTransactionItem(
  *
  * @param currentShareCash 현재 현금 거래 공유 설정
  * @param currentShareAllowance 현재 용돈 공유 설정
- * @param onConfirm 확인 시 콜백 (날짜, 현금 공유, 용돈 공유)
+ * @param selectedBankIds 사용자가 선택한 파싱 은행 ID 목록
+ * @param currentSharedBankIds 현재 공유 설정된 은행 ID 목록
+ * @param onConfirm 확인 시 콜백 (날짜, 현금 공유, 용돈 공유, 공유할 은행 ID 목록)
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharingScopeDialog(
     currentShareCash: Boolean = true,
     currentShareAllowance: Boolean = true,
+    selectedBankIds: List<String> = emptyList(),
+    currentSharedBankIds: List<String> = emptyList(),
     onDismiss: () -> Unit,
-    onConfirm: (Timestamp?, Boolean, Boolean) -> Unit
+    onConfirm: (Timestamp?, Boolean, Boolean, List<String>) -> Unit
 ) {
     var selectedDate by remember { mutableStateOf<Timestamp?>(null) }
     var shareCashTransactions by remember { mutableStateOf(currentShareCash) }
     var shareAllowance by remember { mutableStateOf(currentShareAllowance) }
     var showDatePicker by remember { mutableStateOf(false) }
+    // 공유할 은행 ID 목록 (비어있으면 전체 공유)
+    var sharedBankIds by remember {
+        mutableStateOf(
+            if (currentSharedBankIds.isEmpty()) selectedBankIds.toSet()
+            else currentSharedBankIds.toSet()
+        )
+    }
+    val allBanks = remember { BankConfig.getDefaultBanks() }
 
     if (showDatePicker) {
         val datePickerState = rememberDatePickerState(
@@ -743,10 +765,92 @@ fun SharingScopeDialog(
                         onCheckedChange = { shareAllowance = it }
                     )
                 }
+
+                // 은행별 공유 설정 (선택한 파싱 은행이 있을 때만 표시)
+                if (selectedBankIds.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Divider()
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.AccountBalance,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "공유할 은행 선택",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "선택한 은행의 거래만 공유됩니다",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // 전체 선택/해제 버튼
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        TextButton(
+                            onClick = { sharedBankIds = selectedBankIds.toSet() }
+                        ) {
+                            Text("전체 선택", style = MaterialTheme.typography.bodySmall)
+                        }
+                        TextButton(
+                            onClick = { sharedBankIds = emptySet() }
+                        ) {
+                            Text("전체 해제", style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+
+                    // 선택한 파싱 은행 목록
+                    selectedBankIds.forEach { bankId ->
+                        val bank = allBanks.find { it.bankId == bankId }
+                        if (bank != null) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        sharedBankIds = if (sharedBankIds.contains(bankId)) {
+                                            sharedBankIds - bankId
+                                        } else {
+                                            sharedBankIds + bankId
+                                        }
+                                    }
+                                    .padding(vertical = 8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = bank.displayName,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Checkbox(
+                                    checked = sharedBankIds.contains(bankId),
+                                    onCheckedChange = { checked ->
+                                        sharedBankIds = if (checked) {
+                                            sharedBankIds + bankId
+                                        } else {
+                                            sharedBankIds - bankId
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
             }
         },
         confirmButton = {
-            Button(onClick = { onConfirm(selectedDate, shareCashTransactions, shareAllowance) }) {
+            Button(onClick = { onConfirm(selectedDate, shareCashTransactions, shareAllowance, sharedBankIds.toList()) }) {
                 Text("확인")
             }
         },

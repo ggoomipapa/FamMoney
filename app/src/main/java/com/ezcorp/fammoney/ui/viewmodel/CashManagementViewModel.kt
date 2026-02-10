@@ -8,6 +8,7 @@ import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.data.repository.TransactionRepository
 import com.ezcorp.fammoney.data.repository.UserRepository
 import com.ezcorp.fammoney.service.UserPreferences
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +34,10 @@ class CashManagementViewModel @Inject constructor(
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
+    companion object {
+        private const val TAG = "CashMgmtVM"
+    }
+
     private val _uiState = MutableStateFlow(CashManagementUiState())
     val uiState: StateFlow<CashManagementUiState> = _uiState.asStateFlow()
 
@@ -41,20 +46,26 @@ class CashManagementViewModel @Inject constructor(
     private var currentGroupId: String? = null
 
     init {
+        AppLogger.i(TAG, "ViewModel 초기화")
         loadUserInfo()
     }
 
     private fun loadUserInfo() {
+        AppLogger.d(TAG, "사용자 정보 로드 시작")
         viewModelScope.launch {
             currentUserId = userPreferences.getUserId()
             currentUserName = userPreferences.getUserName()
             currentGroupId = userPreferences.getGroupId()
+            AppLogger.d(TAG, "사용자 정보 로드 완료: userId=$currentUserId, groupId=$currentGroupId")
             loadTransactions()
         }
     }
 
     private fun loadTransactions() {
-        val groupId = currentGroupId ?: return
+        val groupId = currentGroupId ?: run {
+            AppLogger.w(TAG, "현금 거래 로드 중단: groupId 없음")
+            return
+        }
 
         viewModelScope.launch {
             val state = _uiState.value
@@ -65,6 +76,7 @@ class CashManagementViewModel @Inject constructor(
                 state.currentMonth
             ).collect { allTransactions ->
                 val cashTransactions = allTransactions.filter { it.bankId == "CASH" }
+                AppLogger.dataLoaded(TAG, "현금 거래", cashTransactions.size, "전체=${allTransactions.size}")
 
                 val totalIncome = cashTransactions
                     .filter { it.type == TransactionType.INCOME }
@@ -90,10 +102,17 @@ class CashManagementViewModel @Inject constructor(
         description: String,
         memo: String
     ) {
+        AppLogger.userAction(TAG, "현금 거래 추가", "type=$type, amount=$amount, desc=$description")
         viewModelScope.launch {
-            val userId = currentUserId ?: return@launch
+            val userId = currentUserId ?: run {
+                AppLogger.w(TAG, "현금 거래 추가 실패: userId 없음")
+                return@launch
+            }
             val userName = currentUserName ?: ""
-            val groupId = currentGroupId ?: return@launch
+            val groupId = currentGroupId ?: run {
+                AppLogger.w(TAG, "현금 거래 추가 실패: groupId 없음")
+                return@launch
+            }
 
             val transaction = Transaction(
                 groupId = groupId,
@@ -111,16 +130,20 @@ bankName = "?ê¸",
             )
 
             transactionRepository.addTransaction(transaction)
+            AppLogger.apiSuccess(TAG, "addTransaction", "현금 거래 추가 완료: $type, $amount")
         }
     }
 
     fun deleteTransaction(transactionId: String) {
+        AppLogger.userAction(TAG, "현금 거래 삭제", "transactionId=$transactionId")
         viewModelScope.launch {
             transactionRepository.deleteTransaction(transactionId)
+            AppLogger.apiSuccess(TAG, "deleteTransaction", "거래 삭제 완료: $transactionId")
         }
     }
 
     fun previousMonth() {
+        AppLogger.userAction(TAG, "이전 달 이동")
         val state = _uiState.value
         var newYear = state.currentYear
         var newMonth = state.currentMonth - 1
@@ -133,6 +156,7 @@ bankName = "?ê¸",
     }
 
     fun nextMonth() {
+        AppLogger.userAction(TAG, "다음 달 이동")
         val state = _uiState.value
         var newYear = state.currentYear
         var newMonth = state.currentMonth + 1

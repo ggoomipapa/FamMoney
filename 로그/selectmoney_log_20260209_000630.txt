@@ -1,0 +1,1627 @@
+========================================
+SelectMoney Debug Log
+========================================
+Exported: 2026-02-09 00:06:30
+Total lines: 1500
+저장 위치: /data/user/0/com.ezcorp.fammoney/cache/logs/selectmoney_log_20260209_000630.txt
+========================================
+
+[2026-02-08 21:13:49.315] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:13:49.315] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:13:49.316] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:13:50.240] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:13:50.240] [D] TxNotificationService:   패키지: com.nooriolife.app
+[2026-02-08 21:13:50.240] [D] TxNotificationService:   title: 앞문 우측
+[2026-02-08 21:13:50.240] [D] TxNotificationService:   text: 움직임 감지됨 (존 2)
+[2026-02-08 21:13:50.242] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:13:50.245] [D] TxNotificationService: 알림 수신 - 패키지: com.nooriolife.app
+[2026-02-08 21:13:50.245] [D] TxNotificationService: 알림 텍스트: 앞문 우측 움직임 감지됨 (존 2)
+[2026-02-08 21:13:50.246] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:13:50.247] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:13:50.251] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:13:50.253] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:13:50.256] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:13:50.256] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:13:50.256] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:13:50.257] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:13:50.257] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:13:50.257] [D] TxNotificationService: 패키지명 'com.nooriolife.app'과 매칭되는 은행 없음
+[2026-02-08 21:13:50.257] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:13:50.257] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:13:50.258] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:14:01.730] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:14:01.731] [D] TxNotificationService:   패키지: com.android.systemui
+[2026-02-08 21:14:01.731] [D] TxNotificationService:   title: 충전 중 (1분 후 충전완료)
+[2026-02-08 21:14:01.731] [D] TxNotificationService:   text: 99% (1분 후 충전완료)
+[2026-02-08 21:14:01.731] [D] TxNotificationService:   bigText: 99% (1분 후 충전완료)
+[2026-02-08 21:14:01.732] [D] TxNotificationService: 알림 수신 - 패키지: com.android.systemui
+[2026-02-08 21:14:01.732] [D] TxNotificationService: 알림 텍스트: 충전 중 (1분 후 충전완료) 99% (1분 후 충전완료) 99% (1분 후 충전완료)
+[2026-02-08 21:14:01.733] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:14:01.736] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:14:01.739] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:14:01.741] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:14:01.742] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:14:01.742] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:14:01.742] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:14:01.742] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:14:01.742] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:14:01.742] [D] TxNotificationService: 패키지명 'com.android.systemui'과 매칭되는 은행 없음
+[2026-02-08 21:14:01.742] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:14:01.742] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:14:01.743] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:19:07.955] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:19:07.955] [D] TxNotificationService:   패키지: org.telegram.messenger
+[2026-02-08 21:19:07.955] [D] TxNotificationService:   title: DevPilot
+[2026-02-08 21:19:07.955] [D] TxNotificationService:   text: 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: talktalkreader
+파일: batch_done.zip
+크기: 0.0MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_211901_batch_done.zip
+[2026-02-08 21:19:07.956] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:19:07.958] [D] TxNotificationService: 알림 수신 - 패키지: org.telegram.messenger
+[2026-02-08 21:19:07.958] [D] TxNotificationService: 알림 텍스트: DevPilot 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: talktalkreader
+파일: batch_done.zip
+크기: 0.0MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_211901_batch_done.zip
+[2026-02-08 21:19:07.959] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:19:07.960] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:19:07.962] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:19:07.963] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:19:07.963] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:19:07.964] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:19:07.964] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:19:07.964] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:19:07.964] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:19:07.964] [D] TxNotificationService: 패키지명 'org.telegram.messenger'과 매칭되는 은행 없음
+[2026-02-08 21:19:07.964] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:19:07.964] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:19:07.964] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:19:08.314] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:19:08.315] [D] TxNotificationService:   패키지: com.android.systemui
+[2026-02-08 21:19:08.315] [D] TxNotificationService:   title: Edge lighting
+[2026-02-08 21:19:08.315] [D] TxNotificationService:   text: 
+[2026-02-08 21:19:08.315] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:19:08.317] [D] TxNotificationService: 알림 수신 - 패키지: com.android.systemui
+[2026-02-08 21:19:08.318] [D] TxNotificationService: 알림 텍스트: Edge lighting
+[2026-02-08 21:19:08.320] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:19:08.321] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:19:08.322] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:19:08.323] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:19:08.324] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:19:08.324] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:19:08.325] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:19:08.325] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:19:08.325] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:19:08.325] [D] TxNotificationService: 패키지명 'com.android.systemui'과 매칭되는 은행 없음
+[2026-02-08 21:19:08.325] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:19:08.326] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:19:08.326] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:20:06.691] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:20:06.691] [D] TxNotificationService:   패키지: com.kbstar.kbbank
+[2026-02-08 21:20:06.691] [D] TxNotificationService:   title: 
+[2026-02-08 21:20:06.691] [D] TxNotificationService:   text: 
+[2026-02-08 21:20:06.691] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:20:06.691] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.kbstar.kbbank
+[2026-02-08 21:20:06.711] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:20:06.711] [D] TxNotificationService:   패키지: com.kbstar.kbbank
+[2026-02-08 21:20:06.711] [D] TxNotificationService:   title: 입금 1,995원
+[2026-02-08 21:20:06.712] [D] TxNotificationService:   text: 김*성님 02/08 21:20 267301-**-***682 KB체크할인 카드입금(    1,995 잔액186,489,278
+[2026-02-08 21:20:06.712] [D] TxNotificationService:   bigText: 김*성님 02/08 21:20 267301-**-***682 KB체크할인 카드입금(    1,995 잔액186,489,278
+[2026-02-08 21:20:06.713] [D] TxNotificationService: 알림 수신 - 패키지: com.kbstar.kbbank
+[2026-02-08 21:20:06.713] [D] TxNotificationService: 알림 텍스트: 입금 1,995원 김*성님 02/08 21:20 267301-**-***682 KB체크할인 카드입금(    1,995 잔액186,489,278 김*성님 02/08 21:20 267301-**-***682 KB체크할인 카드입금(    1,995 잔액186,489,278
+[2026-02-08 21:20:06.713] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:06.714] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:06.716] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:20:06.718] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:06.719] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:20:06.719] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:20:06.719] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:20:06.719] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:20:06.719] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:20:06.719] [D] TxNotificationService: 매칭된 은행: KB국민
+[2026-02-08 21:20:06.719] [D] NotificationParser: ========== 파싱 시작 ==========
+[2026-02-08 21:20:06.719] [D] NotificationParser: 패키지: com.kbstar.kbbank
+[2026-02-08 21:20:06.719] [D] NotificationParser: 알림 텍스트: 입금 1,995원 김*성님 02/08 21:20 267301-**-***682 KB체크할인 카드입금(    1,995 잔액186,489,278 김*성님 02/08 21:20 267301-**-***682 KB체크할인 카드입금(    1,995 잔액186,489,278
+[2026-02-08 21:20:06.720] [D] NotificationParser: 선택된 은행 수: 3
+[2026-02-08 21:20:06.720] [D] NotificationParser: 매칭된 은행: KB국민 (bankId=kb_kookmin)
+[2026-02-08 21:20:06.720] [D] NotificationParser: parseWithBankConfig 시작: bank=KB국민
+[2026-02-08 21:20:06.720] [D] NotificationParser: 금액 추출 시작
+[2026-02-08 21:20:06.722] [D] NotificationParser: 국내 금액 패턴 매칭: 1995원 → 1995원 (패턴 인덱스: 1)
+[2026-02-08 21:20:06.722] [D] NotificationParser: 금액 추출 성공: amount=1995, 해외거래=false
+[2026-02-08 21:20:06.722] [D] NotificationParser: 거래 유형 판별 시작
+[2026-02-08 21:20:06.723] [D] NotificationParser: 유형 판별: INCOME (키워드='입금' @0 vs '' @2147483647)
+[2026-02-08 21:20:06.723] [D] NotificationParser: 거래 유형 판별: INCOME
+[2026-02-08 21:20:06.724] [D] NotificationParser: 입금 거래 - 입금사유/송금인 추출 시작
+[2026-02-08 21:20:06.725] [D] NotificationParser: 입금사유: 'KB체크할인', 송금인: '카드'
+[2026-02-08 21:20:06.725] [D] NotificationParser: 입금 사유 키워드 매칭: 'KB체크할인' (confidence=0.9)
+[2026-02-08 21:20:06.725] [D] NotificationParser: 계좌번호 추출: ***682
+[2026-02-08 21:20:06.755] [I] NotificationParser: ========== 파싱 완료 ==========
+[2026-02-08 21:20:06.755] [I] NotificationParser: 결과: amount=1995원, type=INCOME, bank=KB국민
+[2026-02-08 21:20:06.758] [I] NotificationParser:   merchant='KB체크할인', sender='카드', confidence=0.9
+[2026-02-08 21:20:06.759] [I] NotificationParser:   후보: 
+[2026-02-08 21:20:06.759] [D] TxNotificationService: 파싱 성공 - 금액: 1995, 유형: INCOME, 가맹점: KB체크할인, 송금자: 카드
+[2026-02-08 21:20:06.763] [D] TxNotificationService: 파싱에서 상대방 이름 확보: '카드'
+[2026-02-08 21:20:06.764] [D] TxNotificationService: 카테고리 분류 건너뜀 - type: INCOME, displayName: '카드'
+[2026-02-08 21:20:06.764] [D] TxNotificationService: 활성 태그 없음
+[2026-02-08 21:20:06.765] [D] TxNotificationService: 고액 기준 금액: 1000000원, 거래 금액: 1995원, 확인 필요: false
+[2026-02-08 21:20:06.765] [D] TxNotificationService: ===== Transaction 객체 생성 =====
+[2026-02-08 21:20:06.765] [D] TxNotificationService:   groupId: IbLSboMDJvQGsIUrcGRd
+[2026-02-08 21:20:06.766] [D] TxNotificationService:   userId: Vy3Zrw1Wm6xCFa9bf66x, userName: 꿈이파파
+[2026-02-08 21:20:06.766] [D] TxNotificationService:   type: INCOME, amount: 1995
+[2026-02-08 21:20:06.766] [D] TxNotificationService:   bankId: kb_kookmin, bankName: KB국민
+[2026-02-08 21:20:06.766] [D] TxNotificationService:   merchantName: '카드', category: ''
+[2026-02-08 21:20:06.766] [D] TxNotificationService:   source: NOTIFICATION, tagId: '', tagName: ''
+[2026-02-08 21:20:06.766] [D] TxNotificationService:   isConfirmed: true
+[2026-02-08 21:20:06.766] [D] TxNotificationService: 신뢰도: 0.9, 후보 수: 0
+[2026-02-08 21:20:06.766] [D] TransactionRepo: API 호출 시작: addTransactionAndReturn params=amount=1995, bank=KB국민
+[2026-02-08 21:20:06.929] [D] TransactionRepo: getTransactionsByMonth: 전체 231건 중 66건 필터됨
+[2026-02-08 21:20:06.930] [I] MainViewModel: 거래내역 로드 완료: 66건 (수입: 202575원, 지출: 2605332원)
+[2026-02-08 21:20:07.010] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:20:07.010] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 21:20:07.010] [D] TxNotificationService:   title: 
+[2026-02-08 21:20:07.010] [D] TxNotificationService:   text: 
+[2026-02-08 21:20:07.010] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:20:07.011] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 21:20:07.026] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:20:07.027] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 21:20:07.027] [D] TxNotificationService:   title: 읽은 알림 7개
+[2026-02-08 21:20:07.027] [D] TxNotificationService:   text: 일반 7개
+[2026-02-08 21:20:07.027] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:20:07.028] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 21:20:07.028] [D] TxNotificationService: 알림 텍스트: 읽은 알림 7개 일반 7개
+[2026-02-08 21:20:07.029] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:07.029] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:07.031] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:20:07.032] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:07.039] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:20:07.039] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:20:07.039] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:20:07.039] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:20:07.039] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:20:07.039] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 21:20:07.039] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:20:07.039] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:20:07.040] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:20:07.184] [I] TransactionRepo: API 호출 성공: addTransactionAndReturn result=id=7Y3G5bFmEencVNTqJavk
+[2026-02-08 21:20:07.184] [D] TxNotificationService: 거래 저장 완료 - ID: 7Y3G5bFmEencVNTqJavk, 금액: 1995
+[2026-02-08 21:20:07.185] [D] DuplicateDetection: 중복 검사 시작 - transactionId: 7Y3G5bFmEencVNTqJavk, groupId: IbLSboMDJvQGsIUrcGRd, userId: Vy3Zrw1Wm6xCFa9bf66x, amount: 1995, timeWindow: 3분
+[2026-02-08 21:20:07.185] [D] TransactionRepo: API 호출 시작: findRecentDuplicateCandidates params=amount=1995, within=3분
+[2026-02-08 21:20:07.216] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:20:07.216] [D] TxNotificationService:   패키지: com.android.systemui
+[2026-02-08 21:20:07.216] [D] TxNotificationService:   title: Edge lighting
+[2026-02-08 21:20:07.216] [D] TxNotificationService:   text: 
+[2026-02-08 21:20:07.216] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:20:07.217] [D] TxNotificationService: 알림 수신 - 패키지: com.android.systemui
+[2026-02-08 21:20:07.217] [D] TxNotificationService: 알림 텍스트: Edge lighting
+[2026-02-08 21:20:07.217] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:07.218] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:07.359] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:20:07.360] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:20:07.361] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:20:07.361] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:20:07.362] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:20:07.362] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:20:07.362] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:20:07.362] [D] TxNotificationService: 패키지명 'com.android.systemui'과 매칭되는 은행 없음
+[2026-02-08 21:20:07.362] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:20:07.362] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:20:07.362] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:20:07.513] [I] TransactionRepo: API 호출 성공: findRecentDuplicateCandidates result=0건 발견
+[2026-02-08 21:20:07.513] [D] DuplicateDetection: 중복 후보 조회 결과 - 발견: 0건
+[2026-02-08 21:20:07.513] [D] DuplicateDetection: 중복 없음 - 정상 저장 진행
+[2026-02-08 21:20:07.513] [D] TxNotificationService: 중복 검사 결과: com.ezcorp.fammoney.service.DuplicateCheckResult$NoDuplicate@97f22b4
+[2026-02-08 21:20:07.513] [D] TxNotificationService: 거래 유지됨 - 중복 아님 또는 유지 규칙
+[2026-02-08 21:20:07.513] [D] TxNotificationService: ===== 목표 저축 자동 입금 처리 시작 =====
+[2026-02-08 21:20:07.514] [D] TxNotificationService:   금액: 1995원, 송금자: '카드'
+[2026-02-08 21:20:07.514] [D] TxNotificationService:   계좌번호: '***682', 은행: 'KB국민'
+[2026-02-08 21:20:07.514] [D] TxNotificationService:   그룹ID: 'IbLSboMDJvQGsIUrcGRd'
+[2026-02-08 21:20:07.514] [D] TxNotificationService:   원본텍스트: '입금 1,995원 김*성님 02/08 21:20 267301-**-***682 KB체크할인 카드입금(    1,995 잔액186,489,278 김*성님 02/08 21:20 267301-**-***682 KB체크할인 카드입금(    1,995 잔액186,489,278'
+[2026-02-08 21:20:07.520] [D] TxNotificationService: 그룹 멤버 수: 2
+[2026-02-08 21:20:07.520] [D] TxNotificationService:   멤버[0]: 꿈이파파 (ID: Vy3Zrw1Wm6xCFa9bf66x)
+[2026-02-08 21:20:07.520] [D] TxNotificationService:   멤버[1]: 꿈이마마 (ID: a0ptOAaxy0CqTf8XBkLQ)
+[2026-02-08 21:20:07.520] [I] SavingsAutoDeposit: processDepositNotification 시작: amount=1995, senderName=카드, accountNumber=***682, groupId=IbLSboMDJvQGsIUrcGRd
+[2026-02-08 21:20:07.521] [D] SavingsGoalRepo: getAutoDepositEnabledGoals: groupId=IbLSboMDJvQGsIUrcGRd
+[2026-02-08 21:20:07.664] [D] SavingsGoalRepo: getAutoDepositEnabledGoals: found 0 auto-deposit goals
+[2026-02-08 21:20:07.664] [D] SavingsAutoDeposit: 자동입금 활성화된 목표 없음, NotApplicable 반환
+[2026-02-08 21:20:07.664] [D] TxNotificationService: 자동 입금 처리 결과 수: 1
+[2026-02-08 21:20:07.664] [D] TxNotificationService: [NotApplicable] 해당하는 저축 목표 없음
+[2026-02-08 21:22:27.925] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:22:27.925] [D] TxNotificationService:   패키지: com.kbcard.cxh.appcard
+[2026-02-08 21:22:27.925] [D] TxNotificationService:   title: KB Pay
+[2026-02-08 21:22:27.926] [D] TxNotificationService:   text: KB국민카드4045승인
+김*성님
+34,200원 일시불
+02/08 21:22
+쿠팡(쿠페이)
+누적2,082,814원
+[2026-02-08 21:22:27.926] [D] TxNotificationService:   bigText: KB국민카드4045승인
+김*성님
+34,200원 일시불
+02/08 21:22
+쿠팡(쿠페이)
+누적2,082,814원
+[2026-02-08 21:22:27.935] [D] TxNotificationService: 알림 수신 - 패키지: com.kbcard.cxh.appcard
+[2026-02-08 21:22:27.935] [D] TxNotificationService: 알림 텍스트: KB Pay KB국민카드4045승인
+김*성님
+34,200원 일시불
+02/08 21:22
+쿠팡(쿠페이)
+누적2,082,814원 KB국민카드4045승인
+김*성님
+34,200원 일시불
+02/08 21:22
+쿠팡(쿠페이)
+누적2,082,814원
+[2026-02-08 21:22:27.936] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:27.936] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:27.947] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:22:27.949] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:27.949] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:22:27.949] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:22:27.950] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:22:27.950] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:22:27.950] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:22:27.950] [D] TxNotificationService: 매칭된 은행: KB국민카드
+[2026-02-08 21:22:27.950] [D] NotificationParser: ========== 파싱 시작 ==========
+[2026-02-08 21:22:27.950] [D] NotificationParser: 패키지: com.kbcard.cxh.appcard
+[2026-02-08 21:22:27.950] [D] NotificationParser: 알림 텍스트: KB Pay KB국민카드4045승인
+김*성님
+34,200원 일시불
+02/08 21:22
+쿠팡(쿠페이)
+누적2,082,814원 KB국민카드4045승인
+김*성님
+34,200원 일시불
+02/08 21:22
+쿠팡(쿠페이)
+누적2,082,814원
+[2026-02-08 21:22:27.950] [D] NotificationParser: 선택된 은행 수: 3
+[2026-02-08 21:22:27.950] [D] NotificationParser: 매칭된 은행: KB국민카드 (bankId=kb_card)
+[2026-02-08 21:22:27.950] [D] NotificationParser: parseWithBankConfig 시작: bank=KB국민카드
+[2026-02-08 21:22:27.950] [D] NotificationParser: 금액 추출 시작
+[2026-02-08 21:22:27.952] [D] NotificationParser: 국내 금액 패턴 매칭: 34200원 → 34200원 (패턴 인덱스: 3)
+[2026-02-08 21:22:27.952] [D] NotificationParser: 금액 추출 성공: amount=34200, 해외거래=false
+[2026-02-08 21:22:27.952] [D] NotificationParser: 거래 유형 판별 시작
+[2026-02-08 21:22:27.953] [D] NotificationParser: 유형 판별: EXPENSE (키워드='승인' @17 vs '' @2147483647)
+[2026-02-08 21:22:27.953] [D] NotificationParser: 거래 유형 판별: EXPENSE
+[2026-02-08 21:22:27.953] [D] NotificationParser: 출금 거래 - N-best 가맹점 추출 시작
+[2026-02-08 21:22:27.953] [D] NotificationParser: 전처리된 텍스트: KB Pay KB국민카드4045승인
+김*성님
+34,200원 일시불
+02/08 21:22
+쿠팡(쿠페이)
+누적2,082,814원 KB국민카드4045...
+[2026-02-08 21:22:27.983] [D] NotificationParser: 학습 규칙 조회: signature=unknown|kb pay kb국민카..., 결과='쿠팡' (hitCount=3)
+[2026-02-08 21:22:27.984] [I] NotificationParser: 학습 규칙 적용: merchant='쿠팡', userConfirmed=true, confidence=0.95
+[2026-02-08 21:22:27.984] [I] NotificationParser: ========== 파싱 완료 ==========
+[2026-02-08 21:22:27.984] [I] NotificationParser: 결과: amount=34200원, type=EXPENSE, bank=KB국민카드
+[2026-02-08 21:22:27.984] [I] NotificationParser:   merchant='쿠팡', sender='', confidence=0.95
+[2026-02-08 21:22:27.985] [I] NotificationParser:   후보: 쿠팡
+[2026-02-08 21:22:27.985] [D] TxNotificationService: 파싱 성공 - 금액: 34200, 유형: EXPENSE, 가맹점: 쿠팡, 송금자: 
+[2026-02-08 21:22:27.985] [D] TxNotificationService: 파싱에서 상대방 이름 확보: '쿠팡'
+[2026-02-08 21:22:27.985] [D] TxNotificationService: AI 자동 카테고리 분류 시도 - 가맹점: '쿠팡', 금액: 34200
+[2026-02-08 21:22:27.986] [D] AIFeature: autoCategorize 호출: merchantName=쿠팡, amount=34200
+[2026-02-08 21:22:27.986] [D] LocalCategorization: categorize: merchantName='쿠팡' → keyword='쿠팡' → category='ONLINE_SHOPPING'
+[2026-02-08 21:22:27.986] [D] AIFeature: autoCategorize 결과: category=ONLINE_SHOPPING, confidence=0.85, reason=키워드 매칭: 쿠팡
+[2026-02-08 21:22:27.986] [D] TxNotificationService: AI 카테고리 분류 결과 - 카테고리: 'ONLINE_SHOPPING', 신뢰도: 0.85
+[2026-02-08 21:22:27.986] [D] TxNotificationService: 카테고리 적용됨: 'ONLINE_SHOPPING' (신뢰도 >= 0.5)
+[2026-02-08 21:22:27.987] [D] TxNotificationService: 활성 태그 없음
+[2026-02-08 21:22:27.987] [D] TxNotificationService: 고액 기준 금액: 1000000원, 거래 금액: 34200원, 확인 필요: false
+[2026-02-08 21:22:27.987] [D] TxNotificationService: ===== Transaction 객체 생성 =====
+[2026-02-08 21:22:27.987] [D] TxNotificationService:   groupId: IbLSboMDJvQGsIUrcGRd
+[2026-02-08 21:22:27.987] [D] TxNotificationService:   userId: Vy3Zrw1Wm6xCFa9bf66x, userName: 꿈이파파
+[2026-02-08 21:22:27.987] [D] TxNotificationService:   type: EXPENSE, amount: 34200
+[2026-02-08 21:22:27.987] [D] TxNotificationService:   bankId: kb_card, bankName: KB국민카드
+[2026-02-08 21:22:27.987] [D] TxNotificationService:   merchantName: '쿠팡', category: 'ONLINE_SHOPPING'
+[2026-02-08 21:22:27.987] [D] TxNotificationService:   source: NOTIFICATION, tagId: '', tagName: ''
+[2026-02-08 21:22:27.987] [D] TxNotificationService:   isConfirmed: true
+[2026-02-08 21:22:27.988] [D] TxNotificationService: 신뢰도: 0.95, 후보 수: 1
+[2026-02-08 21:22:27.988] [D] TransactionRepo: API 호출 시작: addTransactionAndReturn params=amount=34200, bank=KB국민카드
+[2026-02-08 21:22:28.171] [D] TransactionRepo: getTransactionsByMonth: 전체 232건 중 67건 필터됨
+[2026-02-08 21:22:28.176] [I] MainViewModel: 거래내역 로드 완료: 67건 (수입: 202575원, 지출: 2639532원)
+[2026-02-08 21:22:28.307] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:22:28.307] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 21:22:28.307] [D] TxNotificationService:   title: 
+[2026-02-08 21:22:28.307] [D] TxNotificationService:   text: 
+[2026-02-08 21:22:28.308] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:22:28.308] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 21:22:28.310] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:22:28.310] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 21:22:28.310] [D] TxNotificationService:   title: 읽은 알림 7개
+[2026-02-08 21:22:28.310] [D] TxNotificationService:   text: 일반 7개
+[2026-02-08 21:22:28.310] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:22:28.312] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 21:22:28.312] [D] TxNotificationService: 알림 텍스트: 읽은 알림 7개 일반 7개
+[2026-02-08 21:22:28.312] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:28.313] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:28.324] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:22:28.325] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:28.326] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:22:28.326] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:22:28.326] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:22:28.326] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:22:28.326] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:22:28.326] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 21:22:28.326] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:22:28.327] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:22:28.327] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:22:28.408] [I] TransactionRepo: API 호출 성공: addTransactionAndReturn result=id=cBvfalO66QXYhOdI3czx
+[2026-02-08 21:22:28.408] [D] TxNotificationService: 거래 저장 완료 - ID: cBvfalO66QXYhOdI3czx, 금액: 34200
+[2026-02-08 21:22:28.408] [D] DuplicateDetection: 중복 검사 시작 - transactionId: cBvfalO66QXYhOdI3czx, groupId: IbLSboMDJvQGsIUrcGRd, userId: Vy3Zrw1Wm6xCFa9bf66x, amount: 34200, timeWindow: 3분
+[2026-02-08 21:22:28.409] [D] TransactionRepo: API 호출 시작: findRecentDuplicateCandidates params=amount=34200, within=3분
+[2026-02-08 21:22:28.567] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:22:28.567] [D] TxNotificationService:   패키지: com.android.systemui
+[2026-02-08 21:22:28.567] [D] TxNotificationService:   title: Edge lighting
+[2026-02-08 21:22:28.567] [D] TxNotificationService:   text: 
+[2026-02-08 21:22:28.567] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:22:28.568] [D] TxNotificationService: 알림 수신 - 패키지: com.android.systemui
+[2026-02-08 21:22:28.569] [D] TxNotificationService: 알림 텍스트: Edge lighting
+[2026-02-08 21:22:28.569] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:28.570] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:28.576] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:22:28.577] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:22:28.578] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:22:28.578] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:22:28.578] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:22:28.578] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:22:28.579] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:22:28.579] [D] TxNotificationService: 패키지명 'com.android.systemui'과 매칭되는 은행 없음
+[2026-02-08 21:22:28.579] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:22:28.579] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:22:28.579] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:22:28.834] [I] TransactionRepo: API 호출 성공: findRecentDuplicateCandidates result=0건 발견
+[2026-02-08 21:22:28.835] [D] DuplicateDetection: 중복 후보 조회 결과 - 발견: 0건
+[2026-02-08 21:22:28.835] [D] DuplicateDetection: 중복 없음 - 정상 저장 진행
+[2026-02-08 21:22:28.835] [D] TxNotificationService: 중복 검사 결과: com.ezcorp.fammoney.service.DuplicateCheckResult$NoDuplicate@97f22b4
+[2026-02-08 21:22:28.835] [D] TxNotificationService: 거래 유지됨 - 중복 아님 또는 유지 규칙
+[2026-02-08 21:49:13.872] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:49:13.873] [D] TxNotificationService:   패키지: com.google.android.googlequicksearchbox
+[2026-02-08 21:49:13.873] [D] TxNotificationService:   title: 
+[2026-02-08 21:49:13.873] [D] TxNotificationService:   text: 
+[2026-02-08 21:49:13.873] [D] TxNotificationService:   bigText: 
+[2026-02-08 21:49:13.875] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.google.android.googlequicksearchbox
+[2026-02-08 21:49:13.898] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 21:49:13.898] [D] TxNotificationService:   패키지: com.google.android.googlequicksearchbox
+[2026-02-08 21:49:13.898] [D] TxNotificationService:   title: 내일 온도: 4° · 오늘보다 6° 높음
+[2026-02-08 21:49:13.898] [D] TxNotificationService:   text: 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 21:49:13.898] [D] TxNotificationService:   bigText: 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 21:49:13.932] [D] TxNotificationService: 알림 수신 - 패키지: com.google.android.googlequicksearchbox
+[2026-02-08 21:49:13.932] [D] TxNotificationService: 알림 텍스트: 내일 온도: 4° · 오늘보다 6° 높음 오늘보다 6° 높음 · 전체 일기예보 확인 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 21:49:13.937] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:49:13.939] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:49:13.970] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 21:49:13.973] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 21:49:13.974] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 21:49:13.974] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 21:49:13.974] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:49:13.974] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 21:49:13.974] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 21:49:13.974] [D] TxNotificationService: 패키지명 'com.google.android.googlequicksearchbox'과 매칭되는 은행 없음
+[2026-02-08 21:49:13.974] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 21:49:13.975] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 21:49:13.975] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 22:25:13.521] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 22:25:13.522] [D] TxNotificationService:   패키지: com.google.android.googlequicksearchbox
+[2026-02-08 22:25:13.522] [D] TxNotificationService:   title: 
+[2026-02-08 22:25:13.523] [D] TxNotificationService:   text: 
+[2026-02-08 22:25:13.523] [D] TxNotificationService:   bigText: 
+[2026-02-08 22:25:13.524] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.google.android.googlequicksearchbox
+[2026-02-08 22:25:13.526] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 22:25:13.527] [D] TxNotificationService:   패키지: com.google.android.googlequicksearchbox
+[2026-02-08 22:25:13.527] [D] TxNotificationService:   title: 내일 온도: 4° · 오늘보다 6° 높음
+[2026-02-08 22:25:13.527] [D] TxNotificationService:   text: 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 22:25:13.527] [D] TxNotificationService:   bigText: 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 22:25:13.528] [D] TxNotificationService: 알림 수신 - 패키지: com.google.android.googlequicksearchbox
+[2026-02-08 22:25:13.528] [D] TxNotificationService: 알림 텍스트: 내일 온도: 4° · 오늘보다 6° 높음 오늘보다 6° 높음 · 전체 일기예보 확인 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 22:25:13.529] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 22:25:13.530] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 22:25:13.531] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 22:25:13.533] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 22:25:13.533] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 22:25:13.534] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 22:25:13.534] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 22:25:13.534] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 22:25:13.534] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 22:25:13.535] [D] TxNotificationService: 패키지명 'com.google.android.googlequicksearchbox'과 매칭되는 은행 없음
+[2026-02-08 22:25:13.535] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 22:25:13.535] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 22:25:13.536] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:01:13.312] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:01:13.312] [D] TxNotificationService:   패키지: com.google.android.googlequicksearchbox
+[2026-02-08 23:01:13.312] [D] TxNotificationService:   title: 
+[2026-02-08 23:01:13.312] [D] TxNotificationService:   text: 
+[2026-02-08 23:01:13.312] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:01:13.312] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.google.android.googlequicksearchbox
+[2026-02-08 23:01:13.327] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:01:13.327] [D] TxNotificationService:   패키지: com.google.android.googlequicksearchbox
+[2026-02-08 23:01:13.327] [D] TxNotificationService:   title: 내일 온도: 4° · 오늘보다 6° 높음
+[2026-02-08 23:01:13.327] [D] TxNotificationService:   text: 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 23:01:13.327] [D] TxNotificationService:   bigText: 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 23:01:13.328] [D] TxNotificationService: 알림 수신 - 패키지: com.google.android.googlequicksearchbox
+[2026-02-08 23:01:13.328] [D] TxNotificationService: 알림 텍스트: 내일 온도: 4° · 오늘보다 6° 높음 오늘보다 6° 높음 · 전체 일기예보 확인 오늘보다 6° 높음 · 전체 일기예보 확인
+[2026-02-08 23:01:13.329] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:01:13.330] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:01:13.333] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:01:13.334] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:01:13.336] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:01:13.337] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:01:13.337] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:01:13.337] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:01:13.337] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:01:13.338] [D] TxNotificationService: 패키지명 'com.google.android.googlequicksearchbox'과 매칭되는 은행 없음
+[2026-02-08 23:01:13.338] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:01:13.338] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:01:13.338] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:06:27.678] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:06:27.679] [D] TxNotificationService:   패키지: com.nooriolife.app
+[2026-02-08 23:06:27.679] [D] TxNotificationService:   title: 앞문 우측
+[2026-02-08 23:06:27.679] [D] TxNotificationService:   text: 움직임 감지됨 (존 1|존 2)
+[2026-02-08 23:06:27.684] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:06:27.685] [D] TxNotificationService: 알림 수신 - 패키지: com.nooriolife.app
+[2026-02-08 23:06:27.686] [D] TxNotificationService: 알림 텍스트: 앞문 우측 움직임 감지됨 (존 1|존 2)
+[2026-02-08 23:06:27.687] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:06:27.687] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:06:27.689] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:06:27.690] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:06:27.691] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:06:27.692] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:06:27.692] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:06:27.692] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:06:27.692] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:06:27.692] [D] TxNotificationService: 패키지명 'com.nooriolife.app'과 매칭되는 은행 없음
+[2026-02-08 23:06:27.692] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:06:27.693] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:06:27.696] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.735] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:11.735] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.736] [D] TxNotificationService:   title: 20260208_211901_batch_done.zip
+[2026-02-08 23:13:11.736] [D] TxNotificationService:   text: Downloading...
+[2026-02-08 23:13:11.736] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:11.751] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.751] [D] TxNotificationService: 알림 텍스트: 20260208_211901_batch_done.zip Downloading...
+[2026-02-08 23:13:11.752] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:11.752] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.752] [D] TxNotificationService:   title: 20260208_145154_files_package.zip
+[2026-02-08 23:13:11.752] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.752] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:11.755] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.755] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.757] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:11.757] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.757] [D] TxNotificationService:   title: 20260208_151420_batch1.zip
+[2026-02-08 23:13:11.757] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.757] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:11.758] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.758] [D] TxNotificationService: 알림 텍스트: 20260208_145154_files_package.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.758] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.758] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.758] [D] TxNotificationService: 알림 텍스트: 20260208_151420_batch1.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.758] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.758] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.758] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.759] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:13:11.760] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:13:11.760] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:11.760] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.760] [D] TxNotificationService:   title: 20260208_151426_batch2.zip
+[2026-02-08 23:13:11.760] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.760] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:11.761] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:13:11.761] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:11.762] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.762] [D] TxNotificationService:   title: 20260208_151430_batch3.zip
+[2026-02-08 23:13:11.763] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.763] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:11.764] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:11.764] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.762] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.765] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.764] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.765] [D] TxNotificationService:   title: 20260208_185559_batch2_bridge.zip
+[2026-02-08 23:13:11.765] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.765] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:11.766] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.766] [D] TxNotificationService: 알림 텍스트: 20260208_185559_batch2_bridge.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.766] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.766] [D] TxNotificationService: 알림 텍스트: 20260208_151430_batch3.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.766] [D] TxNotificationService: 알림 텍스트: 20260208_151426_batch2.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:13:11.767] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.767] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.767] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:13:11.768] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:13:11.768] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:13:11.769] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.769] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.770] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:13:11.770] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:13:11.770] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.770] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:13:11.770] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.770] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:13:11.770] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.770] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:13:11.770] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.770] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:13:11.770] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:13:11.770] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.770] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:13:11.770] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.770] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:13:11.770] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:13:11.771] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.771] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.771] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.772] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:13:11.772] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.772] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.773] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:13:11.773] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:13:11.773] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:13:11.773] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:13:11.773] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.774] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:13:11.774] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:13:11.774] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.774] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.775] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.776] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.776] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:13:11.777] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:11.777] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:13:11.777] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:13:11.777] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.777] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:13:11.777] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.777] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:13:11.777] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:13:11.777] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:11.777] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:11.940] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:11.940] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.940] [D] TxNotificationService:   title: 
+[2026-02-08 23:13:11.940] [D] TxNotificationService:   text: 
+[2026-02-08 23:13:11.940] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:11.940] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.950] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:11.950] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:11.950] [D] TxNotificationService:   title: 
+[2026-02-08 23:13:11.950] [D] TxNotificationService:   text: 
+[2026-02-08 23:13:11.950] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:11.950] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:12.259] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:12.260] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:12.260] [D] TxNotificationService:   title: 20260208_211901_batch_done.zip
+[2026-02-08 23:13:12.260] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:13:12.260] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:12.261] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:13:12.261] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:13:12.261] [D] TxNotificationService:   title: 
+[2026-02-08 23:13:12.261] [D] TxNotificationService:   text: 
+[2026-02-08 23:13:12.261] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:13:12.262] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:12.262] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:13:12.262] [D] TxNotificationService: 알림 텍스트: 20260208_211901_batch_done.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:13:12.262] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:12.262] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:12.270] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:13:12.271] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:13:12.272] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:13:12.272] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:13:12.272] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:12.272] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:13:12.272] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:13:12.272] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:13:12.272] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:13:12.272] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:13:12.272] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:19:21.549] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:19:21.550] [D] TxNotificationService:   패키지: org.telegram.messenger
+[2026-02-08 23:19:21.550] [D] TxNotificationService:   title: DevPilot
+[2026-02-08 23:19:21.550] [D] TxNotificationService:   text: 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_231911_app-debug.apk
+[2026-02-08 23:19:21.554] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:19:21.565] [D] TxNotificationService: 알림 수신 - 패키지: org.telegram.messenger
+[2026-02-08 23:19:21.565] [D] TxNotificationService: 알림 텍스트: DevPilot 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_231911_app-debug.apk
+[2026-02-08 23:19:21.570] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:19:21.572] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:19:21.575] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:19:21.578] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:19:21.580] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:19:21.580] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:19:21.581] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:19:21.581] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:19:21.581] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:19:21.581] [D] TxNotificationService: 패키지명 'org.telegram.messenger'과 매칭되는 은행 없음
+[2026-02-08 23:19:21.581] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:19:21.581] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:19:21.582] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:32:19.300] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:32:19.300] [D] TxNotificationService:   패키지: org.telegram.messenger
+[2026-02-08 23:32:19.300] [D] TxNotificationService:   title: DevPilot
+[2026-02-08 23:32:19.300] [D] TxNotificationService:   text: 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_231911_app-debug.apk
+[2026-02-08 23:32:19.300] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:32:19.301] [D] TxNotificationService: 알림 수신 - 패키지: org.telegram.messenger
+[2026-02-08 23:32:19.301] [D] TxNotificationService: 알림 텍스트: DevPilot 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: TechcenterManagement
+파일: app-debug.apk
+크기: 23.3MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_231911_app-debug.apk
+[2026-02-08 23:32:19.301] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:32:19.302] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:32:19.303] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:32:19.304] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:32:19.304] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:32:19.304] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:32:19.304] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:32:19.304] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:32:19.304] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:32:19.304] [D] TxNotificationService: 패키지명 'org.telegram.messenger'과 매칭되는 은행 없음
+[2026-02-08 23:32:19.304] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:32:19.304] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:32:19.304] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:34:04.069] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:34:04.069] [D] TxNotificationService:   패키지: org.telegram.messenger
+[2026-02-08 23:34:04.069] [D] TxNotificationService:   title: DevPilot
+[2026-02-08 23:34:04.069] [D] TxNotificationService:   text: 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: talktalkreader
+파일: app-debug.apk
+크기: 63.1MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_233351_app-debug.apk
+[2026-02-08 23:34:04.070] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:34:04.071] [D] TxNotificationService: 알림 수신 - 패키지: org.telegram.messenger
+[2026-02-08 23:34:04.071] [D] TxNotificationService: 알림 텍스트: DevPilot 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: talktalkreader
+파일: app-debug.apk
+크기: 63.1MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_233351_app-debug.apk
+[2026-02-08 23:34:04.072] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:34:04.072] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:34:04.073] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:34:04.073] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:34:04.074] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:34:04.074] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:34:04.074] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:34:04.074] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:34:04.074] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:34:04.074] [D] TxNotificationService: 패키지명 'org.telegram.messenger'과 매칭되는 은행 없음
+[2026-02-08 23:34:04.074] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:34:04.074] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:34:04.074] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:38:58.841] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:38:58.841] [D] TxNotificationService:   패키지: org.telegram.messenger
+[2026-02-08 23:38:58.841] [D] TxNotificationService:   title: DevPilot
+[2026-02-08 23:38:58.841] [D] TxNotificationService:   text: 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: talktalkreader
+파일: app-debug.apk
+크기: 63.1MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_233846_app-debug.apk
+[2026-02-08 23:38:58.841] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:38:58.842] [D] TxNotificationService: 알림 수신 - 패키지: org.telegram.messenger
+[2026-02-08 23:38:58.842] [D] TxNotificationService: 알림 텍스트: DevPilot 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: talktalkreader
+파일: app-debug.apk
+크기: 63.1MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260208_233846_app-debug.apk
+[2026-02-08 23:38:58.842] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:38:58.842] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:38:58.843] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:38:58.844] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:38:58.844] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:38:58.844] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:38:58.844] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:38:58.844] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:38:58.844] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:38:58.844] [D] TxNotificationService: 패키지명 'org.telegram.messenger'과 매칭되는 은행 없음
+[2026-02-08 23:38:58.844] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:38:58.845] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:38:58.845] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.397] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.397] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.397] [D] TxNotificationService:   title: 20260208_233846_app-debug.apk
+[2026-02-08 23:39:24.397] [D] TxNotificationService:   text: Downloading...
+[2026-02-08 23:39:24.397] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.398] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.398] [D] TxNotificationService: 알림 텍스트: 20260208_233846_app-debug.apk Downloading...
+[2026-02-08 23:39:24.399] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.399] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.399] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:24.401] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.403] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:24.403] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:24.403] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.403] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:24.403] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.403] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:24.403] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:24.403] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.403] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.405] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.405] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.405] [D] TxNotificationService:   title: 20260208_145154_files_package.zip
+[2026-02-08 23:39:24.405] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.405] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.406] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.407] [D] TxNotificationService: 알림 텍스트: 20260208_145154_files_package.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.407] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.407] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.413] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:24.413] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.413] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.413] [D] TxNotificationService:   title: 20260208_151420_batch1.zip
+[2026-02-08 23:39:24.413] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.413] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.414] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.414] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.414] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.414] [D] TxNotificationService: 알림 텍스트: 20260208_151420_batch1.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.414] [D] TxNotificationService:   title: 20260208_151426_batch2.zip
+[2026-02-08 23:39:24.414] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.415] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.415] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.415] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.418] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.420] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.420] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.420] [D] TxNotificationService:   title: 20260208_151430_batch3.zip
+[2026-02-08 23:39:24.420] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.420] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.420] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.420] [D] TxNotificationService: 알림 텍스트: 20260208_151426_batch2.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.420] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.420] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.420] [D] TxNotificationService:   title: 20260208_185559_batch2_bridge.zip
+[2026-02-08 23:39:24.420] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.420] [D] TxNotificationService: 알림 텍스트: 20260208_151430_batch3.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.421] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.421] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.421] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.421] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:24.421] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:24.421] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.421] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:24.421] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.421] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:24.421] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:24.421] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.421] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.422] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.420] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.423] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.423] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.423] [D] TxNotificationService: 알림 텍스트: 20260208_185559_batch2_bridge.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.423] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.423] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.424] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.424] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.424] [D] TxNotificationService:   title: 20260208_211901_batch_done.zip
+[2026-02-08 23:39:24.424] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.424] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.424] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:24.424] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.424] [D] TxNotificationService: 알림 텍스트: 20260208_211901_batch_done.zip 다운로드가 완료되었습니다.
+[2026-02-08 23:39:24.424] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.425] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.425] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.425] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:24.425] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:24.427] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.427] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:24.427] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.427] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:24.427] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:24.427] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.427] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.427] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:24.428] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:24.428] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.428] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:24.428] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.428] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:24.428] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:24.429] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:24.429] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:24.429] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.429] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.430] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.430] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:24.430] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:24.430] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.430] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:24.430] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.430] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:24.430] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:24.430] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.430] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.430] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:24.431] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:24.431] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.431] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:24.431] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.431] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:24.431] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:24.431] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.431] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.581] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.581] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.581] [D] TxNotificationService:   title: 
+[2026-02-08 23:39:24.581] [D] TxNotificationService:   text: 
+[2026-02-08 23:39:24.581] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.581] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.599] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.599] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.599] [D] TxNotificationService:   title: 
+[2026-02-08 23:39:24.599] [D] TxNotificationService:   text: 
+[2026-02-08 23:39:24.599] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.599] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.978] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:24.978] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.978] [D] TxNotificationService:   title: 20260208_233846_app-debug.apk
+[2026-02-08 23:39:24.978] [D] TxNotificationService:   text: Downloading...
+[2026-02-08 23:39:24.978] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:24.980] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:24.980] [D] TxNotificationService: 알림 텍스트: 20260208_233846_app-debug.apk Downloading...
+[2026-02-08 23:39:24.981] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.982] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.985] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:24.986] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:24.987] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:24.987] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:24.987] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.987] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:24.987] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:24.987] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:24.987] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:24.987] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:24.987] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:25.170] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:25.171] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:25.171] [D] TxNotificationService:   title: 
+[2026-02-08 23:39:25.171] [D] TxNotificationService:   text: 
+[2026-02-08 23:39:25.171] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:25.171] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:25.396] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:25.396] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:25.396] [D] TxNotificationService:   title: 20260208_233846_app-debug.apk
+[2026-02-08 23:39:25.396] [D] TxNotificationService:   text: Downloading...
+[2026-02-08 23:39:25.396] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:25.397] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:25.397] [D] TxNotificationService: 알림 텍스트: 20260208_233846_app-debug.apk Downloading...
+[2026-02-08 23:39:25.398] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:25.398] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:25.398] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:25.398] [D] TxNotificationService:   title: 20260208_233846_app-debug.apk
+[2026-02-08 23:39:25.398] [D] TxNotificationService:   text: Downloading...
+[2026-02-08 23:39:25.398] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:25.398] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:25.399] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:25.399] [D] TxNotificationService: 알림 텍스트: 20260208_233846_app-debug.apk Downloading...
+[2026-02-08 23:39:25.399] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:25.400] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:25.400] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:25.401] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:25.402] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:25.402] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:25.402] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:25.402] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:25.402] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:25.402] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:25.402] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:25.402] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:25.402] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:25.402] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:25.403] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:25.403] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:25.403] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:25.403] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:25.403] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:25.403] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:25.403] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:25.403] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:25.403] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:25.403] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:28.343] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:28.343] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:28.343] [D] TxNotificationService:   title: 20260208_233846_app-debug.apk
+[2026-02-08 23:39:28.344] [D] TxNotificationService:   text: Downloading...
+[2026-02-08 23:39:28.344] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:28.344] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:28.344] [D] TxNotificationService: 알림 텍스트: 20260208_233846_app-debug.apk Downloading...
+[2026-02-08 23:39:28.345] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:28.345] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:28.346] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:28.346] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:28.346] [D] TxNotificationService:   title: 20260208_233846_app-debug.apk
+[2026-02-08 23:39:28.346] [D] TxNotificationService:   text: Downloading...
+[2026-02-08 23:39:28.346] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:28.347] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:28.347] [D] TxNotificationService: 알림 텍스트: 20260208_233846_app-debug.apk Downloading...
+[2026-02-08 23:39:28.347] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:28.347] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:28.348] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:28.348] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:28.349] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:28.351] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:28.352] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:28.352] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:28.352] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:28.352] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:28.352] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:28.352] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:28.352] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:28.352] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:28.352] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:28.353] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:28.353] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:28.356] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:28.356] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:28.356] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:28.356] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:28.356] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:28.356] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:28.356] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:33.508] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:33.509] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:33.509] [D] TxNotificationService:   title: 20260208_233846_app-debug.apk
+[2026-02-08 23:39:33.509] [D] TxNotificationService:   text: 다운로드가 완료되었습니다.
+[2026-02-08 23:39:33.509] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:33.510] [D] TxNotificationService: 알림 수신 - 패키지: com.android.providers.downloads
+[2026-02-08 23:39:33.510] [D] TxNotificationService: 알림 텍스트: 20260208_233846_app-debug.apk 다운로드가 완료되었습니다.
+[2026-02-08 23:39:33.510] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:33.510] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:33.511] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:39:33.512] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:39:33.512] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:39:33.512] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:39:33.512] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:33.512] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:39:33.512] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:33.512] [D] TxNotificationService: 패키지명 'com.android.providers.downloads'과 매칭되는 은행 없음
+[2026-02-08 23:39:33.512] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:39:33.512] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:39:33.512] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:39:33.520] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:39:33.520] [D] TxNotificationService:   패키지: com.android.providers.downloads
+[2026-02-08 23:39:33.520] [D] TxNotificationService:   title: 
+[2026-02-08 23:39:33.520] [D] TxNotificationService:   text: 
+[2026-02-08 23:39:33.520] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:39:33.520] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.android.providers.downloads
+[2026-02-08 23:47:42.751] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.752] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.752] [D] TxNotificationService:   title: 읽은 알림 80개
+[2026-02-08 23:47:42.752] [D] TxNotificationService:   text: 긴급 66개 일반 14개
+[2026-02-08 23:47:42.752] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.753] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.753] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.753] [D] TxNotificationService:   title: 읽은 알림 81개
+[2026-02-08 23:47:42.753] [D] TxNotificationService:   text: 긴급 66개 일반 15개
+[2026-02-08 23:47:42.753] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.753] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.754] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.754] [D] TxNotificationService: 알림 텍스트: 읽은 알림 81개 긴급 66개 일반 15개
+[2026-02-08 23:47:42.755] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.755] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.755] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.755] [D] TxNotificationService:   title: 읽은 알림 79개
+[2026-02-08 23:47:42.755] [D] TxNotificationService:   text: 긴급 66개 일반 13개
+[2026-02-08 23:47:42.755] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.756] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.756] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.756] [D] TxNotificationService:   title: 읽은 알림 78개
+[2026-02-08 23:47:42.756] [D] TxNotificationService:   text: 긴급 66개 일반 12개
+[2026-02-08 23:47:42.756] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.757] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.758] [D] TxNotificationService: 알림 텍스트: 읽은 알림 78개 긴급 66개 일반 12개
+[2026-02-08 23:47:42.758] [D] TxNotificationService: 알림 텍스트: 읽은 알림 80개 긴급 66개 일반 14개
+[2026-02-08 23:47:42.759] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.759] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.759] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.760] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.760] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.762] [D] TxNotificationService: 알림 텍스트: 읽은 알림 79개 긴급 66개 일반 13개
+[2026-02-08 23:47:42.762] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.762] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.762] [D] TxNotificationService:   title: 읽은 알림 75개
+[2026-02-08 23:47:42.762] [D] TxNotificationService:   text: 긴급 66개 일반 9개
+[2026-02-08 23:47:42.763] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.763] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.763] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.763] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.763] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.763] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.763] [D] TxNotificationService: 알림 텍스트: 읽은 알림 75개 긴급 66개 일반 9개
+[2026-02-08 23:47:42.763] [D] TxNotificationService:   title: 읽은 알림 75개
+[2026-02-08 23:47:42.763] [D] TxNotificationService:   text: 긴급 66개 일반 9개
+[2026-02-08 23:47:42.764] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.764] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.764] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.765] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.765] [D] TxNotificationService: 알림 텍스트: 읽은 알림 75개 긴급 66개 일반 9개
+[2026-02-08 23:47:42.765] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.766] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.766] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.767] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.768] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.768] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.768] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.768] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.768] [D] TxNotificationService:   title: 읽은 알림 75개
+[2026-02-08 23:47:42.768] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.768] [D] TxNotificationService:   text: 긴급 66개 일반 9개
+[2026-02-08 23:47:42.769] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.769] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.769] [D] TxNotificationService: 알림 텍스트: 읽은 알림 75개 긴급 66개 일반 9개
+[2026-02-08 23:47:42.769] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.771] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.771] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.771] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.771] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.771] [D] TxNotificationService:   title: 읽은 알림 73개
+[2026-02-08 23:47:42.772] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.772] [D] TxNotificationService:   text: 긴급 66개 일반 7개
+[2026-02-08 23:47:42.772] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.772] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.772] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.772] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.772] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.772] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.772] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.772] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.772] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.772] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.772] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.772] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.773] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.773] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.773] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.773] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.773] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.773] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.773] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.773] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.773] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.774] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.774] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.774] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.774] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.774] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.774] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.774] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.774] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.774] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.775] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.775] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.776] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.776] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.776] [D] TxNotificationService: 알림 텍스트: 읽은 알림 73개 긴급 66개 일반 7개
+[2026-02-08 23:47:42.776] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.776] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.776] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.777] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.777] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.777] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.777] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.777] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.778] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.775] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.778] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.778] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.778] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.778] [D] TxNotificationService:   title: 읽은 알림 73개
+[2026-02-08 23:47:42.778] [D] TxNotificationService:   text: 긴급 66개 일반 7개
+[2026-02-08 23:47:42.778] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.779] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.779] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.779] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.779] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.779] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.779] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.779] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.779] [D] TxNotificationService: 알림 텍스트: 읽은 알림 73개 긴급 66개 일반 7개
+[2026-02-08 23:47:42.779] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.779] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.779] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.779] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.779] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.779] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.780] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.780] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.780] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.780] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.780] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.780] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.780] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.781] [D] TxNotificationService:   title: 읽은 알림 69개
+[2026-02-08 23:47:42.781] [D] TxNotificationService:   text: 긴급 66개 일반 4개
+[2026-02-08 23:47:42.781] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.781] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.781] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.781] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.781] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.782] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.782] [D] TxNotificationService: 알림 텍스트: 읽은 알림 69개 긴급 66개 일반 4개
+[2026-02-08 23:47:42.783] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.784] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.784] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.785] [D] TxNotificationService:   title: 읽은 알림 69개
+[2026-02-08 23:47:42.785] [D] TxNotificationService:   text: 긴급 66개 일반 4개
+[2026-02-08 23:47:42.785] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.785] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.785] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.785] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.785] [D] TxNotificationService: 알림 텍스트: 읽은 알림 69개 긴급 66개 일반 4개
+[2026-02-08 23:47:42.786] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.786] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.786] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.786] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.786] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.786] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.786] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.786] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.786] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.786] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.786] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.786] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.786] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.786] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.786] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.786] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.787] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.787] [D] TxNotificationService:   title: 읽은 알림 69개
+[2026-02-08 23:47:42.787] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.787] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.787] [D] TxNotificationService:   text: 긴급 66개 일반 6개
+[2026-02-08 23:47:42.787] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.787] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.787] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.787] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.787] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.788] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.788] [D] TxNotificationService: 알림 텍스트: 읽은 알림 69개 긴급 66개 일반 6개
+[2026-02-08 23:47:42.788] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.788] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.788] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.788] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.788] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.788] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.788] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.789] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.789] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.789] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   title: 읽은 알림 69개
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   text: 긴급 66개 일반 3개
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.789] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.789] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.789] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.789] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.789] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.789] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.789] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.789] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.789] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.789] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.790] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.790] [D] TxNotificationService: 알림 텍스트: 읽은 알림 69개 긴급 66개 일반 3개
+[2026-02-08 23:47:42.790] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.790] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.790] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.790] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.790] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.790] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.790] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.790] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.790] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.790] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.791] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.791] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.791] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.791] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.791] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.791] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   title: 읽은 알림 68개
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   text: 긴급 66개 일반 2개
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.792] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   title: 읽은 알림 67개
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   text: 긴급 66개 일반 1개
+[2026-02-08 23:47:42.792] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.793] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.793] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.793] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.793] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.793] [D] TxNotificationService: 알림 텍스트: 읽은 알림 67개 긴급 66개 일반 1개
+[2026-02-08 23:47:42.793] [D] TxNotificationService: 알림 텍스트: 읽은 알림 68개 긴급 66개 일반 2개
+[2026-02-08 23:47:42.793] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.793] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.793] [D] TxNotificationService:   title: 읽은 알림 66개
+[2026-02-08 23:47:42.793] [D] TxNotificationService:   text: 긴급 66개
+[2026-02-08 23:47:42.793] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.793] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.793] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.793] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.793] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.794] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.794] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.794] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:47:42.794] [D] TxNotificationService:   title: 
+[2026-02-08 23:47:42.794] [D] TxNotificationService:   text: 
+[2026-02-08 23:47:42.794] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.794] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.kakao.talk
+[2026-02-08 23:47:42.794] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.794] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.794] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.794] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.794] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.793] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.794] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.795] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.795] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.795] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.795] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.795] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.795] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.795] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.795] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.795] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:47:42.795] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:47:42.795] [D] TxNotificationService:   title: 김희성
+[2026-02-08 23:47:42.795] [D] TxNotificationService:   text: 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:47:42.795] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:47:42.796] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.796] [D] TxNotificationService: 알림 수신 - 패키지: com.kakao.talk
+[2026-02-08 23:47:42.796] [D] TxNotificationService: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:47:42.796] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.796] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.796] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.796] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.796] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.796] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.796] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.796] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.796] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.796] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.797] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.797] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 알림 텍스트: 읽은 알림 66개 긴급 66개
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.797] [D] TxNotificationService: 매칭된 은행: KB국민
+[2026-02-08 23:47:42.797] [D] NotificationParser: ========== 파싱 시작 ==========
+[2026-02-08 23:47:42.797] [D] NotificationParser: 패키지: com.kakao.talk
+[2026-02-08 23:47:42.797] [D] NotificationParser: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:47:42.797] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.798] [D] NotificationParser: 선택된 은행 수: 3
+[2026-02-08 23:47:42.798] [D] NotificationParser: 매칭된 은행: KB국민 (bankId=kb_kookmin)
+[2026-02-08 23:47:42.798] [D] NotificationParser: parseWithBankConfig 시작: bank=KB국민
+[2026-02-08 23:47:42.798] [D] NotificationParser: 금액 추출 시작
+[2026-02-08 23:47:42.798] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.797] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.798] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:47:42.799] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.798] [D] NotificationParser: 금액 추출 실패 - 매칭되는 패턴 없음
+[2026-02-08 23:47:42.800] [D] NotificationParser: 금액 추출 실패 - 텍스트에서 금액 패턴 없음
+[2026-02-08 23:47:42.800] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:47:42.800] [D] TxNotificationService: 파싱 실패 - 금액 정규식 또는 형식 불일치
+[2026-02-08 23:47:42.800] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:47:42.800] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:47:42.800] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.800] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:47:42.800] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:47:42.801] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:47:42.801] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:47:42.801] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:47:42.801] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:48:09.763] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:48:09.763] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:48:09.763] [D] TxNotificationService:   title: 
+[2026-02-08 23:48:09.763] [D] TxNotificationService:   text: 
+[2026-02-08 23:48:09.763] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:48:09.763] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.kakao.talk
+[2026-02-08 23:48:09.764] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:48:09.764] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:48:09.764] [D] TxNotificationService:   title: 김희성
+[2026-02-08 23:48:09.764] [D] TxNotificationService:   text: 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:48:09.764] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:48:09.765] [D] TxNotificationService: 알림 수신 - 패키지: com.kakao.talk
+[2026-02-08 23:48:09.765] [D] TxNotificationService: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:48:09.765] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:48:09.765] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:48:09.766] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:48:09.767] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:48:09.767] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:48:09.767] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:48:09.767] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:48:09.767] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:48:09.767] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:48:09.767] [D] TxNotificationService: 매칭된 은행: KB국민
+[2026-02-08 23:48:09.767] [D] NotificationParser: ========== 파싱 시작 ==========
+[2026-02-08 23:48:09.767] [D] NotificationParser: 패키지: com.kakao.talk
+[2026-02-08 23:48:09.767] [D] NotificationParser: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:48:09.767] [D] NotificationParser: 선택된 은행 수: 3
+[2026-02-08 23:48:09.767] [D] NotificationParser: 매칭된 은행: KB국민 (bankId=kb_kookmin)
+[2026-02-08 23:48:09.767] [D] NotificationParser: parseWithBankConfig 시작: bank=KB국민
+[2026-02-08 23:48:09.767] [D] NotificationParser: 금액 추출 시작
+[2026-02-08 23:48:09.768] [D] NotificationParser: 금액 추출 실패 - 매칭되는 패턴 없음
+[2026-02-08 23:48:09.768] [D] NotificationParser: 금액 추출 실패 - 텍스트에서 금액 패턴 없음
+[2026-02-08 23:48:09.768] [D] TxNotificationService: 파싱 실패 - 금액 정규식 또는 형식 불일치
+[2026-02-08 23:49:03.732] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:49:03.732] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:49:03.732] [D] TxNotificationService:   title: 
+[2026-02-08 23:49:03.734] [D] TxNotificationService:   text: 
+[2026-02-08 23:49:03.734] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:49:03.735] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.kakao.talk
+[2026-02-08 23:49:03.738] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:49:03.738] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:49:03.738] [D] TxNotificationService:   title: 김희성
+[2026-02-08 23:49:03.738] [D] TxNotificationService:   text: 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:49:03.738] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:49:03.740] [D] TxNotificationService: 알림 수신 - 패키지: com.kakao.talk
+[2026-02-08 23:49:03.740] [D] TxNotificationService: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:49:03.740] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:49:03.741] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:49:03.741] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:49:03.742] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:49:03.743] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:49:03.743] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:49:03.743] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:49:03.743] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:49:03.743] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:49:03.743] [D] TxNotificationService: 매칭된 은행: KB국민
+[2026-02-08 23:49:03.743] [D] NotificationParser: ========== 파싱 시작 ==========
+[2026-02-08 23:49:03.743] [D] NotificationParser: 패키지: com.kakao.talk
+[2026-02-08 23:49:03.743] [D] NotificationParser: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:49:03.743] [D] NotificationParser: 선택된 은행 수: 3
+[2026-02-08 23:49:03.743] [D] NotificationParser: 매칭된 은행: KB국민 (bankId=kb_kookmin)
+[2026-02-08 23:49:03.743] [D] NotificationParser: parseWithBankConfig 시작: bank=KB국민
+[2026-02-08 23:49:03.743] [D] NotificationParser: 금액 추출 시작
+[2026-02-08 23:49:03.743] [D] NotificationParser: 금액 추출 실패 - 매칭되는 패턴 없음
+[2026-02-08 23:49:03.744] [D] NotificationParser: 금액 추출 실패 - 텍스트에서 금액 패턴 없음
+[2026-02-08 23:49:03.744] [D] TxNotificationService: 파싱 실패 - 금액 정규식 또는 형식 불일치
+[2026-02-08 23:50:13.698] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:50:13.700] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:50:13.700] [D] TxNotificationService:   title: 
+[2026-02-08 23:50:13.700] [D] TxNotificationService:   text: 
+[2026-02-08 23:50:13.701] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:50:13.701] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.kakao.talk
+[2026-02-08 23:50:13.701] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:50:13.702] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:50:13.702] [D] TxNotificationService:   title: 김희성
+[2026-02-08 23:50:13.702] [D] TxNotificationService:   text: 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:50:13.702] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:50:13.704] [D] TxNotificationService: 알림 수신 - 패키지: com.kakao.talk
+[2026-02-08 23:50:13.705] [D] TxNotificationService: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:50:13.705] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:50:13.706] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:50:13.708] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:50:13.709] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:50:13.710] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:50:13.710] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:50:13.710] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:50:13.711] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:50:13.711] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:50:13.711] [D] TxNotificationService: 매칭된 은행: KB국민
+[2026-02-08 23:50:13.712] [D] NotificationParser: ========== 파싱 시작 ==========
+[2026-02-08 23:50:13.712] [D] NotificationParser: 패키지: com.kakao.talk
+[2026-02-08 23:50:13.712] [D] NotificationParser: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:50:13.713] [D] NotificationParser: 선택된 은행 수: 3
+[2026-02-08 23:50:13.713] [D] NotificationParser: 매칭된 은행: KB국민 (bankId=kb_kookmin)
+[2026-02-08 23:50:13.713] [D] NotificationParser: parseWithBankConfig 시작: bank=KB국민
+[2026-02-08 23:50:13.713] [D] NotificationParser: 금액 추출 시작
+[2026-02-08 23:50:13.715] [D] NotificationParser: 금액 추출 실패 - 매칭되는 패턴 없음
+[2026-02-08 23:50:13.715] [D] NotificationParser: 금액 추출 실패 - 텍스트에서 금액 패턴 없음
+[2026-02-08 23:50:13.716] [D] TxNotificationService: 파싱 실패 - 금액 정규식 또는 형식 불일치
+[2026-02-08 23:55:57.846] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:55:57.847] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:55:57.848] [D] TxNotificationService:   title: 
+[2026-02-08 23:55:57.848] [D] TxNotificationService:   text: 
+[2026-02-08 23:55:57.848] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:55:57.849] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.kakao.talk
+[2026-02-08 23:55:57.851] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:55:57.851] [D] TxNotificationService:   패키지: com.kakao.talk
+[2026-02-08 23:55:57.851] [D] TxNotificationService:   title: 김희성
+[2026-02-08 23:55:57.852] [D] TxNotificationService:   text: 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:55:57.852] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:55:57.858] [D] TxNotificationService: 알림 수신 - 패키지: com.kakao.talk
+[2026-02-08 23:55:57.858] [D] TxNotificationService: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:55:57.860] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:55:57.862] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:55:57.868] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:55:57.870] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:55:57.871] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:55:57.871] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:55:57.871] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:55:57.872] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:55:57.872] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:55:57.872] [D] TxNotificationService: 매칭된 은행: KB국민
+[2026-02-08 23:55:57.872] [D] NotificationParser: ========== 파싱 시작 ==========
+[2026-02-08 23:55:57.873] [D] NotificationParser: 패키지: com.kakao.talk
+[2026-02-08 23:55:57.873] [D] NotificationParser: 알림 텍스트: 김희성 폴더 내의 로그 폴더에서 가장 최신 로그 확인해줘(폴더를 새로 생성하는게 아니라 존재하는 로그 폴더에 저장)
+[2026-02-08 23:55:57.873] [D] NotificationParser: 선택된 은행 수: 3
+[2026-02-08 23:55:57.873] [D] NotificationParser: 매칭된 은행: KB국민 (bankId=kb_kookmin)
+[2026-02-08 23:55:57.873] [D] NotificationParser: parseWithBankConfig 시작: bank=KB국민
+[2026-02-08 23:55:57.873] [D] NotificationParser: 금액 추출 시작
+[2026-02-08 23:55:57.874] [D] NotificationParser: 금액 추출 실패 - 매칭되는 패턴 없음
+[2026-02-08 23:55:57.875] [D] NotificationParser: 금액 추출 실패 - 텍스트에서 금액 패턴 없음
+[2026-02-08 23:55:57.875] [D] TxNotificationService: 파싱 실패 - 금액 정규식 또는 형식 불일치
+[2026-02-08 23:56:01.193] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:56:01.193] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:56:01.194] [D] TxNotificationService:   title: 
+[2026-02-08 23:56:01.194] [D] TxNotificationService:   text: 
+[2026-02-08 23:56:01.194] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:56:01.194] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:56:01.194] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:56:01.194] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:56:01.194] [D] TxNotificationService:   title: 읽은 알림 1개
+[2026-02-08 23:56:01.194] [D] TxNotificationService:   text: 일반 1개
+[2026-02-08 23:56:01.194] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:56:01.194] [D] TxNotificationService: 알림 수신 - 패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:56:01.194] [D] TxNotificationService: 알림 텍스트: 읽은 알림 1개 일반 1개
+[2026-02-08 23:56:01.194] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:56:01.195] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:56:01.196] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-08 23:56:01.196] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-08 23:56:01.197] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-08 23:56:01.197] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-08 23:56:01.197] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:56:01.197] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-08 23:56:01.197] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:56:01.197] [D] TxNotificationService: 패키지명 'com.ezcorp.talktalkreader'과 매칭되는 은행 없음
+[2026-02-08 23:56:01.197] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-08 23:56:01.197] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-08 23:56:01.197] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-08 23:56:07.021] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-08 23:56:07.022] [D] TxNotificationService:   패키지: com.ezcorp.talktalkreader
+[2026-02-08 23:56:07.022] [D] TxNotificationService:   title: 
+[2026-02-08 23:56:07.022] [D] TxNotificationService:   text: 
+[2026-02-08 23:56:07.022] [D] TxNotificationService:   bigText: 
+[2026-02-08 23:56:07.022] [D] TxNotificationService: 알림 텍스트가 비어있어 무시함 - 패키지: com.ezcorp.talktalkreader
+[2026-02-09 00:05:55.640] [I] HomeScreen: ========== 홈 화면 시작 ==========
+[2026-02-09 00:05:55.640] [D] UserPreferences: getGroupId: value=IbLSboMDJvQGsIUrcGRd
+[2026-02-09 00:05:55.640] [D] TagRepo: getTagsByGroup: groupId=IbLSboMDJvQGsIUrcGRd
+[2026-02-09 00:05:55.641] [I] HomeScreen: 사용자: 꿈이파파, 그룹: 꿈이네
+[2026-02-09 00:05:55.641] [I] HomeScreen: 거래내역 로드됨: 67건
+[2026-02-09 00:05:55.641] [D] AIFeature: isAIEnabled: true (디버그 빌드)
+[2026-02-09 00:05:55.641] [D] AIFeature: isAIEnabled: true (디버그 빌드)
+[2026-02-09 00:05:55.641] [D] AIFeature: generateSmartInsights 호출: featureId=smartInsights
+[2026-02-09 00:05:55.642] [D] AIFeature: canUseFeature: featureId=smartInsights, result=false (Gemini 미초기화)
+[2026-02-09 00:05:55.642] [D] AIFeature: isAIEnabled: true (디버그 빌드)
+[2026-02-09 00:05:55.642] [D] AIFeature: predictMonthlySpending 호출: currentExpense=2639532, day=9/28
+[2026-02-09 00:05:55.642] [D] AIFeature: canUseFeature: featureId=spendingPrediction, result=false (Gemini 미초기화)
+[2026-02-09 00:05:55.642] [D] AIFeature: isAIEnabled: true (디버그 빌드)
+[2026-02-09 00:05:55.650] [D] TagRepo: getTagsByGroup: received 0 tags
+[2026-02-09 00:06:07.643] [I] SettingsScreen: ========== 설정 화면 진입 ==========
+[2026-02-09 00:06:09.947] [I] DebugLogScreen: ========== 디버그 로그 뷰어 진입 ==========
+[2026-02-09 00:06:27.011] [D] TxNotificationService: ===== 알림 원본 필드 =====
+[2026-02-09 00:06:27.012] [D] TxNotificationService:   패키지: org.telegram.messenger
+[2026-02-09 00:06:27.012] [D] TxNotificationService:   title: DevPilot
+[2026-02-09 00:06:27.012] [D] TxNotificationService:   text: 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: MomentBook
+파일: app-debug.apk
+크기: 174.0MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260209_000602_app-debug.apk
+[2026-02-09 00:06:27.012] [D] TxNotificationService:   bigText: 
+[2026-02-09 00:06:27.013] [D] TxNotificationService: 알림 수신 - 패키지: org.telegram.messenger
+[2026-02-09 00:06:27.014] [D] TxNotificationService: 알림 텍스트: DevPilot 📤 아웃박스 전송
+━━━━━━━━━━━━━━━━━
+프로젝트: MomentBook
+파일: app-debug.apk
+크기: 174.0MB
+
+🔗 다운로드 링크:
+https://storage.googleapis.com/repaircostcalc.firebasestorage.app/outbox/20260209_000602_app-debug.apk
+[2026-02-09 00:06:27.014] [D] UserPreferences: getUserId: value=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-09 00:06:27.014] [D] UserRepository: getUserFlow 시작: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-09 00:06:27.016] [D] UserRepository: getUserFlow 업데이트: user=꿈이파파
+[2026-02-09 00:06:27.016] [D] UserRepository: getUserFlow 종료: userId=Vy3Zrw1Wm6xCFa9bf66x
+[2026-02-09 00:06:27.017] [D] TxNotificationService: 선택된 은행 ID 목록: [kb_kookmin, kb_card, kakaobank]
+[2026-02-09 00:06:27.017] [D] TxNotificationService: 선택된 은행 수: 3
+[2026-02-09 00:06:27.017] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-09 00:06:27.017] [D] TxNotificationService:   - 카카오뱅크: [com.kakaobank.channel, com.kakao.talk]
+[2026-02-09 00:06:27.017] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-09 00:06:27.017] [D] TxNotificationService: 패키지명 'org.telegram.messenger'과 매칭되는 은행 없음
+[2026-02-09 00:06:27.017] [D] TxNotificationService: 등록된 모든 은행의 패키지명:
+[2026-02-09 00:06:27.017] [D] TxNotificationService:   - KB국민: [com.kbstar.kbbank, com.kbcard.kbkookmincard, com.kbstar.liivbank, com.kakao.talk]
+[2026-02-09 00:06:27.017] [D] TxNotificationService:   - KB국민카드: [com.kbcard.kbkookmincard, com.kbcard.cxh.appcard, com.kakao.talk]
+[2026-02-09 00:06:30.136] [D] DebugLogScreen: 사용자 액션: 공유 버튼 클릭

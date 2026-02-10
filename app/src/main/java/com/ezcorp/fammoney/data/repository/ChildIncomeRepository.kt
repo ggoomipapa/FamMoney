@@ -1,7 +1,7 @@
 package com.ezcorp.fammoney.data.repository
 
-import android.util.Log
 import com.ezcorp.fammoney.data.model.Child
+import com.ezcorp.fammoney.util.AppLogger
 import com.ezcorp.fammoney.data.model.ChildExpense
 import com.ezcorp.fammoney.data.model.ChildIncome
 import com.ezcorp.fammoney.data.model.IncomeGiverType
@@ -29,12 +29,12 @@ class ChildIncomeRepository @Inject constructor(
 
     suspend fun addChild(child: Child): Result<String> {
         return try {
-            Log.d(TAG, "addChild 시도: name=${child.name}, groupId=${child.groupId}")
+            AppLogger.d(TAG, "addChild 시도: name=${child.name}, groupId=${child.groupId}")
             val docRef = childrenCollection.add(child.toMap()).await()
-            Log.d(TAG, "addChild 성공: id=${docRef.id}")
+            AppLogger.d(TAG, "addChild 성공: id=${docRef.id}")
             Result.success(docRef.id)
         } catch (e: Exception) {
-            Log.e(TAG, "addChild 실패", e)
+            AppLogger.e(TAG, "addChild 실패", e)
             Result.failure(e)
         }
     }
@@ -69,22 +69,31 @@ class ChildIncomeRepository @Inject constructor(
     }
 
     fun getChildrenByGroup(groupId: String): Flow<List<Child>> = callbackFlow {
-        Log.d(TAG, "getChildrenByGroup 시작: groupId=$groupId")
+        AppLogger.d(TAG, "getChildrenByGroup 시작: groupId=$groupId")
+        if (groupId.isBlank()) {
+            AppLogger.e(TAG, "getChildrenByGroup: groupId가 비어있습니다!")
+            trySend(emptyList())
+            awaitClose { }
+            return@callbackFlow
+        }
+
         val listener = childrenCollection
             .whereEqualTo("groupId", groupId)
             .orderBy("createdAt", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    Log.e(TAG, "getChildrenByGroup 에러: ${error.message}", error)
+                    AppLogger.e(TAG, "getChildrenByGroup 에러: ${error.message}", error)
+                    AppLogger.e(TAG, "getChildrenByGroup 에러 상세: groupId=$groupId, errorCode=${error.localizedMessage}")
                     trySend(emptyList())
                     return@addSnapshotListener
                 }
 
                 val children = snapshot?.documents?.mapNotNull { doc ->
+                    AppLogger.d(TAG, "getChildrenByGroup 문서: id=${doc.id}, groupId=${doc.getString("groupId")}")
                     doc.data?.let { Child.fromMap(doc.id, it) }
                 } ?: emptyList()
 
-                Log.d(TAG, "getChildrenByGroup 결과: ${children.size}명")
+                AppLogger.d(TAG, "getChildrenByGroup 결과: ${children.size}명 (조회한 groupId=$groupId)")
                 trySend(children)
             }
 
@@ -328,7 +337,7 @@ class ChildIncomeRepository @Inject constructor(
      */
     suspend fun setAllowance(childId: String, amount: Long, frequency: String): Result<Unit> {
         return try {
-            Log.d(TAG, "setAllowance: childId=$childId, amount=$amount, frequency=$frequency")
+            AppLogger.d(TAG, "setAllowance: childId=$childId, amount=$amount, frequency=$frequency")
             childrenCollection.document(childId)
                 .update(
                     mapOf(
@@ -339,7 +348,7 @@ class ChildIncomeRepository @Inject constructor(
                 .await()
             Result.success(Unit)
         } catch (e: Exception) {
-            Log.e(TAG, "setAllowance 실패", e)
+            AppLogger.e(TAG, "setAllowance 실패", e)
             Result.failure(e)
         }
     }
@@ -355,7 +364,7 @@ class ChildIncomeRepository @Inject constructor(
             val currentBalance = child.totalIncome - child.totalExpense
             val now = Timestamp.now()
 
-            Log.d(TAG, "startAllowance: childId=$childId, preSavingsAmount=$currentBalance")
+            AppLogger.d(TAG, "startAllowance: childId=$childId, preSavingsAmount=$currentBalance")
 
             childrenCollection.document(childId)
                 .update(
@@ -371,7 +380,7 @@ class ChildIncomeRepository @Inject constructor(
                 .await()
             Result.success(Unit)
         } catch (e: Exception) {
-            Log.e(TAG, "startAllowance 실패", e)
+            AppLogger.e(TAG, "startAllowance 실패", e)
             Result.failure(e)
         }
     }
@@ -393,7 +402,7 @@ class ChildIncomeRepository @Inject constructor(
         return try {
             val child = getChildById(childId) ?: return Result.failure(Exception("Child not found"))
 
-            Log.d(TAG, "giveAllowance: childId=$childId, amount=$amount, currentBalance=${child.allowanceBalance}")
+            AppLogger.d(TAG, "giveAllowance: childId=$childId, amount=$amount, currentBalance=${child.allowanceBalance}")
 
             // 용돈 잔액 업데이트
             val newBalance = child.allowanceBalance + amount
@@ -421,7 +430,7 @@ class ChildIncomeRepository @Inject constructor(
 
             Result.success(Unit)
         } catch (e: Exception) {
-            Log.e(TAG, "giveAllowance 실패", e)
+            AppLogger.e(TAG, "giveAllowance 실패", e)
             Result.failure(e)
         }
     }
@@ -436,7 +445,7 @@ class ChildIncomeRepository @Inject constructor(
         return try {
             val child = getChildById(childId) ?: return Result.failure(Exception("Child not found"))
 
-            Log.d(TAG, "addToAllowanceBalance: childId=$childId, amount=$amount")
+            AppLogger.d(TAG, "addToAllowanceBalance: childId=$childId, amount=$amount")
 
             if (child.isAllowanceActive) {
                 // 용돈 체계: allowanceBalance에 추가
@@ -448,7 +457,7 @@ class ChildIncomeRepository @Inject constructor(
             // 적립 체계: totalIncome은 addChildIncome에서 처리되므로 별도 처리 불필요
             Result.success(Unit)
         } catch (e: Exception) {
-            Log.e(TAG, "addToAllowanceBalance 실패", e)
+            AppLogger.e(TAG, "addToAllowanceBalance 실패", e)
             Result.failure(e)
         }
     }
@@ -463,7 +472,7 @@ class ChildIncomeRepository @Inject constructor(
         return try {
             val child = getChildById(childId) ?: return Result.failure(Exception("Child not found"))
 
-            Log.d(TAG, "subtractFromAllowanceBalance: childId=$childId, amount=$amount")
+            AppLogger.d(TAG, "subtractFromAllowanceBalance: childId=$childId, amount=$amount")
 
             if (child.isAllowanceActive) {
                 // 용돈 체계: allowanceBalance에서 차감
@@ -475,7 +484,7 @@ class ChildIncomeRepository @Inject constructor(
             // 적립 체계: totalExpense는 addChildExpense에서 처리되므로 별도 처리 불필요
             Result.success(Unit)
         } catch (e: Exception) {
-            Log.e(TAG, "subtractFromAllowanceBalance 실패", e)
+            AppLogger.e(TAG, "subtractFromAllowanceBalance 실패", e)
             Result.failure(e)
         }
     }
@@ -487,7 +496,7 @@ class ChildIncomeRepository @Inject constructor(
      */
     suspend fun cancelAllowance(childId: String): Result<Unit> {
         return try {
-            Log.d(TAG, "cancelAllowance: childId=$childId")
+            AppLogger.d(TAG, "cancelAllowance: childId=$childId")
             childrenCollection.document(childId)
                 .update(
                     mapOf(
@@ -502,7 +511,7 @@ class ChildIncomeRepository @Inject constructor(
                 .await()
             Result.success(Unit)
         } catch (e: Exception) {
-            Log.e(TAG, "cancelAllowance 실패", e)
+            AppLogger.e(TAG, "cancelAllowance 실패", e)
             Result.failure(e)
         }
     }

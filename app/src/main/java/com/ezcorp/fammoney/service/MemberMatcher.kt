@@ -1,8 +1,11 @@
 package com.ezcorp.fammoney.service
 
 import com.ezcorp.fammoney.data.model.User
+import com.ezcorp.fammoney.util.AppLogger
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "MemberMatcher"
 
 /**
  * ?ê¸???´ë¦ê³?ê·¸ë£¹ ë©¤ë²ë¥?ë§¤ì¹­?ë ?ë¹?? * ?ë¤?? ?¤ëª, ë³ì¹­, ë§ì¤?¹ë ?´ë¦ ???¤ì???í???´ë¦ ë§¤ì¹­ ì§?? */
@@ -61,7 +64,11 @@ class MemberMatcher @Inject constructor() {
         senderName: String,
         groupMembers: List<User>
     ): MatchResult {
+        AppLogger.d(TAG, "matchSenderToMember 시작: inputName=$senderName, candidateCount=${groupMembers.size}")
+        AppLogger.d(TAG, "후보 멤버: ${groupMembers.map { "${it.name}(id=${it.id})" }}")
+
         if (senderName.isBlank()) {
+            AppLogger.d(TAG, "매칭 결과: NoMatch (빈 이름)")
             return MatchResult.NoMatch("")
         }
 
@@ -70,6 +77,7 @@ class MemberMatcher @Inject constructor() {
         for (member in groupMembers) {
             // 1. ?ë¤???í???¼ì¹
             if (senderName == member.name) {
+                AppLogger.i(TAG, "매칭 결과: HighConfidence - NICKNAME_EXACT, userId=${member.id}, userName=${member.name}, confidence=1.0")
                 return MatchResult.HighConfidence(
                     userId = member.id,
                     userName = member.name,
@@ -81,6 +89,7 @@ class MemberMatcher @Inject constructor() {
 
             // 2. ?¤ëª ?í???¼ì¹
             if (member.realName.isNotBlank() && senderName == member.realName) {
+                AppLogger.i(TAG, "매칭 결과: HighConfidence - REALNAME_EXACT, userId=${member.id}, userName=${member.name}, confidence=1.0")
                 return MatchResult.HighConfidence(
                     userId = member.id,
                     userName = member.name,
@@ -92,6 +101,7 @@ class MemberMatcher @Inject constructor() {
 
             // 3. ë³ì¹­ ëª©ë¡???ëì§ ?ì¸
             if (member.aliasNames.contains(senderName)) {
+                AppLogger.i(TAG, "매칭 결과: HighConfidence - ALIAS_EXACT, userId=${member.id}, userName=${member.name}, confidence=0.95")
                 return MatchResult.HighConfidence(
                     userId = member.id,
                     userName = member.name,
@@ -104,8 +114,10 @@ class MemberMatcher @Inject constructor() {
             // 4. ë§ì¤?¹ë ?´ë¦ ë§¤ì¹­ (ê¹*??-> ê¹ì² ì)
             if (senderName.contains("*")) {
                 if (matchesMaskedName(senderName, member.name)) {
+                    AppLogger.d(TAG, "마스킹 매칭 후보: member=${member.name}, confidence=0.7")
                     candidates.add(Candidate(member, MatchType.MASKED_NAME, 0.7f))
                 } else if (member.realName.isNotBlank() && matchesMaskedName(senderName, member.realName)) {
+                    AppLogger.d(TAG, "마스킹 매칭 후보 (실명): member=${member.name}, realName=${member.realName}, confidence=0.75")
                     candidates.add(Candidate(member, MatchType.MASKED_NAME, 0.75f))
                 }
             }
@@ -113,17 +125,21 @@ class MemberMatcher @Inject constructor() {
             // 5. ë¶ë¶?ë§¤ì¹­ (?±ì´ ê°ê±°???´ë¦??ê°ì? ê²½ì°)
             val partialConfidence = calculatePartialMatchConfidence(senderName, member)
             if (partialConfidence > 0.3f) {
+                AppLogger.d(TAG, "부분 매칭 후보: member=${member.name}, confidence=$partialConfidence")
                 candidates.add(Candidate(member, MatchType.PARTIAL_MATCH, partialConfidence))
             }
         }
 
         // ?ë³´??ê²°ê³¼ ì²ë¦¬
+        AppLogger.d(TAG, "후보 수: ${candidates.size}, 후보 목록: ${candidates.map { "${it.user.name}(${it.matchType}, ${it.confidence})" }}")
         return when {
             candidates.isEmpty() -> {
+                AppLogger.d(TAG, "매칭 결과: NoMatch, inputName=$senderName")
                 MatchResult.NoMatch(senderName)
             }
             candidates.size == 1 && candidates[0].confidence >= 0.7f -> {
                 val candidate = candidates[0]
+                AppLogger.i(TAG, "매칭 결과: HighConfidence (단일 후보), userId=${candidate.user.id}, userName=${candidate.user.name}, matchType=${candidate.matchType}, confidence=${candidate.confidence}")
                 MatchResult.HighConfidence(
                     userId = candidate.user.id,
                     userName = candidate.user.name,
@@ -135,6 +151,7 @@ class MemberMatcher @Inject constructor() {
             else -> {
                 // ? ë¢°???ì¼ë¡??ë ¬
                 val sortedCandidates = candidates.sortedByDescending { it.confidence }
+                AppLogger.d(TAG, "매칭 결과: LowConfidence, 후보=${sortedCandidates.size}건, 최고신뢰도=${sortedCandidates.firstOrNull()?.confidence}")
                 MatchResult.LowConfidence(sortedCandidates, senderName)
             }
         }
@@ -204,10 +221,12 @@ return if (sameFirstChar) {
 * ?ë¤?? ?¤ëª, ë³ì¹­ ëª¨ë ê²
 */
     fun findMemberByAnyName(name: String, groupMembers: List<User>): User? {
-        return groupMembers.find { member ->
+        val found = groupMembers.find { member ->
             member.name == name ||
             member.realName == name ||
             member.aliasNames.contains(name)
         }
+        AppLogger.d(TAG, "findMemberByAnyName: name=$name, found=${found?.name ?: "null"}")
+        return found
     }
 }

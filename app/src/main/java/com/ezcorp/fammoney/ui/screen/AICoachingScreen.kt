@@ -27,6 +27,9 @@ import com.ezcorp.fammoney.ui.theme.ExpenseColor
 import com.ezcorp.fammoney.ui.theme.IncomeColor
 import com.ezcorp.fammoney.ui.viewmodel.AICoachingViewModel
 import com.ezcorp.fammoney.ui.viewmodel.AICoachingUiState
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "AICoachingScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,6 +40,12 @@ fun AICoachingScreen(
     viewModel: AICoachingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== AI 코칭 화면 진입 ==========")
+    }
+
     // 0: 재정분석, 1: 재산증식, 2: 목표코칭, 3: 상품검색
     var selectedTab by remember { mutableStateOf(0) }
 

@@ -1,6 +1,7 @@
 package com.ezcorp.fammoney.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import androidx.lifecycle.viewModelScope
 import com.ezcorp.fammoney.data.model.Allowance
 import com.ezcorp.fammoney.data.model.BankConfig
@@ -157,7 +158,15 @@ class MainViewModel @Inject constructor(
 
     fun updateCashManagementEnabled(enabled: Boolean) {
         viewModelScope.launch {
-            userPreferences.saveCashManagementEnabled(enabled)
+            val groupId = _uiState.value.currentGroup?.id ?: return@launch
+            val currentThreshold = _uiState.value.currentGroup?.highAmountThreshold ?: 100000L
+            val childIncomeEnabled = _uiState.value.currentGroup?.childIncomeEnabled ?: false
+            userRepository.updateGroupSettings(
+                groupId,
+                enabled,
+                currentThreshold,
+                childIncomeEnabled
+            )
         }
     }
 
@@ -194,6 +203,13 @@ class MainViewModel @Inject constructor(
             try {
                 userRepository.getUserFlow(userId).collect { user ->
                     if (user != null) {
+                        AppLogger.d("MainViewModel", "loadUserData: user=${user.name}, groupId=${user.groupId}, groupIds=${user.groupIds}")
+                        // 기존 사용자의 groupIds가 비어있으면 현재 groupId 추가
+                        if (user.groupIds.isEmpty() && user.groupId.isNotBlank()) {
+                            AppLogger.d("MainViewModel", "loadUserData: groupIds가 비어있어 groupId를 추가합니다")
+                            userRepository.addGroupToUser(user.id, user.groupId)
+                        }
+
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             isLoggedIn = true,
@@ -205,7 +221,7 @@ class MainViewModel @Inject constructor(
                         loadAllowances(user.groupId)
                         loadSavingsGoals(user.groupId)
                         loadChildren(user.groupId)
-                        loadUserGroups(user.groupIds)
+                        loadUserGroups(user.groupIds.ifEmpty { listOf(user.groupId) })
                     } else {
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
@@ -223,14 +239,31 @@ class MainViewModel @Inject constructor(
     }
 
     private fun loadGroupData(groupId: String) {
+        AppLogger.d("MainViewModel", "loadGroupData: groupId=$groupId")
         viewModelScope.launch {
             userRepository.getGroupFlow(groupId).collect { group ->
+                AppLogger.d("MainViewModel", "loadGroupData: group=${group?.name}, childIncomeEnabled=${group?.childIncomeEnabled}, cashManagementEnabled=${group?.cashManagementEnabled}")
                 _uiState.value = _uiState.value.copy(currentGroup = group)
+
+                // 로컬 설정을 Group 문서로 마이그레이션 (한 번만 실행)
+                if (group != null && !group.cashManagementEnabled) {
+                    val localCashEnabled = userPreferences.getCashManagementEnabled()
+                    if (localCashEnabled) {
+                        AppLogger.d("MainViewModel", "마이그레이션: 로컬 cashManagementEnabled=true를 Group 문서로 복사")
+                        userRepository.updateGroupSettings(
+                            groupId,
+                            true,
+                            group.highAmountThreshold,
+                            group.childIncomeEnabled
+                        )
+                    }
+                }
             }
         }
 
         viewModelScope.launch {
             userRepository.getGroupMembersFlow(groupId).collect { members ->
+                AppLogger.d("MainViewModel", "loadGroupData: groupMembers=${members.size}명 (${members.map { it.name }.joinToString(", ")})")
                 _uiState.value = _uiState.value.copy(groupMembers = members)
             }
         }
@@ -263,8 +296,10 @@ class MainViewModel @Inject constructor(
     }
 
     private fun loadChildren(groupId: String) {
+        AppLogger.d("MainViewModel", "loadChildren: groupId=$groupId")
         viewModelScope.launch {
             childIncomeRepository.getChildrenByGroup(groupId).collect { children ->
+                AppLogger.d("MainViewModel", "loadChildren: ${children.size}명 자녀 로드됨 (${children.map { it.name }.joinToString(", ")})")
                 _uiState.value = _uiState.value.copy(children = children)
             }
         }
@@ -276,6 +311,7 @@ class MainViewModel @Inject constructor(
         transactionsJob = viewModelScope.launch {
             val year = _uiState.value.currentYear
             val month = _uiState.value.currentMonth
+            AppLogger.d("MainViewModel", "거래내역 로드 시작: groupId=$groupId, ${year}년 ${month}월")
             transactionRepository.getTransactionsByMonth(
                 groupId,
                 year,
@@ -303,29 +339,7 @@ class MainViewModel @Inject constructor(
                         // 다른 사람의 거래는 그 사람의 공유 범위 설정 확인
                         val transactionOwner = groupMembers.find { it.id == transaction.userId }
                         if (transactionOwner != null) {
-                            val shareFromDate = transactionOwner.shareFromDate
-                            val hiddenIds = transactionOwner.hiddenTransactionIds
-                            val shareCash = transactionOwner.shareCashTransactions
-                            val shareAllowance = transactionOwner.shareAllowance
-
-                            // 숨김 목록에 있는 거래는 안 보임
-                            if (hiddenIds.contains(transaction.id)) {
-                                false
-                            }
-                            // 현금 거래 공유 설정 확인
-                            else if (!shareCash && isCashTransaction(transaction)) {
-                                false
-                            }
-                            // 용돈 거래 공유 설정 확인
-                            else if (!shareAllowance && transaction.isLinkedToChild) {
-                                false
-                            }
-                            // 공유 시작일 이전 거래는 안 보임
-                            else if (shareFromDate != null && transaction.transactionDate != null) {
-                                transaction.transactionDate >= shareFromDate
-                            } else {
-                                true
-                            }
+                            isTransactionShared(transaction, transactionOwner)
                         } else {
                             true
                         }
@@ -346,6 +360,8 @@ class MainViewModel @Inject constructor(
                     .groupBy { it.category.ifBlank { "기타" } }
                     .mapValues { entry -> entry.value.sumOf { it.amount } }
 
+                AppLogger.i("MainViewModel", "거래내역 로드 완료: ${visibleTransactions.size}건 (수입: ${totalIncome}원, 지출: ${totalExpense}원)")
+
                 _uiState.value = _uiState.value.copy(
                     transactions = visibleTransactions,
                     totalIncome = totalIncome,
@@ -358,9 +374,56 @@ class MainViewModel @Inject constructor(
 
     // 현금 거래인지 확인하는 헬퍼 함수
     private fun isCashTransaction(transaction: Transaction): Boolean {
-        return transaction.bankName.isEmpty() ||
+        return transaction.bankId.equals("CASH", ignoreCase = true) ||
                transaction.bankName.equals("현금", ignoreCase = true) ||
                transaction.bankName.equals("cash", ignoreCase = true)
+    }
+
+    /**
+     * 거래가 공유 범위에 포함되는지 확인하는 헬퍼 함수
+     * @param transaction 확인할 거래
+     * @param owner 거래 소유자 (공유 설정을 가진 사용자)
+     * @return 공유 범위에 포함되면 true
+     */
+    private fun isTransactionShared(transaction: Transaction, owner: User): Boolean {
+        val shareFromDate = owner.shareFromDate
+        val hiddenIds = owner.hiddenTransactionIds
+        val shareCash = owner.shareCashTransactions
+        val shareAllowance = owner.shareAllowance
+        val sharedBankIds = owner.sharedBankIds
+
+        // 숨김 목록에 있는 거래는 안 보임
+        if (hiddenIds.contains(transaction.id)) {
+            return false
+        }
+
+        // 현금 거래 공유 설정 확인
+        if (!shareCash && isCashTransaction(transaction)) {
+            return false
+        }
+
+        // 용돈 거래 공유 설정 확인
+        if (!shareAllowance && transaction.isLinkedToChild) {
+            return false
+        }
+
+        // 공유 시작일 이전 거래는 안 보임
+        if (shareFromDate != null && transaction.transactionDate != null) {
+            if (transaction.transactionDate < shareFromDate) {
+                return false
+            }
+        }
+
+        // 은행별 공유 설정 확인 (sharedBankIds가 비어있으면 전체 공유)
+        if (sharedBankIds.isNotEmpty() && !isCashTransaction(transaction)) {
+            // 거래의 bankId가 공유 목록에 있는지 확인
+            val transactionBankId = transaction.bankId
+            if (transactionBankId.isNotBlank() && !sharedBankIds.contains(transactionBankId)) {
+                return false
+            }
+        }
+
+        return true
     }
 
     fun setUserFilter(userId: String?) {
@@ -464,7 +527,8 @@ class MainViewModel @Inject constructor(
         shareFromDate: Timestamp?,
         hiddenTransactionIds: List<String>,
         shareCashTransactions: Boolean = true,
-        shareAllowance: Boolean = true
+        shareAllowance: Boolean = true,
+        sharedBankIds: List<String> = emptyList()
     ) {
         viewModelScope.launch {
             val userId = _uiState.value.currentUser?.id ?: return@launch
@@ -473,7 +537,8 @@ class MainViewModel @Inject constructor(
                 shareFromDate,
                 hiddenTransactionIds,
                 shareCashTransactions,
-                shareAllowance
+                shareAllowance,
+                sharedBankIds
             )
         }
     }

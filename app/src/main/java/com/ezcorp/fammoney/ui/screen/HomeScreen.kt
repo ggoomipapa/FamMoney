@@ -43,8 +43,11 @@ import com.ezcorp.fammoney.ui.screen.components.SpendingPredictionCard
 import com.ezcorp.fammoney.ui.theme.ExpenseColor
 import com.ezcorp.fammoney.ui.theme.IncomeColor
 import com.ezcorp.fammoney.ui.viewmodel.MainViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val TAG = "HomeScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,9 +87,24 @@ fun HomeScreen(
 
     val listState = rememberLazyListState()
 
-    // 태그 로드
+    // 화면 진입 로그 및 태그 로드
     LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 홈 화면 시작 ==========")
         viewModel.loadTags()
+    }
+
+    // 사용자 정보 로그
+    LaunchedEffect(uiState.currentUser, uiState.currentGroup) {
+        if (uiState.currentUser != null && uiState.currentGroup != null) {
+            AppLogger.i(TAG, "사용자: ${uiState.currentUser?.name}, 그룹: ${uiState.currentGroup?.name}")
+        }
+    }
+
+    // 거래내역 로드 완료 로그
+    LaunchedEffect(uiState.transactions.size) {
+        if (!uiState.isLoading && uiState.transactions.isNotEmpty()) {
+            AppLogger.i(TAG, "거래내역 로드됨: ${uiState.transactions.size}건")
+        }
     }
 
     // 선택 모드에서 뒤로가기 시 선택 모드 해제
@@ -321,7 +339,7 @@ fun HomeScreen(
                                 expanded = showOverflowMenu,
                                 onDismissRequest = { showOverflowMenu = false }
                             ) {
-                                if (uiState.cashManagementEnabled) {
+                                if (uiState.currentGroup?.cashManagementEnabled == true) {
                                     DropdownMenuItem(
                                         text = { Text("현금 관리") },
                                         onClick = {
@@ -349,7 +367,7 @@ fun HomeScreen(
                         }
                     } else {
                         // 넓은 화면: 모든 아이콘 표시
-                        if (uiState.cashManagementEnabled) {
+                        if (uiState.currentGroup?.cashManagementEnabled == true) {
                             IconButton(onClick = onNavigateToCashManagement) {
                                 Icon(Icons.Default.Payments, contentDescription = "현금 관리")
                             }

@@ -4,6 +4,7 @@ import com.ezcorp.fammoney.data.model.BankConfig
 import com.ezcorp.fammoney.data.model.LearnedMerchantRule
 import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.data.repository.LearnedMerchantRuleRepository
+import com.ezcorp.fammoney.util.AppLogger
 import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,6 +47,8 @@ class NotificationParser @Inject constructor(
 ) {
 
     companion object {
+        private const val TAG = "NotificationParser"
+
         // 금액 추출 패턴들 (우선순위 순)
         private val AMOUNT_PATTERNS = listOf(
             Pattern.compile("([\\d,]+)\\s*원\\s*(?:승인|결제|출금|입금|이체)"),
@@ -103,10 +106,20 @@ class NotificationParser @Inject constructor(
         notificationText: String,
         selectedBanks: List<BankConfig>
     ): ParsedTransaction? {
+        AppLogger.d(TAG, "========== 파싱 시작 ==========")
+        AppLogger.d(TAG, "패키지: $packageName")
+        AppLogger.d(TAG, "알림 텍스트: $notificationText")
+        AppLogger.d(TAG, "선택된 은행 수: ${selectedBanks.size}")
+
         val matchingBank = selectedBanks.find { bank ->
             bank.packageNames.contains(packageName)
-        } ?: return null
+        }
+        if (matchingBank == null) {
+            AppLogger.d(TAG, "매칭되는 은행 없음 - 패키지 '$packageName'이 선택된 은행에 없음")
+            return null
+        }
 
+        AppLogger.d(TAG, "매칭된 은행: ${matchingBank.displayName} (bankId=${matchingBank.bankId})")
         return parseWithBankConfig(notificationText, matchingBank)
     }
 
@@ -114,31 +127,49 @@ class NotificationParser @Inject constructor(
         text: String,
         selectedBanks: List<BankConfig>
     ): ParsedTransaction? {
+        AppLogger.d(TAG, "수동 입력 파싱 시작: text=${text.take(50)}...")
         for (bank in selectedBanks) {
             val result = parseWithBankConfig(text, bank)
             if (result != null) {
+                AppLogger.i(TAG, "수동 입력 파싱 성공: 은행=${bank.displayName}, 금액=${result.amount}")
                 return result
             }
         }
+        AppLogger.d(TAG, "수동 입력 파싱 실패 - 모든 은행에서 매칭 안됨")
         return null
     }
 
     private suspend fun parseWithBankConfig(text: String, bankConfig: BankConfig): ParsedTransaction? {
+        AppLogger.d(TAG, "parseWithBankConfig 시작: bank=${bankConfig.displayName}")
+
         // 1. 금액 추출
-        val (amount, isForeign) = extractAmount(text) ?: return null
+        val amountResult = extractAmount(text)
+        if (amountResult == null) {
+            AppLogger.d(TAG, "금액 추출 실패 - 텍스트에서 금액 패턴 없음")
+            return null
+        }
+        val (amount, isForeign) = amountResult
+        AppLogger.d(TAG, "금액 추출 성공: amount=$amount, 해외거래=$isForeign")
 
         val finalAmount = if (isForeign) {
             // 실시간 환율 적용
+            AppLogger.d(TAG, "해외거래 환율 변환 시작: USD $amount")
             val exchangeRate = exchangeRateService.getExchangeRate(baseCurrency = "USD", targetCurrency = "KRW") ?: 1300.0 // Default to 1300 if API fails
-            (amount.toDouble() * exchangeRate).toLong()
+            val converted = (amount.toDouble() * exchangeRate).toLong()
+            AppLogger.d(TAG, "환율 변환 완료: USD $amount × $exchangeRate = ${converted}원")
+            converted
         } else {
             amount.toLong()
         }
-                
-        if (finalAmount <= 0) return null
+
+        if (finalAmount <= 0) {
+            AppLogger.d(TAG, "최종 금액이 0 이하: $finalAmount - 파싱 중단")
+            return null
+        }
 
         // 2. 거래 유형 판별
         val type = determineTransactionType(text, bankConfig)
+        AppLogger.d(TAG, "거래 유형 판별: ${type.name}")
 
         // 3. 가맹점/송금인 추출 (N-best 시스템 적용)
         val merchantName: String
@@ -147,30 +178,38 @@ class NotificationParser @Inject constructor(
         var merchantCandidates = emptyList<String>()
 
         if (type == TransactionType.INCOME) {
+            AppLogger.d(TAG, "입금 거래 - 입금사유/송금인 추출 시작")
             // 입금인 경우: 특별 입금 사유 우선, 없으면 송금인 추출
             val incomeReason = extractIncomeReason(text)
             senderName = extractSenderName(text)
+            AppLogger.d(TAG, "입금사유: '$incomeReason', 송금인: '$senderName'")
             // 특별 입금 사유(체크할인, 캐시백 등)가 있으면 그것을 사용
             merchantName = if (incomeReason != "입금") {
                 confidence = 0.9  // 입금 사유 키워드 매칭은 높은 신뢰도
+                AppLogger.d(TAG, "입금 사유 키워드 매칭: '$incomeReason' (confidence=0.9)")
                 incomeReason
             } else if (senderName.isNotBlank()) {
                 confidence = 0.8  // 송금인 추출도 높은 신뢰도
+                AppLogger.d(TAG, "송금인 추출 성공: '$senderName' (confidence=0.8)")
                 senderName
             } else {
                 confidence = 0.3  // 기본 "입금"은 낮은 신뢰도
+                AppLogger.d(TAG, "입금 사유/송금인 미확인 - 기본값 '입금' 사용 (confidence=0.3)")
                 "입금"
             }
         } else {
+            AppLogger.d(TAG, "출금 거래 - N-best 가맹점 추출 시작")
             // 출금인 경우: N-best 후보 추출 + 점수화
             senderName = ""
 
             // 전처리
             val cleanText = preprocess(text)
+            AppLogger.d(TAG, "전처리된 텍스트: ${cleanText.take(80)}...")
 
             // 정책 3: 학습된 규칙 우선 조회
             val signature = LearnedMerchantRule.generateSignature(cleanText, null)
             val learnedRule = learnedMerchantRuleRepository.findBySignature(signature)
+            AppLogger.d(TAG, "학습 규칙 조회: signature=${signature.take(20)}..., 결과=${if (learnedRule != null) "'${learnedRule.merchant}' (hitCount=${learnedRule.hitCount})" else "없음"}")
 
             if (learnedRule != null && learnedRule.merchant.isNotBlank()) {
                 // 학습된 규칙 사용
@@ -181,23 +220,32 @@ class NotificationParser @Inject constructor(
                     0.85 + LearnedMerchantRule.confidenceBonus(learnedRule.hitCount)
                 }
                 merchantCandidates = listOf(learnedRule.merchant)
+                AppLogger.i(TAG, "학습 규칙 적용: merchant='$merchantName', userConfirmed=${learnedRule.isUserConfirmed}, confidence=$confidence")
             } else {
                 // N-best 후보 추출
                 val extractionResult = merchantCandidateExtractor.extract(cleanText)
 
                 confidence = extractionResult.confidence
                 merchantCandidates = extractionResult.candidates.map { it.normalizedText }
+                AppLogger.d(TAG, "N-best 후보 추출: ${merchantCandidates.size}개, confidence=$confidence")
+                merchantCandidates.forEachIndexed { idx, candidate ->
+                    AppLogger.d(TAG, "  후보[$idx]: '$candidate'")
+                }
 
                 // 정책 2 준수: confidence < 0.50이면 미분류 허용
                 merchantName = if (extractionResult.bestCandidate != null && confidence >= 0.30) {
+                    AppLogger.d(TAG, "Best candidate 사용: '${extractionResult.bestCandidate.normalizedText}' (confidence=$confidence >= 0.30)")
                     extractionResult.bestCandidate.normalizedText
                 } else {
                     // 기존 방식으로 폴백 (호환성 유지)
+                    AppLogger.d(TAG, "N-best 불충분 - 레거시 방식 폴백 시도")
                     val fallback = extractMerchantNameLegacy(text, isForeign)
                     if (fallback.isNotBlank()) {
                         confidence = 0.4  // 레거시 방식은 중간 신뢰도
+                        AppLogger.d(TAG, "레거시 방식 성공: '$fallback' (confidence=0.4)")
                         fallback
                     } else {
+                        AppLogger.d(TAG, "레거시 방식도 실패 - 미분류 처리")
                         ""  // 미분류 (정책 2)
                     }
                 }
@@ -206,9 +254,17 @@ class NotificationParser @Inject constructor(
 
         // 4. 계좌번호 추출
         val accountNumber = extractAccountNumber(text)
+        if (accountNumber.isNotBlank()) {
+            AppLogger.d(TAG, "계좌번호 추출: $accountNumber")
+        }
 
         // 5. 설명 추출
         val description = extractDescription(text, type)
+
+        AppLogger.i(TAG, "========== 파싱 완료 ==========")
+        AppLogger.i(TAG, "결과: amount=${finalAmount}원, type=${type.name}, bank=${bankConfig.displayName}")
+        AppLogger.i(TAG, "  merchant='$merchantName', sender='$senderName', confidence=$confidence")
+        AppLogger.i(TAG, "  후보: ${merchantCandidates.joinToString(", ")}")
 
         return ParsedTransaction(
             amount = finalAmount,
@@ -228,6 +284,8 @@ class NotificationParser @Inject constructor(
      * 금액 추출
      */
     private fun extractAmount(text: String): Pair<Number, Boolean>? {
+        AppLogger.d(TAG, "금액 추출 시작")
+
         // 해외 패턴 (USD)
         val foreignPatterns = listOf(
             Pattern.compile("USD\\s*([\\d,]+\\.?\\d*)", Pattern.CASE_INSENSITIVE),
@@ -240,22 +298,25 @@ class NotificationParser @Inject constructor(
                 val amountStr = matcher.group(1).replace(",", "")
                 val amount = amountStr.toDoubleOrNull()
                 if (amount != null && amount > 0) {
-                    return Pair(amount, true) // (금액, 해외거래여부)
+                    AppLogger.d(TAG, "해외 금액 패턴 매칭: $amountStr → $amount (패턴: ${pattern.pattern()})")
+                    return Pair(amount, true)
                 }
             }
         }
-        
+
         // 국내 패턴 (원)
-        for (pattern in AMOUNT_PATTERNS) {
+        for ((index, pattern) in AMOUNT_PATTERNS.withIndex()) {
             val matcher = pattern.matcher(text)
             if (matcher.find()) {
                 val amountStr = matcher.group(1).replace(",", "")
                 val amount = amountStr.toLongOrNull()
                 if (amount != null && amount > 0) {
+                    AppLogger.d(TAG, "국내 금액 패턴 매칭: ${amountStr}원 → ${amount}원 (패턴 인덱스: $index)")
                     return Pair(amount, false)
                 }
             }
         }
+        AppLogger.d(TAG, "금액 추출 실패 - 매칭되는 패턴 없음")
         return null
     }
 
@@ -263,17 +324,22 @@ class NotificationParser @Inject constructor(
      * 거래 유형 판별
      */
     private fun determineTransactionType(text: String, bankConfig: BankConfig): TransactionType {
+        AppLogger.d(TAG, "거래 유형 판별 시작")
+
         // 취소/환불 키워드 우선 확인
         val cancelKeywords = listOf("취소", "CANCELED", "CANCELLED", "환불", "REFUND")
-        if (cancelKeywords.any { text.contains(it, ignoreCase = true) }) {
+        val foundCancel = cancelKeywords.firstOrNull { text.contains(it, ignoreCase = true) }
+        if (foundCancel != null) {
+            AppLogger.d(TAG, "취소/환불 키워드 감지: '$foundCancel' → INCOME")
             return TransactionType.INCOME
         }
 
         // "출금취소"는 입금으로 처리 (우선 체크)
         if (text.contains("출금취소")) {
+            AppLogger.d(TAG, "'출금취소' 감지 → INCOME")
             return TransactionType.INCOME
         }
-        
+
         // 수입 키워드 확인 (은행 설정 + 기본 키워드)
         val allIncomeKeywords = bankConfig.incomeKeywords + INCOME_KEYWORDS
         val allExpenseKeywords = bankConfig.expenseKeywords + EXPENSE_KEYWORDS
@@ -281,11 +347,14 @@ class NotificationParser @Inject constructor(
         // 각 키워드의 첫 등장 위치 확인
         var incomeIndex = Int.MAX_VALUE
         var expenseIndex = Int.MAX_VALUE
+        var matchedIncomeKeyword = ""
+        var matchedExpenseKeyword = ""
 
         for (keyword in allIncomeKeywords) {
             val idx = text.indexOf(keyword)
             if (idx >= 0 && idx < incomeIndex) {
                 incomeIndex = idx
+                matchedIncomeKeyword = keyword
             }
         }
 
@@ -296,14 +365,25 @@ class NotificationParser @Inject constructor(
             val idx = text.indexOf(keyword)
             if (idx >= 0 && idx < expenseIndex) {
                 expenseIndex = idx
+                matchedExpenseKeyword = keyword
             }
         }
 
-        return when {
-            incomeIndex < expenseIndex -> TransactionType.INCOME
-            expenseIndex < incomeIndex -> TransactionType.EXPENSE
-            else -> TransactionType.EXPENSE // 기본값
+        val result = when {
+            incomeIndex < expenseIndex -> {
+                AppLogger.d(TAG, "유형 판별: INCOME (키워드='$matchedIncomeKeyword' @$incomeIndex vs '$matchedExpenseKeyword' @$expenseIndex)")
+                TransactionType.INCOME
+            }
+            expenseIndex < incomeIndex -> {
+                AppLogger.d(TAG, "유형 판별: EXPENSE (키워드='$matchedExpenseKeyword' @$expenseIndex vs '$matchedIncomeKeyword' @$incomeIndex)")
+                TransactionType.EXPENSE
+            }
+            else -> {
+                AppLogger.d(TAG, "유형 판별: EXPENSE (기본값 - 키워드 위치 동일 또는 미발견)")
+                TransactionType.EXPENSE
+            }
         }
+        return result
     }
 
     /**
@@ -373,13 +453,21 @@ class NotificationParser @Inject constructor(
     /**
      * 송금인 추출 (입금 시)
      */
+    /** 송금인으로 잘못 추출되는 금융 용어 */
+    private val invalidSenderNames = setOf(
+        "카드", "체크", "적금", "예금", "출금", "보험", "대출",
+        "이자", "수수료", "해지", "환불", "취소", "잔액", "받기",
+        "보내기", "충전", "결제", "승인", "입금", "송금", "이체",
+        "할인", "캐시백", "포인트", "리워드", "정산", "배당"
+    )
+
     private fun extractSenderName(text: String): String {
         // "김*성님" 형식의 마스킹된 이름 찾기
         val senderPatterns = listOf(
             Pattern.compile("([가-힣]\\*[가-힣]{1,2})님?\\s*(?:입금|송금|이체)"),
             Pattern.compile("(?:입금|송금|이체)\\s*([가-힣]\\*[가-힣]{1,2})님?"),
-            Pattern.compile("([가-힣]{2,4})님?\\s*(?:입금|송금|이체)"),
-            Pattern.compile("(?:입금|송금|이체)\\s*([가-힣]{2,4})님?"),
+            Pattern.compile("([가-힣]{2,4})님?\\s+(?:입금|송금|이체)"),
+            Pattern.compile("(?:입금|송금|이체)\\s+([가-힣]{2,4})님?"),
             Pattern.compile("보내신\\s*분\\s*[:：]?\\s*([가-힣*]+)"),
             Pattern.compile("([가-힣]\\*[가-힣]{1,2})님?에게서")
         )
@@ -388,9 +476,10 @@ class NotificationParser @Inject constructor(
             val matcher = pattern.matcher(text)
             if (matcher.find()) {
                 val sender = matcher.group(1)?.trim() ?: continue
-                // 마스킹된 본인 이름이 아닌 경우에만 반환
-                if (sender.isNotBlank() && sender.length in 2..5) {
-                    return sender.replace("님", "")
+                val cleaned = sender.replace("님", "")
+                // 금융 용어가 아닌 실제 사람 이름만 반환
+                if (cleaned.isNotBlank() && cleaned.length in 2..5 && cleaned !in invalidSenderNames) {
+                    return cleaned
                 }
             }
         }

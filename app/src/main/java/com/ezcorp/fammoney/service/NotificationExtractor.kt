@@ -4,6 +4,7 @@ import android.app.Notification
 import android.os.Build
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
+import com.ezcorp.fammoney.util.AppLogger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,6 +42,7 @@ class NotificationExtractor @Inject constructor() {
     }
 
     companion object {
+        private const val TAG = "NotificationExtractor"
         // 요약 알림 감지 패턴
         private val SUMMARY_PATTERNS = listOf(
             Regex("""외\s*(\d+)\s*건"""),          // "외 3건"
@@ -73,8 +75,11 @@ class NotificationExtractor @Inject constructor() {
         val packageName = sbn.packageName
         val receivedAt = sbn.postTime
 
+        AppLogger.d(TAG, "알림 메시지 추출 시작: pkg=$packageName")
+
         // 그룹 요약 알림인 경우 스킵 (개별 알림만 처리)
         if (isGroupSummary(notification, extras)) {
+            AppLogger.d(TAG, "그룹 요약 알림 스킵: pkg=$packageName")
             return emptyList()
         }
 
@@ -82,7 +87,13 @@ class NotificationExtractor @Inject constructor() {
         val rawTexts = extractRawTexts(extras)
 
         if (rawTexts.isEmpty()) {
+            AppLogger.d(TAG, "원시 텍스트 추출 결과 없음: pkg=$packageName")
             return emptyList()
+        }
+
+        AppLogger.d(TAG, "원시 텍스트 ${rawTexts.size}개 추출됨")
+        rawTexts.forEachIndexed { idx, text ->
+            AppLogger.d(TAG, "  rawText[$idx]: ${text.take(80)}...")
         }
 
         // 멀티 거래 분해
@@ -90,6 +101,7 @@ class NotificationExtractor @Inject constructor() {
 
         for (rawText in rawTexts) {
             val decomposed = decomposeMultiTransaction(rawText)
+            AppLogger.d(TAG, "멀티거래 분해: 입력 1개 → ${decomposed.size}개")
             for (text in decomposed) {
                 decomposedMessages.add(
                     RawMessage(
@@ -103,6 +115,7 @@ class NotificationExtractor @Inject constructor() {
             }
         }
 
+        AppLogger.d(TAG, "최종 메시지 ${decomposedMessages.size}개 추출 완료")
         return decomposedMessages
     }
 
@@ -112,6 +125,7 @@ class NotificationExtractor @Inject constructor() {
     private fun isGroupSummary(notification: Notification, extras: Bundle): Boolean {
         // FLAG_GROUP_SUMMARY 확인
         if ((notification.flags and Notification.FLAG_GROUP_SUMMARY) != 0) {
+            AppLogger.d(TAG, "FLAG_GROUP_SUMMARY 감지")
             return true
         }
 
@@ -119,6 +133,7 @@ class NotificationExtractor @Inject constructor() {
         val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""
         for (pattern in SUMMARY_PATTERNS) {
             if (pattern.containsMatchIn(title)) {
+                AppLogger.d(TAG, "요약 패턴 감지: title='$title', pattern=${pattern.pattern}")
                 return true
             }
         }
@@ -306,13 +321,17 @@ class NotificationExtractor @Inject constructor() {
     fun isTransactionNotification(text: String): Boolean {
         // 금액 패턴 존재
         if (!AMOUNT_PATTERN.containsMatchIn(text)) {
+            AppLogger.d(TAG, "거래 알림 아님: 금액 패턴 없음")
             return false
         }
 
         // 트리거 키워드 존재
-        return TRANSACTION_TRIGGERS.any { trigger ->
+        val hasTrigger = TRANSACTION_TRIGGERS.any { trigger ->
             text.contains(trigger)
         }
+        val matchedTrigger = if (hasTrigger) TRANSACTION_TRIGGERS.first { text.contains(it) } else "없음"
+        AppLogger.d(TAG, "거래 알림 판별: hasTrigger=$hasTrigger (keyword=$matchedTrigger)")
+        return hasTrigger
     }
 
     /**

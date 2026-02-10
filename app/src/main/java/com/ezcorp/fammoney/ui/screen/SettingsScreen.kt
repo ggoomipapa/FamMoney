@@ -24,8 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.ui.viewmodel.AuthViewModel
 import com.ezcorp.fammoney.ui.viewmodel.MainViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import com.ezcorp.fammoney.util.DebugConfig
 import com.ezcorp.fammoney.util.subscriptionDisplayName
+
+private const val TAG = "SettingsScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +43,7 @@ fun SettingsScreen(
     onNavigateToAICoaching: () -> Unit = {},
     onNavigateToMotivation: () -> Unit = {},
     onNavigateToTags: () -> Unit = {},
+    onNavigateToDebugLog: () -> Unit = {},
     mainViewModel: MainViewModel = hiltViewModel(),
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
@@ -47,6 +51,11 @@ fun SettingsScreen(
     val authState by authViewModel.uiState.collectAsState()
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 설정 화면 진입 ==========")
+    }
 
     var showCopiedSnackbar by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -64,8 +73,8 @@ fun SettingsScreen(
     }
     var showThresholdDialog by remember { mutableStateOf(false) }
     var thresholdInput by remember { mutableStateOf("") }
-    var cashManagementEnabled by remember(uiState.cashManagementEnabled) {
-        mutableStateOf(uiState.cashManagementEnabled)
+    var cashManagementEnabled by remember(uiState.currentGroup?.cashManagementEnabled) {
+        mutableStateOf(uiState.currentGroup?.cashManagementEnabled ?: false)
     }
 
     // 중복 알림 처리 설정
@@ -379,13 +388,16 @@ fun SettingsScreen(
         SharingScopeDialog(
             currentShareCash = uiState.currentUser?.shareCashTransactions ?: true,
             currentShareAllowance = uiState.currentUser?.shareAllowance ?: true,
+            selectedBankIds = uiState.currentUser?.selectedBankIds ?: emptyList(),
+            currentSharedBankIds = uiState.currentUser?.sharedBankIds ?: emptyList(),
             onDismiss = { showSharingScopeDialog = false },
-            onConfirm = { shareFromDate, shareCash, shareAllowance ->
+            onConfirm = { shareFromDate, shareCash, shareAllowance, sharedBankIds ->
                 mainViewModel.updateSharingScope(
                     shareFromDate,
                     uiState.currentUser?.hiddenTransactionIds ?: emptyList(),
                     shareCash,
-                    shareAllowance
+                    shareAllowance,
+                    sharedBankIds
                 )
                 showSharingScopeDialog = false
                 // 초대 코드 복사
@@ -1944,6 +1956,62 @@ fun SettingsScreen(
                             Icons.Default.OpenInNew,
                             contentDescription = null
                         )
+                    }
+                }
+            }
+
+            // 디버그 로그 (Debug 빌드에서만 표시)
+            if (DebugConfig.isDebugBuild) {
+                item {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = "개발자 도구",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        onClick = onNavigateToDebugLog
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    Icons.Default.BugReport,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Column {
+                                    Text(
+                                        text = "디버그 로그",
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                    Text(
+                                        text = "앱 내부 로그 확인 및 저장",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                            Icon(
+                                Icons.Default.ChevronRight,
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
             }

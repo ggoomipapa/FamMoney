@@ -1,0 +1,167 @@
+[21:27:34.993] [I] FamMoneyApp: 앱 시작 - Debug: true, Version: 1.0.0
+[21:27:35.088] [I] BillingRepo: init: initializing BillingRepository
+[21:27:35.088] [D] BillingRepo: startConnection: connecting to billing service
+[21:27:35.109] [I] TxNotificationService: ========== TransactionNotificationListenerService 생성됨 ==========
+[21:27:35.110] [D] TxNotificationService: 알림 채널 생성 시작 (API 36)
+[21:27:35.110] [D] TxNotificationService: 알림 채널 생성: 'high_amount_channel' (고액 거래)
+[21:27:35.111] [D] TxNotificationService: 알림 채널 생성: 'duplicate_channel' (중복 거래)
+[21:27:35.111] [D] TxNotificationService: 알림 채널 생성: 'savings_channel' (목표 저축)
+[21:27:35.111] [D] TxNotificationService: 알림 채널 생성 완료 - 총 3개 채널
+[21:27:35.133] [I] BillingRepo: onBillingSetupFinished: connected successfully
+[21:27:35.133] [D] BillingRepo: queryProducts: querying subscription products
+[21:27:35.134] [D] BillingRepo: queryProducts: querying in-app products
+[21:27:35.134] [D] BillingRepo: queryPurchases: checking subscription purchases
+[21:27:35.134] [D] BillingRepo: queryPurchases: checking in-app purchases
+[21:27:35.137] [D] BillingRepo: queryPurchases: found 0 subscription purchases, productIds=[]
+[21:27:35.137] [D] BillingRepo: queryPurchases: found 0 in-app purchases, productIds=[]
+[21:27:35.394] [D] BillingRepo: queryProducts: in-app products found=0
+[21:27:35.396] [D] BillingRepo: queryProducts: subscription products found=0
+[21:27:36.194] [D] AuthViewModel: 인증 상태 관찰 시작
+[21:27:36.194] [D] AuthRepo: authStateFlow: 인증 상태 감시 시작
+[21:27:36.234] [I] AuthRepo: authStateFlow: 인증 상태 변경 uid=w05AZzDzzAQqPYXtQhALWmBKXqi1, isAnonymous=false
+[21:27:36.235] [I] AuthViewModel: 인증된 사용자 감지: uid=w05AZzDz..., isAnonymous=false
+[21:27:36.235] [D] AuthViewModel: 인증된 사용자 처리: uid=w05AZzDz...
+[21:27:36.235] [D] UserRepository: API 호출 시작: getUserByAuthUid params=authUid=w05AZzDz...
+[21:27:36.236] [D] UserPreferences: getUserId: value=lCogUxjw0YssSSEO4UvK
+[21:27:36.236] [D] UserRepository: getUserFlow 시작: userId=lCogUxjw0YssSSEO4UvK
+[21:27:36.250] [D] UserRepository: getUserFlow 업데이트: user=꾸
+[21:27:36.250] [D] MainViewModel: loadUserData: user=꾸, groupId=, groupIds=[]
+[21:27:36.250] [D] MainViewModel: loadGroupData: groupId=
+[21:27:36.251] [D] MainViewModel: loadChildren: groupId=
+[21:27:36.251] [D] MainViewModel: 거래내역 로드 시작: groupId=, 2026년 2월
+[21:27:36.251] [D] UserPreferences: getGroupId: value=
+[21:27:36.252] [W] UserRepository: getGroupFlow: groupId가 비어있음
+[21:27:36.252] [D] TransactionRepo: getTransactionsByMonth: 리스너 시작 2026년 2월
+[21:27:36.252] [D] DuplicateRepo: getPendingDuplicatesFlow: groupId=
+[21:27:36.252] [D] AllowanceRepo: getAllowancesFlow: groupId=
+[21:27:36.252] [D] SavingsGoalRepo: getGoalsFlow: groupId=
+[21:27:36.252] [D] ChildIncomeRepository: getChildrenByGroup 시작: groupId=
+[21:27:36.252] [E] ChildIncomeRepository: getChildrenByGroup: groupId가 비어있습니다!
+[21:27:36.252] [W] UserRepository: getGroupFlow: groupId가 비어있음
+[21:27:36.252] [D] MainViewModel: loadGroupData: group=null, childIncomeEnabled=null, cashManagementEnabled=null
+[21:27:36.252] [D] MainViewModel: loadGroupData: groupMembers=0명 ()
+[21:27:36.252] [D] MainViewModel: loadChildren: 0명 자녀 로드됨 ()
+[21:27:36.330] [D] TransactionRepo: getTransactionsByMonth: 전체 55건 중 18건 필터됨
+[21:27:36.330] [I] MainViewModel: 거래내역 로드 완료: 18건 (수입: 0원, 지출: 236634원)
+[21:27:36.348] [D] DuplicateRepo: getPendingDuplicatesFlow: received 17 pending duplicates
+[21:27:36.348] [D] AllowanceRepo: getAllowancesFlow: received 0 allowances
+[21:27:36.349] [D] SavingsGoalRepo: getGoalsFlow: received 0 goals
+[21:27:36.423] [I] UserRepository: API 호출 성공: getUserByAuthUid result=found=true
+[21:27:36.423] [I] AuthViewModel: 기존 사용자 발견: 꾸, groupId=
+[21:27:36.423] [D] UserPreferences: saveFullUserData: userId=lCogUxjw0YssSSEO4UvK, groupId=, userName=꾸, authUid=w05AZzDzzAQqPYXtQhALWmBKXqi1
+[21:27:36.424] [D] AuthViewModel: FCM 토큰 업데이트: userId=lCogUxjw0YssSSEO4UvK
+[21:27:36.424] [D] UserRepository: API 호출 시작: updateFcmToken params=userId=lCogUxjw0YssSSEO4UvK
+[21:27:36.478] [I] UserRepository: API 호출 성공: updateFcmToken
+[21:27:36.659] [I] HomeScreen: ========== 홈 화면 시작 ==========
+[21:27:36.659] [D] UserPreferences: getGroupId: value=
+[21:27:36.659] [D] TagRepo: getTagsByGroup: groupId=
+[21:27:36.659] [I] HomeScreen: 거래내역 로드됨: 18건
+[21:27:36.659] [D] AIFeature: isAIEnabled: true (디버그 빌드)
+[21:27:36.659] [D] AIFeature: isAIEnabled: true (디버그 빌드)
+[21:27:36.659] [D] AIFeature: generateSmartInsights 호출: featureId=smartInsights
+[21:27:36.660] [D] AIFeature: canUseFeature: featureId=smartInsights, result=false (Gemini 미초기화)
+[21:27:36.660] [D] AIFeature: isAIEnabled: true (디버그 빌드)
+[21:27:36.660] [D] AIFeature: predictMonthlySpending 호출: currentExpense=236634, day=7/28
+[21:27:36.660] [D] AIFeature: canUseFeature: featureId=spendingPrediction, result=false (Gemini 미초기화)
+[21:27:36.660] [D] AIFeature: isAIEnabled: true (디버그 빌드)
+[21:27:36.749] [E] TagRepo: getTagsByGroup: snapshot error for groupId=
+com.google.firebase.firestore.FirebaseFirestoreException: FAILED_PRECONDITION: The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/fammoney-28c0e/firestore/indexes?create_composite=Cldwcm9qZWN0cy9mYW1tb25leS0yOGMwZS9kYXRhYmFzZXMvKGRlZmF1bHQpL2NvbGxlY3Rpb25Hcm91cHMvdHJhbnNhY3Rpb25fdGFncy9pbmRleGVzL18QARoLCgdncm91cElkEAEaDQoJY3JlYXRlZEF0EAIaDAoIX19uYW1lX18QAg
+	at com.google.firebase.firestore.util.Util.exceptionFromStatus(Util.java:113)
+	at com.google.firebase.firestore.core.EventManager.onError(EventManager.java:166)
+	at com.google.firebase.firestore.core.SyncEngine.removeAndCleanupTarget(SyncEngine.java:604)
+	at com.google.firebase.firestore.core.SyncEngine.handleRejectedListen(SyncEngine.java:440)
+	at com.google.firebase.firestore.core.MemoryComponentProvider$RemoteStoreCallback.handleRejectedListen(MemoryComponentProvider.java:130)
+	at com.google.firebase.firestore.remote.RemoteStore.processTargetError(RemoteStore.java:591)
+	at com.google.firebase.firestore.remote.RemoteStore.handleWatchChange(RemoteStore.java:474)
+	at com.google.firebase.firestore.remote.RemoteStore.access$100(RemoteStore.java:60)
+	at com.google.firebase.firestore.remote.RemoteStore$1.onWatchChange(RemoteStore.java:183)
+	at com.google.firebase.firestore.remote.WatchStream.onNext(WatchStream.java:109)
+	at com.google.firebase.firestore.remote.WatchStream.onNext(WatchStream.java:38)
+	at com.google.firebase.firestore.remote.AbstractStream$StreamObserver.lambda$onNext$1$com-google-firebase-firestore-remote-AbstractStream$StreamObserver(AbstractStream.java:119)
+	at com.google.firebase.firestore.remote.AbstractStream$StreamObserver$$ExternalSyntheticLambda2.run(Unknown Source:4)
+	at com.google.firebase.firestore.remote.AbstractStream$CloseGuardedRunner.run(AbstractStream.java:67)
+	at com.google.firebase.firestore.remote.AbstractStream$StreamObserver.onNext(AbstractStream.java:110)
+	at com.google.firebase.firestore.remote.FirestoreChannel$1.onMessage(FirestoreChannel.java:140)
+	at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessagesAvailable.runInternal(ClientCallImpl.java:675)
+	at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessagesAvailable.runInContext(ClientCallImpl.java:660)
+	at io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+	at io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:133)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:524)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:348)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1156)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:651)
+	at com.google.firebase.firestore.util.AsyncQueue$SynchronizedShutdownAwareExecutor$DelayedStartFactory.run(AsyncQueue.java:235)
+	at java.lang.Thread.run(Thread.java:1119)
+Caused by: io.grpc.StatusException: FAILED_PRECONDITION: The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/fammoney-28c0e/firestore/indexes?create_composite=Cldwcm9qZWN0cy9mYW1tb25leS0yOGMwZS9kYXRhYmFzZXMvKGRlZmF1bHQpL2NvbGxlY3Rpb25Hcm91cHMvdHJhbnNhY3Rpb25fdGFncy9pbmRleGVzL18QARoLCgdncm91cElkEAEaDQoJY3JlYXRlZEF0EAIaDAoIX19uYW1lX18QAg
+	at io.grpc.Status.asException(Status.java:547)
+	at com.google.firebase.firestore.util.Util.exceptionFromStatus(Util.java:111)
+	... 26 more
+
+[21:27:39.166] [I] SettingsScreen: ========== 설정 화면 진입 ==========
+[21:27:41.401] [I] DebugLogScreen: ========== 디버그 로그 뷰어 진입 ==========
+[21:28:14.721] [D] DebugLogScreen: 사용자 액션: 공유 버튼 클릭
+[21:28:14.749] [E] AppLogger: 로그 파일 저장 실패
+java.io.FileNotFoundException: /storage/emulated/0/만든어플/SelectMoney 로그/selectmoney_log_20260207_212814.txt: open failed: EPERM (Operation not permitted)
+	at libcore.io.IoBridge.open(IoBridge.java:574)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:259)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:208)
+	at kotlin.io.FilesKt__FileReadWriteKt.writeBytes(FileReadWrite.kt:108)
+	at kotlin.io.FilesKt__FileReadWriteKt.writeText(FileReadWrite.kt:134)
+	at kotlin.io.FilesKt__FileReadWriteKt.writeText$default(FileReadWrite.kt:134)
+	at com.ezcorp.fammoney.util.AppLogger.saveToFile(AppLogger.kt:285)
+	at com.ezcorp.fammoney.ui.screen.DebugLogScreenKt$DebugLogScreen$8$1$1$3$1.invokeSuspend(DebugLogScreen.kt:290)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at androidx.compose.ui.platform.AndroidUiDispatcher.performTrampolineDispatch(AndroidUiDispatcher.android.kt:81)
+	at androidx.compose.ui.platform.AndroidUiDispatcher.access$performTrampolineDispatch(AndroidUiDispatcher.android.kt:41)
+	at androidx.compose.ui.platform.AndroidUiDispatcher$dispatchCallback$1.run(AndroidUiDispatcher.android.kt:57)
+	at android.os.Handler.handleCallback(Handler.java:995)
+	at android.os.Handler.dispatchMessage(Handler.java:103)
+	at android.os.Looper.loopOnce(Looper.java:273)
+	at android.os.Looper.loop(Looper.java:363)
+	at android.app.ActivityThread.main(ActivityThread.java:10060)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:632)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:975)
+Caused by: android.system.ErrnoException: open failed: EPERM (Operation not permitted)
+	at libcore.io.Linux.open(Native Method)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:9904)
+	at libcore.io.IoBridge.open(IoBridge.java:560)
+	... 20 more
+
+[21:28:23.860] [D] DebugLogScreen: 사용자 액션: 저장 버튼 클릭
+[21:28:23.878] [E] AppLogger: 로그 파일 저장 실패
+java.io.FileNotFoundException: /storage/emulated/0/만든어플/SelectMoney 로그/selectmoney_log_20260207_212823.txt: open failed: EPERM (Operation not permitted)
+	at libcore.io.IoBridge.open(IoBridge.java:574)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:259)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:208)
+	at kotlin.io.FilesKt__FileReadWriteKt.writeBytes(FileReadWrite.kt:108)
+	at kotlin.io.FilesKt__FileReadWriteKt.writeText(FileReadWrite.kt:134)
+	at kotlin.io.FilesKt__FileReadWriteKt.writeText$default(FileReadWrite.kt:134)
+	at com.ezcorp.fammoney.util.AppLogger.saveToFile(AppLogger.kt:285)
+	at com.ezcorp.fammoney.ui.screen.DebugLogScreenKt$DebugLogScreen$8$1$1$2$1.invokeSuspend(DebugLogScreen.kt:268)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at androidx.compose.ui.platform.AndroidUiDispatcher.performTrampolineDispatch(AndroidUiDispatcher.android.kt:81)
+	at androidx.compose.ui.platform.AndroidUiDispatcher.access$performTrampolineDispatch(AndroidUiDispatcher.android.kt:41)
+	at androidx.compose.ui.platform.AndroidUiDispatcher$dispatchCallback$1.run(AndroidUiDispatcher.android.kt:57)
+	at android.os.Handler.handleCallback(Handler.java:995)
+	at android.os.Handler.dispatchMessage(Handler.java:103)
+	at android.os.Looper.loopOnce(Looper.java:273)
+	at android.os.Looper.loop(Looper.java:363)
+	at android.app.ActivityThread.main(ActivityThread.java:10060)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:632)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:975)
+Caused by: android.system.ErrnoException: open failed: EPERM (Operation not permitted)
+	at libcore.io.Linux.open(Native Method)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:9904)
+	at libcore.io.IoBridge.open(IoBridge.java:560)
+	... 20 more

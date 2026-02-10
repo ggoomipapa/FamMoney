@@ -21,6 +21,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.ui.viewmodel.AuthViewModel
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "SetupScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +42,18 @@ fun SetupScreen(
 
     val deviceId = remember {
         Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    }
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 초기 설정 화면 진입 ==========")
+    }
+
+    // 설정 완료 로그
+    LaunchedEffect(uiState.setupComplete) {
+        if (uiState.setupComplete) {
+            AppLogger.i(TAG, "초기 설정 완료")
+        }
     }
 
     val googleSignInLauncher = rememberLauncherForActivityResult(

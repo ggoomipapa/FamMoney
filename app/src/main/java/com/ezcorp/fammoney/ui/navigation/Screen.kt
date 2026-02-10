@@ -59,4 +59,7 @@ sealed class Screen(val route: String) {
 
     // 태그 관리 (여행/이벤트)
     data object Tags : Screen("tags")
+
+    // 디버그 로그 (Debug 빌드 전용)
+    data object DebugLog : Screen("debug_log")
 }

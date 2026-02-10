@@ -1,5 +1,6 @@
 package com.ezcorp.fammoney.service
 
+import com.ezcorp.fammoney.util.AppLogger
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,7 +16,21 @@ class LocalCategorizationService @Inject constructor() {
      * 알림 텍스트에서 가맹점명 추출 (정규식 기반)
      */
     fun extractMerchantName(notificationText: String): String {
+        val truncatedInput = if (notificationText.length > 50) notificationText.take(50) + "..." else notificationText
+        AppLogger.d(TAG, "extractMerchantName() 입력: '$truncatedInput'")
+
         // 일반적인 은행/카드 알림 패턴들 (우선순위 순)
+        val patternNames = listOf(
+            "카드승인/취소[대괄호]",
+            "카드승인/취소[카드사]",
+            "KB국민은행출금",
+            "법인명패턴",
+            "토스/카카오페이",
+            "일반카드(금액+사용처)",
+            "일반카드(사용처+금액)",
+            "계좌번호",
+            "~에서패턴"
+        )
         val patterns = listOf(
             // === 카드 승인/취소 형식 ===
             // [카드사] 승인 금액원 사용처
@@ -41,7 +56,7 @@ class LocalCategorizationService @Inject constructor() {
             Regex("""([가-힣a-zA-Z0-9]{2,15})에서"""),
         )
 
-        for (pattern in patterns) {
+        for ((index, pattern) in patterns.withIndex()) {
             val match = pattern.find(notificationText)
             if (match != null) {
                 val merchantName = match.groupValues[1].trim()
@@ -49,11 +64,14 @@ class LocalCategorizationService @Inject constructor() {
                 if (!isExcludedKeyword(merchantName) &&
                     !isMaskedOwnerName(merchantName) &&
                     !isAccountNumber(merchantName)) {
-                    return cleanMerchantName(merchantName)
+                    val cleaned = cleanMerchantName(merchantName)
+                    AppLogger.d(TAG, "extractMerchantName: 패턴='${patternNames[index]}' 매칭 → 추출='$cleaned'")
+                    return cleaned
                 }
             }
         }
 
+        AppLogger.d(TAG, "extractMerchantName: 매칭 패턴 없음 → 빈 문자열 반환")
         return ""
     }
 
@@ -110,6 +128,7 @@ class LocalCategorizationService @Inject constructor() {
         for ((category, keywords) in categoryKeywords) {
             for (keyword in keywords) {
                 if (lowerName.contains(keyword.lowercase())) {
+                    AppLogger.d(TAG, "categorize: merchantName='$merchantName' → keyword='$keyword' → category='$category'")
                     return AutoCategoryResult(
                         category = category,
                         confidence = 0.85f,
@@ -120,15 +139,19 @@ class LocalCategorizationService @Inject constructor() {
         }
 
         // 금액 기반 추론 (매칭 실패 시)
-        return when {
+        val fallbackResult = when {
             amount in 1000..10000 -> AutoCategoryResult("CAFE_SNACK", 0.4f, "소액 결제")
             amount in 10000..50000 -> AutoCategoryResult("DINING_OUT", 0.3f, "일반 결제")
             amount > 100000 -> AutoCategoryResult("ONLINE_SHOPPING", 0.3f, "고액 결제")
             else -> AutoCategoryResult("OTHER", 0.2f, "분류 불확실")
         }
+        AppLogger.d(TAG, "categorize: merchantName='$merchantName' 키워드 매칭 실패 → 금액기반 fallback: category='${fallbackResult.category}', amount=$amount")
+        return fallbackResult
     }
 
     companion object {
+        private const val TAG = "LocalCategorization"
+
         /**
          * 카테고리별 키워드 데이터베이스
          */

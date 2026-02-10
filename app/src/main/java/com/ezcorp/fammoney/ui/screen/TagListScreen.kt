@@ -24,8 +24,11 @@ import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.ui.theme.ExpenseColor
 import com.ezcorp.fammoney.ui.theme.IncomeColor
 import com.ezcorp.fammoney.ui.viewmodel.TagViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val TAG = "TagListScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +39,16 @@ fun TagListScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showCreateDialog by remember { mutableStateOf(false) }
     var tagToDelete by remember { mutableStateOf<TransactionTag?>(null) }
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 태그 관리 화면 진입 ==========")
+    }
+
+    // 태그 목록 로드 로그
+    LaunchedEffect(uiState.tags.size) {
+        AppLogger.i(TAG, "태그 목록 로드 완료: ${uiState.tags.size}개")
+    }
 
     Scaffold(
         topBar = {

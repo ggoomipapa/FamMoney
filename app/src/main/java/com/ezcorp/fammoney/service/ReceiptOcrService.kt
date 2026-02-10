@@ -2,7 +2,7 @@ package com.ezcorp.fammoney.service
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Log
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-private const val TAG = "ReceiptOcrService"
+private const val TAG = "ReceiptOCR"
 
 /**
  * 영수증 항목 파싱 결과
@@ -42,6 +42,7 @@ class ReceiptOcrService @Inject constructor() {
      * 비트맵 이미지에서 텍스트 인식
      */
     suspend fun recognizeText(bitmap: Bitmap): OcrResult {
+        AppLogger.d(TAG, "recognizeText (Bitmap): width=${bitmap.width}, height=${bitmap.height}")
         val inputImage = InputImage.fromBitmap(bitmap, 0)
         return processImage(inputImage)
     }
@@ -50,24 +51,32 @@ class ReceiptOcrService @Inject constructor() {
      * URI에서 텍스트 인식
      */
     suspend fun recognizeText(uri: Uri, context: android.content.Context): OcrResult {
+        AppLogger.d(TAG, "recognizeText (URI): uri=$uri")
         val inputImage = InputImage.fromFilePath(context, uri)
         return processImage(inputImage)
     }
 
     private suspend fun processImage(inputImage: InputImage): OcrResult {
+        AppLogger.d(TAG, "processImage: OCR 처리 시작")
         return suspendCancellableCoroutine { continuation ->
             recognizer.process(inputImage)
                 .addOnSuccessListener { visionText ->
                     val rawText = visionText.text
-                    Log.d(TAG, "OCR Raw Text:\n$rawText")
+                    AppLogger.d(TAG, "OCR Raw Text (${rawText.length}자):\n${rawText.take(500)}")
 
                     val items = parseReceiptItems(rawText)
+                    AppLogger.d(TAG, "파싱된 항목: ${items.size}건")
+                    items.forEachIndexed { index, item ->
+                        AppLogger.d(TAG, "  항목[$index]: name=${item.name}, qty=${item.quantity}, unitPrice=${item.unitPrice}, totalPrice=${item.totalPrice}")
+                    }
+
                     val totalAmount = extractTotalAmount(rawText)
+                    AppLogger.i(TAG, "OCR 완료: items=${items.size}건, totalAmount=${totalAmount ?: 0L}")
 
                     continuation.resume(OcrResult(rawText, items, totalAmount ?: 0L))
                 }
                 .addOnFailureListener { e ->
-                    Log.e(TAG, "OCR failed", e)
+                    AppLogger.e(TAG, "OCR 처리 실패", e)
                     continuation.resumeWithException(e)
                 }
         }
@@ -165,6 +174,7 @@ class ReceiptOcrService @Inject constructor() {
      * 총 금액 추출
      */
     private fun extractTotalAmount(text: String): Long? {
+        AppLogger.d(TAG, "extractTotalAmount: 총 금액 추출 시작")
         val totalPatterns = listOf(
             Regex("""(?:합계|총합|결제금액|총액)\s*[:：]?\s*(\d{1,3}(?:,\d{3})*|\d+)\s*(?:원)""", RegexOption.IGNORE_CASE),
             Regex("""(\d{1,3}(?:,\d{3})*|\d+)\s*(?:원)?\s*(?:합계|총합)""", RegexOption.IGNORE_CASE)
@@ -174,7 +184,9 @@ class ReceiptOcrService @Inject constructor() {
             val match = pattern.find(text)
             if (match != null) {
                 val amountStr = match.groupValues[1].replace(",", "")
-                return amountStr.toLongOrNull()
+                val amount = amountStr.toLongOrNull()
+                AppLogger.d(TAG, "extractTotalAmount: 패턴 매칭 성공, amount=$amount")
+                return amount
             }
         }
 

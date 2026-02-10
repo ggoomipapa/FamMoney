@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.data.model.SavingsGoal
 import com.ezcorp.fammoney.ui.viewmodel.MainViewModel
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "SavingsGoalScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +33,19 @@ fun SavingsGoalScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 목표 저축 화면 진입 ==========")
+    }
+
+    // 저축 목표 로드 완료 로그
+    LaunchedEffect(uiState.savingsGoals.size) {
+        if (!uiState.isLoading) {
+            AppLogger.i(TAG, "저축 목표 로드 완료: ${uiState.savingsGoals.size}개")
+        }
+    }
+
     var showAddDialog by remember { mutableStateOf(false) }
     var showContributeDialog by remember { mutableStateOf<SavingsGoal?>(null) }
     var showDeleteDialog by remember { mutableStateOf<SavingsGoal?>(null) }

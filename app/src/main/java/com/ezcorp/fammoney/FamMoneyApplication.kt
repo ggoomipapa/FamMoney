@@ -2,6 +2,7 @@ package com.ezcorp.fammoney
 
 import android.app.Application
 import com.ezcorp.fammoney.util.AIFeatureConfig
+import com.ezcorp.fammoney.util.AppLogger
 import com.ezcorp.fammoney.util.DebugConfig
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,9 @@ class FamMoneyApplication : Application() {
 
         // 디버그 빌드 여부 초기화 - 프리미엄 기능 잠금 해제용
         DebugConfig.initialize(BuildConfig.DEBUG)
+
+        // 앱 시작 로그
+        AppLogger.i("FamMoneyApp", "앱 시작 - Debug: ${BuildConfig.DEBUG}, Version: ${BuildConfig.VERSION_NAME}")
 
         // AI 기능 Remote Config 초기화
         AIFeatureConfig.initialize()

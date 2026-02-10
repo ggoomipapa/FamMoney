@@ -17,7 +17,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.ui.viewmodel.MainViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import com.ezcorp.fammoney.util.effectiveSubscription
+
+private const val TAG = "SubscriptionScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,6 +36,12 @@ fun SubscriptionScreen(
 
     var showPurchaseResultDialog by remember { mutableStateOf<Pair<Boolean, String?>?>(null) }
     var isProcessing by remember { mutableStateOf(false) }
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 구독 플랜 화면 진입 ==========")
+        AppLogger.d(TAG, "현재 구독: $currentSubscription")
+    }
 
     // 결제 결과 다이얼로그
     showPurchaseResultDialog?.let { (success, message) ->

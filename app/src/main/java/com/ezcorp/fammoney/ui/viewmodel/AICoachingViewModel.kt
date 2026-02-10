@@ -6,6 +6,7 @@ import com.ezcorp.fammoney.data.repository.TransactionRepository
 import com.ezcorp.fammoney.service.GeminiService
 import com.ezcorp.fammoney.service.MonthlyFinancialData
 import com.ezcorp.fammoney.service.UserPreferences
+import com.ezcorp.fammoney.util.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -38,12 +39,17 @@ class AICoachingViewModel @Inject constructor(
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
+    companion object {
+        private const val TAG = "AICoachingVM"
+    }
+
     private val _uiState = MutableStateFlow(AICoachingUiState())
     val uiState: StateFlow<AICoachingUiState> = _uiState.asStateFlow()
 
     private var monthlyDataCache: List<MonthlyFinancialData> = emptyList()
 
     init {
+        AppLogger.i(TAG, "ViewModel 초기화")
         initializeAI()
         loadCurrentMonthData()
     }
@@ -53,16 +59,19 @@ class AICoachingViewModel @Inject constructor(
      * 구독자만 AI 기능 사용 가능
      */
     private fun initializeAI() {
+        AppLogger.d(TAG, "AI 서비스 초기화 시작")
         viewModelScope.launch {
             // Remote Config에서 최신 설정 가져오기
             com.ezcorp.fammoney.util.AIFeatureConfig.fetchAndActivate()
 
             // API 키로 GeminiService 초기화
             val isInitialized = geminiService.initializeFromRemoteConfig()
+            AppLogger.d(TAG, "GeminiService 초기화 결과: isInitialized=$isInitialized")
 
             // 디버그 빌드에서는 항상 프리미엄 취급
             val isPremium = com.ezcorp.fammoney.util.DebugConfig.isDebugBuild ||
                             checkSubscriptionStatus()
+            AppLogger.d(TAG, "프리미엄 상태: isPremium=$isPremium")
 
             _uiState.update {
                 it.copy(
@@ -88,16 +97,22 @@ class AICoachingViewModel @Inject constructor(
      */
     fun setConnectedBanks(banks: List<String>) {
         val bankNames = banks.filter { it.isNotBlank() }
+        AppLogger.d(TAG, "연결된 은행 설정: ${bankNames.joinToString()}, count=${bankNames.size}")
         _uiState.update { it.copy(connectedBanks = bankNames) }
         geminiService.setConnectedBanks(bankNames)
     }
 
     private fun loadCurrentMonthData() {
+        AppLogger.d(TAG, "이번 달 데이터 로드 시작")
         viewModelScope.launch {
-            val groupId = userPreferences.getGroupId() ?: return@launch
+            val groupId = userPreferences.getGroupId() ?: run {
+                AppLogger.w(TAG, "groupId가 null - 데이터 로드 중단")
+                return@launch
+            }
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
             val month = calendar.get(Calendar.MONTH) + 1
+            AppLogger.d(TAG, "데이터 조회: groupId=$groupId, year=$year, month=$month")
 
             transactionRepository.getTransactionsByMonth(groupId, year, month).collect { transactions ->
                 var totalIncome = 0L
@@ -113,6 +128,8 @@ class AICoachingViewModel @Inject constructor(
                         categoryMap[category] = (categoryMap[category] ?: 0L) + transaction.amount
                     }
                 }
+
+                AppLogger.dataLoaded(TAG, "이번 달 거래", transactions.size, "수입=$totalIncome, 지출=$totalExpense, 잔액=${totalIncome - totalExpense}")
 
                 _uiState.update {
                     it.copy(
@@ -140,6 +157,7 @@ class AICoachingViewModel @Inject constructor(
     }
 
     fun refresh() {
+        AppLogger.userAction(TAG, "새로고침")
         loadCurrentMonthData()
         _uiState.update {
             it.copy(
@@ -152,13 +170,16 @@ class AICoachingViewModel @Inject constructor(
     }
 
     fun analyzeFinances() {
+        AppLogger.userAction(TAG, "재무 분석 요청")
         if (!geminiService.isInitialized()) {
+            AppLogger.w(TAG, "재무 분석 실패: API 키 미설정")
             _uiState.update { it.copy(error = "API 키가 설정되지 않았습니다") }
             return
         }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
+            AppLogger.apiStart(TAG, "analyzeFinances", "monthlyDataCache.size=${monthlyDataCache.size}")
 
             val result = geminiService.analyzeFinances(
                 monthlyData = monthlyDataCache,
@@ -168,6 +189,7 @@ class AICoachingViewModel @Inject constructor(
 
             result.fold(
                 onSuccess = { analysis ->
+                    AppLogger.apiSuccess(TAG, "analyzeFinances", "분석 결과 길이=${analysis.length}")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -176,6 +198,7 @@ class AICoachingViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
+                    AppLogger.apiError(TAG, "analyzeFinances", error.message ?: "Unknown error")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -188,13 +211,16 @@ class AICoachingViewModel @Inject constructor(
     }
 
     fun analyzeInvestment(riskPreference: String, investmentPeriod: String) {
+        AppLogger.userAction(TAG, "투자 분석 요청", "risk=$riskPreference, period=$investmentPeriod")
         if (!geminiService.isInitialized()) {
+            AppLogger.w(TAG, "투자 분석 실패: API 키 미설정")
             _uiState.update { it.copy(error = "API 키가 설정되지 않았습니다") }
             return
         }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
+            AppLogger.apiStart(TAG, "analyzeInvestment", "balance=${_uiState.value.balance}")
 
             val result = geminiService.analyzeInvestment(
                 monthlyBalance = _uiState.value.balance,
@@ -204,6 +230,7 @@ class AICoachingViewModel @Inject constructor(
 
             result.fold(
                 onSuccess = { analysis ->
+                    AppLogger.apiSuccess(TAG, "analyzeInvestment", "결과 길이=${analysis.length}")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -212,6 +239,7 @@ class AICoachingViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
+                    AppLogger.apiError(TAG, "analyzeInvestment", error.message ?: "Unknown error")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -224,13 +252,16 @@ class AICoachingViewModel @Inject constructor(
     }
 
     fun analyzeGoalProgress(goalName: String, targetAmount: Long, targetYears: Int) {
+        AppLogger.userAction(TAG, "목표 달성 분석 요청", "goal=$goalName, target=$targetAmount, years=$targetYears")
         if (!geminiService.isInitialized()) {
+            AppLogger.w(TAG, "목표 분석 실패: API 키 미설정")
             _uiState.update { it.copy(error = "API 키가 설정되지 않았습니다") }
             return
         }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
+            AppLogger.apiStart(TAG, "analyzeGoalProgress", "goalName=$goalName, targetAmount=$targetAmount")
 
             val result = geminiService.analyzeGoalProgress(
                 goalName = goalName,
@@ -243,6 +274,7 @@ class AICoachingViewModel @Inject constructor(
 
             result.fold(
                 onSuccess = { analysis ->
+                    AppLogger.apiSuccess(TAG, "analyzeGoalProgress", "결과 길이=${analysis.length}")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -251,6 +283,7 @@ class AICoachingViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
+                    AppLogger.apiError(TAG, "analyzeGoalProgress", error.message ?: "Unknown error")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -266,13 +299,16 @@ class AICoachingViewModel @Inject constructor(
      * 금융상품 검색 (예금, CMA, ETF 등)
      */
     fun searchFinancialProducts(productType: String) {
+        AppLogger.userAction(TAG, "금융상품 검색", "productType=$productType")
         if (!geminiService.isInitialized()) {
+            AppLogger.w(TAG, "금융상품 검색 실패: API 키 미설정")
             _uiState.update { it.copy(error = "API 키가 설정되지 않았습니다") }
             return
         }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, productSearchResult = null) }
+            AppLogger.apiStart(TAG, "searchFinancialProducts", "type=$productType, banks=${_uiState.value.connectedBanks}")
 
             val result = geminiService.searchFinancialProducts(
                 productType = productType,
@@ -282,6 +318,7 @@ class AICoachingViewModel @Inject constructor(
 
             result.fold(
                 onSuccess = { searchResult ->
+                    AppLogger.apiSuccess(TAG, "searchFinancialProducts", "결과 길이=${searchResult.length}")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -290,6 +327,7 @@ class AICoachingViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
+                    AppLogger.apiError(TAG, "searchFinancialProducts", error.message ?: "Unknown error")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -305,7 +343,9 @@ class AICoachingViewModel @Inject constructor(
      * 저축전략 맞춤형 안내 제공
      */
     fun getSavingsStrategy(savingsGoal: String? = null, targetAmount: Long? = null) {
+        AppLogger.userAction(TAG, "저축전략 요청", "goal=$savingsGoal, target=$targetAmount")
         if (!geminiService.isInitialized()) {
+            AppLogger.w(TAG, "저축전략 요청 실패: API 키 미설정")
             _uiState.update { it.copy(error = "API 키가 설정되지 않았습니다") }
             return
         }
@@ -314,6 +354,7 @@ class AICoachingViewModel @Inject constructor(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, savingsStrategyResult = null) }
+            AppLogger.apiStart(TAG, "getSavingsStrategy", "bank=$primaryBank, surplus=${_uiState.value.balance}")
 
             val result = geminiService.getSavingsStrategy(
                 primaryBank = primaryBank,
@@ -324,6 +365,7 @@ class AICoachingViewModel @Inject constructor(
 
             result.fold(
                 onSuccess = { strategy ->
+                    AppLogger.apiSuccess(TAG, "getSavingsStrategy", "결과 길이=${strategy.length}")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -332,6 +374,7 @@ class AICoachingViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
+                    AppLogger.apiError(TAG, "getSavingsStrategy", error.message ?: "Unknown error")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -351,13 +394,16 @@ class AICoachingViewModel @Inject constructor(
         riskLevel: String,
         preferredProducts: List<String> = emptyList()
     ) {
+        AppLogger.userAction(TAG, "투자 가이드 요청", "profile=$investorProfile, risk=$riskLevel, products=$preferredProducts")
         if (!geminiService.isInitialized()) {
+            AppLogger.w(TAG, "투자 가이드 실패: API 키 미설정")
             _uiState.update { it.copy(error = "API 키가 설정되지 않았습니다") }
             return
         }
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, investmentGuideResult = null) }
+            AppLogger.apiStart(TAG, "getInvestmentGuide", "profile=$investorProfile, risk=$riskLevel")
 
             val result = geminiService.getInvestmentStartGuide(
                 investorProfile = investorProfile,
@@ -368,6 +414,7 @@ class AICoachingViewModel @Inject constructor(
 
             result.fold(
                 onSuccess = { guide ->
+                    AppLogger.apiSuccess(TAG, "getInvestmentGuide", "결과 길이=${guide.length}")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -376,6 +423,7 @@ class AICoachingViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
+                    AppLogger.apiError(TAG, "getInvestmentGuide", error.message ?: "Unknown error")
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -391,6 +439,7 @@ class AICoachingViewModel @Inject constructor(
      * 분석결과 초기화
      */
     fun clearResults() {
+        AppLogger.d(TAG, "분석 결과 초기화")
         _uiState.update {
             it.copy(
                 productSearchResult = null,

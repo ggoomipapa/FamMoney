@@ -26,8 +26,11 @@ import com.ezcorp.fammoney.data.model.SavingsGoal
 import com.ezcorp.fammoney.data.model.User
 import com.ezcorp.fammoney.data.repository.MemberStatistics
 import com.ezcorp.fammoney.ui.viewmodel.SavingsGoalDetailViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val TAG = "SavingsGoalDetailScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +43,20 @@ fun SavingsGoalDetailScreen(
     var showAddContributionDialog by remember { mutableStateOf(false) }
     var showEditContributionDialog by remember { mutableStateOf<SavingsContribution?>(null) }
     var selectedTab by remember { mutableStateOf(0) }
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 저축 목표 상세 화면 진입 ==========")
+        AppLogger.d(TAG, "목표 ID: $goalId")
+    }
+
+    // 저축 목표 로드 로그
+    LaunchedEffect(uiState.goal) {
+        uiState.goal?.let { goal ->
+            val progressPercent = if (goal.targetAmount > 0) (goal.currentAmount * 100 / goal.targetAmount) else 0
+            AppLogger.i(TAG, "저축 목표 로드: ${goal.name} - ${goal.currentAmount}/${goal.targetAmount}원 (${progressPercent}%)")
+        }
+    }
 
     // 에러 메시지 표시
     val snackbarHostState = remember { SnackbarHostState() }

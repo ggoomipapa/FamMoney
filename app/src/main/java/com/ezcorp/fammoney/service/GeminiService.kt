@@ -1,5 +1,6 @@
 package com.ezcorp.fammoney.service
 
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.generationConfig
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +72,10 @@ data class MonthlyFinancialData(
 @Singleton
 class GeminiService @Inject constructor() {
 
+    companion object {
+        private const val TAG = "GeminiService"
+    }
+
     private var generativeModel: GenerativeModel? = null
 
     /**
@@ -78,12 +83,16 @@ class GeminiService @Inject constructor() {
      * Application 시작 시 또는 Remote Config fetch 후 호출
      */
     fun initializeFromRemoteConfig(): Boolean {
+        AppLogger.d(TAG, "initializeFromRemoteConfig: Remote Config에서 API 키 조회 시작")
         val apiKey = com.ezcorp.fammoney.util.AIFeatureConfig.getGeminiApiKey()
         if (apiKey.isBlank()) {
+            AppLogger.w(TAG, "initializeFromRemoteConfig: API 키가 비어있음 - 초기화 실패")
             generativeModel = null
             return false
         }
+        AppLogger.i(TAG, "initializeFromRemoteConfig: API 키 발견 (길이=${apiKey.length}), 초기화 진행")
         initialize(apiKey)
+        AppLogger.i(TAG, "initializeFromRemoteConfig: 초기화 완료, isInitialized=${isInitialized()}")
         return true
     }
 
@@ -91,7 +100,9 @@ class GeminiService @Inject constructor() {
      * API 키 설정 (내부용 또는 테스트용)
      */
     fun initialize(apiKey: String) {
+        AppLogger.d(TAG, "initialize: API 키로 초기화 시작 (키 길이=${apiKey.length})")
         if (apiKey.isBlank()) {
+            AppLogger.w(TAG, "initialize: API 키가 비어있음 - 모델을 null로 설정")
             generativeModel = null
             return
         }
@@ -106,6 +117,7 @@ class GeminiService @Inject constructor() {
                 maxOutputTokens = 4096  // 더 긴 응답 허용
             }
         )
+        AppLogger.i(TAG, "initialize: GenerativeModel 생성 완료 (model=gemini-2.0-flash-exp, maxTokens=4096)")
     }
 
     /**
@@ -130,16 +142,22 @@ class GeminiService @Inject constructor() {
         savingsGoals: List<Pair<String, Long>>? = null,  // 목표명, 목표금액
         userName: String = "사용자"
     ): Result<String> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다. 설정에서 Gemini API 키를 입력해주세요.")
-        )
+        AppLogger.apiStart(TAG, "analyzeFinances", "monthlyData=${monthlyData.size}건, savingsGoals=${savingsGoals?.size ?: 0}건, userName=$userName")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "analyzeFinances: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다. 설정에서 Gemini API 키를 입력해주세요.")
+            )
+        }
 
         try {
             val prompt = buildFinancialPrompt(monthlyData, savingsGoals ?: emptyList(), userName)
             val response = model.generateContent(prompt)
             val text = response.text ?: "분석 결과를 생성할 수 없습니다."
+            AppLogger.apiSuccess(TAG, "analyzeFinances", "응답 길이=${text.length}")
             Result.success(text)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "analyzeFinances", e.message ?: "알 수 없는 오류", e)
             Result.failure(Exception("AI 분석 중 오류가 발생했습니다: ${e.message}"))
         }
     }
@@ -153,16 +171,22 @@ class GeminiService @Inject constructor() {
         riskPreference: String,
         investmentPeriod: String
     ): Result<String> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "analyzeInvestment", "monthlyBalance=$monthlyBalance, riskPreference=$riskPreference, investmentPeriod=$investmentPeriod")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "analyzeInvestment: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val prompt = buildInvestmentPrompt(monthlyBalance, riskPreference, investmentPeriod)
             val response = model.generateContent(prompt)
             val text = response.text ?: "분석 결과를 생성할 수 없습니다."
+            AppLogger.apiSuccess(TAG, "analyzeInvestment", "응답 길이=${text.length}")
             Result.success(text)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "analyzeInvestment", e.message ?: "알 수 없는 오류", e)
             Result.failure(Exception("투자 분석 중 오류가 발생했습니다: ${e.message}"))
         }
     }
@@ -178,9 +202,13 @@ class GeminiService @Inject constructor() {
         averageMonthlyBalance: Long,
         categoryExpenses: Map<String, Long>
     ): Result<String> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "analyzeGoalProgress", "goalName=$goalName, targetAmount=$targetAmount, currentAmount=$currentAmount, targetYears=$targetYears")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "analyzeGoalProgress: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val prompt = buildGoalCoachingPrompt(
@@ -189,8 +217,10 @@ class GeminiService @Inject constructor() {
             )
             val response = model.generateContent(prompt)
             val text = response.text ?: "분석 결과를 생성할 수 없습니다."
+            AppLogger.apiSuccess(TAG, "analyzeGoalProgress", "goalName=$goalName, 응답 길이=${text.length}")
             Result.success(text)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "analyzeGoalProgress", "goalName=$goalName, error=${e.message}", e)
             Result.failure(Exception("목표 분석 중 오류가 발생했습니다: ${e.message}"))
         }
     }
@@ -352,16 +382,22 @@ class GeminiService @Inject constructor() {
         connectedBankNames: List<String> = connectedBanks,
         monthlySurplus: Long = 0L
     ): Result<String> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "searchFinancialProducts", "productType=$productType, connectedBanks=${connectedBankNames.joinToString(",")}, monthlySurplus=$monthlySurplus")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "searchFinancialProducts: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val prompt = buildProductSearchPrompt(productType, connectedBankNames, monthlySurplus)
             val response = model.generateContent(prompt)
             val text = response.text ?: "상품 정보를 가져올 수 없습니다."
+            AppLogger.apiSuccess(TAG, "searchFinancialProducts", "productType=$productType, 응답 길이=${text.length}")
             Result.success(text)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "searchFinancialProducts", "productType=$productType, error=${e.message}", e)
             Result.failure(Exception("상품 검색 중 오류가 발생했습니다: ${e.message}"))
         }
     }
@@ -436,16 +472,22 @@ class GeminiService @Inject constructor() {
         savingsGoal: String? = null,
         targetAmount: Long? = null
     ): Result<String> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "getSavingsStrategy", "primaryBank=$primaryBank, monthlySurplus=$monthlySurplus, savingsGoal=$savingsGoal")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "getSavingsStrategy: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val prompt = buildSavingsStrategyPrompt(primaryBank, monthlySurplus, savingsGoal ?: "", targetAmount ?: 0L)
             val response = model.generateContent(prompt)
             val text = response.text ?: "전략을 생성할 수 없습니다."
+            AppLogger.apiSuccess(TAG, "getSavingsStrategy", "primaryBank=$primaryBank, 응답 길이=${text.length}")
             Result.success(text)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "getSavingsStrategy", "primaryBank=$primaryBank, error=${e.message}", e)
             Result.failure(Exception("저축 전략 분석 중 오류가 발생했습니다: ${e.message}"))
         }
     }
@@ -516,16 +558,22 @@ class GeminiService @Inject constructor() {
         monthlySurplus: Long,
         preferredProducts: List<String> = emptyList()  // "ETF", "주식", "펀드" 등
     ): Result<String> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "getInvestmentStartGuide", "investorProfile=$investorProfile, riskLevel=$riskLevel, monthlySurplus=$monthlySurplus, preferredProducts=${preferredProducts.joinToString(",")}")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "getInvestmentStartGuide: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val prompt = buildInvestmentGuidePrompt(investorProfile, riskLevel, monthlySurplus, preferredProducts)
             val response = model.generateContent(prompt)
             val text = response.text ?: "가이드를 생성할 수 없습니다."
+            AppLogger.apiSuccess(TAG, "getInvestmentStartGuide", "investorProfile=$investorProfile, riskLevel=$riskLevel, 응답 길이=${text.length}")
             Result.success(text)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "getInvestmentStartGuide", "investorProfile=$investorProfile, riskLevel=$riskLevel, error=${e.message}", e)
             Result.failure(Exception("투자 가이드 생성 중 오류가 발생했습니다: ${e.message}"))
         }
     }
@@ -615,9 +663,13 @@ class GeminiService @Inject constructor() {
         amount: Long,
         description: String = ""
     ): Result<AutoCategoryResult> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "autoCategorize", "merchantName=$merchantName, amount=$amount")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "autoCategorize: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val prompt = """
@@ -650,9 +702,12 @@ class GeminiService @Inject constructor() {
             """.trimIndent()
 
             val response = model.generateContent(prompt)
-            val text = response.text?.trim() ?: return@withContext Result.failure(
-                Exception("분류 결과를 받지 못했습니다")
-            )
+            val text = response.text?.trim() ?: run {
+                AppLogger.w(TAG, "autoCategorize: 분류 결과 응답이 null - merchantName=$merchantName")
+                return@withContext Result.failure(
+                    Exception("분류 결과를 받지 못했습니다")
+                )
+            }
 
             // JSON 파싱
             val jsonMatch = Regex("\\{[^}]+\\}").find(text)
@@ -662,11 +717,14 @@ class GeminiService @Inject constructor() {
                 val confidence = Regex("\"confidence\"\\s*:\\s*([0-9.]+)").find(json)?.groupValues?.get(1)?.toFloatOrNull() ?: 0.5f
                 val reason = Regex("\"reason\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: ""
 
+                AppLogger.apiSuccess(TAG, "autoCategorize", "merchantName=$merchantName, category=$category, confidence=$confidence, reason=$reason")
                 Result.success(AutoCategoryResult(category, confidence, reason))
             } else {
+                AppLogger.w(TAG, "autoCategorize: JSON 파싱 실패 - merchantName=$merchantName, 원본 응답=${text.take(100)}")
                 Result.success(AutoCategoryResult("OTHER", 0.3f, "분류 불확실"))
             }
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "autoCategorize", "merchantName=$merchantName, error=${e.message}", e)
             Result.failure(Exception("카테고리 분류 중 오류: ${e.message}"))
         }
     }
@@ -677,9 +735,14 @@ class GeminiService @Inject constructor() {
     suspend fun extractMerchantName(
         notificationText: String
     ): Result<String> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        val truncatedInput = if (notificationText.length > 80) notificationText.take(80) + "..." else notificationText
+        AppLogger.apiStart(TAG, "extractMerchantName", "입력 텍스트=$truncatedInput")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "extractMerchantName: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val prompt = """
@@ -701,11 +764,14 @@ class GeminiService @Inject constructor() {
             val text = response.text?.trim() ?: "없음"
 
             if (text == "없음" || text.length > 30) {
+                AppLogger.d(TAG, "extractMerchantName: 가맹점명 없음 또는 너무 김 - 응답=$text")
                 Result.success("")
             } else {
+                AppLogger.apiSuccess(TAG, "extractMerchantName", "추출 결과=$text")
                 Result.success(text)
             }
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "extractMerchantName", "error=${e.message}", e)
             Result.success("") // 실패해도 빈 문자열 반환
         }
     }
@@ -720,9 +786,13 @@ class GeminiService @Inject constructor() {
         categoryExpenses: Map<String, Long>,
         previousMonthsData: List<MonthlyFinancialData> = emptyList()
     ): Result<SpendingPrediction> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "predictMonthlySpending", "currentMonthExpense=$currentMonthExpense, dayOfMonth=$dayOfMonth/$daysInMonth, 이전 데이터=${previousMonthsData.size}건")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "predictMonthlySpending: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val remainingDays = daysInMonth - dayOfMonth
@@ -776,11 +846,14 @@ class GeminiService @Inject constructor() {
                 val trend = Regex("\"trend\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: "stable"
                 val insight = Regex("\"insight\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: ""
 
+                AppLogger.apiSuccess(TAG, "predictMonthlySpending", "predicted=$predicted, confidence=$confidence, trend=$trend, remainingDays=$remainingDays")
                 Result.success(SpendingPrediction(predicted, confidence, trend, insight, remainingDays))
             } else {
+                AppLogger.w(TAG, "predictMonthlySpending: JSON 파싱 실패 - 단순 예측 사용, simpleProjection=$simpleProjection")
                 Result.success(SpendingPrediction(simpleProjection, 0.5f, "stable", "단순 예측 기반", remainingDays))
             }
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "predictMonthlySpending", e.message ?: "알 수 없는 오류", e)
             Result.failure(Exception("예측 중 오류: ${e.message}"))
         }
     }
@@ -793,9 +866,13 @@ class GeminiService @Inject constructor() {
         previousMonth: MonthlyFinancialData? = null,
         savingsGoals: List<Pair<String, Long>> = emptyList()
     ): Result<List<SmartInsight>> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "generateSmartInsights", "currentMonth=${currentMonth.year}년 ${currentMonth.month}월, income=${currentMonth.totalIncome}, expense=${currentMonth.totalExpense}, hasPreviousMonth=${previousMonth != null}")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "generateSmartInsights: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val compareText = if (previousMonth != null) {
@@ -861,6 +938,7 @@ class GeminiService @Inject constructor() {
             }
 
             if (insights.isEmpty()) {
+                AppLogger.d(TAG, "generateSmartInsights: AI 응답에서 인사이트 파싱 실패 - 기본 인사이트 사용")
                 // 기본 인사이트
                 insights.add(SmartInsight(
                     type = if (currentMonth.balance >= 0) "saving" else "warning",
@@ -874,8 +952,10 @@ class GeminiService @Inject constructor() {
                 ))
             }
 
+            AppLogger.apiSuccess(TAG, "generateSmartInsights", "인사이트 ${insights.size}개 생성됨")
             Result.success(insights.sortedBy { it.priority })
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "generateSmartInsights", e.message ?: "알 수 없는 오류", e)
             Result.failure(Exception("인사이트 생성 중 오류: ${e.message}"))
         }
     }
@@ -888,9 +968,13 @@ class GeminiService @Inject constructor() {
         recentTransactions: List<ParsedTransactionInfo>,
         categoryAverages: Map<String, Long>
     ): Result<AnomalyResult?> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "detectAnomalies", "amount=${currentTransaction.amount}, merchantName=${currentTransaction.merchantName}, category=${currentTransaction.category}")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "detectAnomalies: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             // 먼저 간단한 규칙 기반 체크
@@ -906,7 +990,10 @@ class GeminiService @Inject constructor() {
                 kotlin.math.abs(it.timestamp - currentTransaction.timestamp) < 3600000 // 1시간 이내
             }
 
+            AppLogger.d(TAG, "detectAnomalies: isHighAmount=$isHighAmount (amount=${currentTransaction.amount}, categoryAvg=$categoryAvg), isDuplicateSuspect=$isDuplicateSuspect")
+
             if (!isHighAmount && !isDuplicateSuspect) {
+                AppLogger.d(TAG, "detectAnomalies: 이상 징후 없음 - 규칙 기반 체크 통과")
                 return@withContext Result.success(null)
             }
 
@@ -952,14 +1039,18 @@ class GeminiService @Inject constructor() {
                     val reason = Regex("\"reason\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: ""
                     val suggestion = Regex("\"suggestion\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: ""
 
+                    AppLogger.apiSuccess(TAG, "detectAnomalies", "이상 감지! type=$type, severity=$severity, reason=$reason")
                     Result.success(AnomalyResult(type, severity, reason, suggestion))
                 } else {
+                    AppLogger.d(TAG, "detectAnomalies: AI 판단 결과 정상 거래")
                     Result.success(null)
                 }
             } else {
+                AppLogger.w(TAG, "detectAnomalies: JSON 파싱 실패 - 정상으로 처리")
                 Result.success(null)
             }
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "detectAnomalies", "error=${e.message} - 정상으로 처리", e)
             Result.success(null) // 오류 시 이상 없음으로 처리
         }
     }
@@ -975,15 +1066,19 @@ class GeminiService @Inject constructor() {
         averageMonthlyContribution: Long,
         recentContributions: List<Long> = emptyList() // 최근 월별 기여금
     ): Result<GoalPrediction> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        val progress = (currentAmount.toFloat() / targetAmount * 100).toInt()
+        AppLogger.apiStart(TAG, "predictGoalAchievement", "goalName=$goalName, progress=${progress}%, currentAmount=$currentAmount/$targetAmount, avgMonthlyContribution=$averageMonthlyContribution")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "predictGoalAchievement: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val remainingAmount = targetAmount - currentAmount
             val remainingMonths = ((targetDate - System.currentTimeMillis()) / (30L * 24 * 60 * 60 * 1000)).toInt().coerceAtLeast(1)
             val requiredMonthly = remainingAmount / remainingMonths
-            val progress = (currentAmount.toFloat() / targetAmount * 100).toInt()
 
             val contributionText = if (recentContributions.isNotEmpty()) {
                 recentContributions.takeLast(6).joinToString(", ") { String.format("%,d", it) }
@@ -1026,10 +1121,12 @@ class GeminiService @Inject constructor() {
                 val recommendation = Regex("\"recommendation\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: ""
                 val message = Regex("\"motivationalMessage\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: ""
 
+                AppLogger.apiSuccess(TAG, "predictGoalAchievement", "goalName=$goalName, probability=${probability}%, onTrack=$onTrack, completionMonths=$completionMonths")
                 Result.success(GoalPrediction(probability, completionMonths, onTrack, recommendation, message))
             } else {
                 // 기본 계산
                 val probability = if (averageMonthlyContribution >= requiredMonthly) 80 else 40
+                AppLogger.w(TAG, "predictGoalAchievement: JSON 파싱 실패 - 기본 계산 사용, goalName=$goalName, probability=$probability%")
                 Result.success(GoalPrediction(
                     probability,
                     if (averageMonthlyContribution > 0) (remainingAmount / averageMonthlyContribution).toInt() else remainingMonths * 2,
@@ -1039,6 +1136,7 @@ class GeminiService @Inject constructor() {
                 ))
             }
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "predictGoalAchievement", "goalName=$goalName, error=${e.message}", e)
             Result.failure(Exception("목표 예측 중 오류: ${e.message}"))
         }
     }
@@ -1051,9 +1149,13 @@ class GeminiService @Inject constructor() {
         transaction2: ParsedTransactionInfo,
         timeDiffMinutes: Long
     ): Result<DuplicateAnalysis> = withContext(Dispatchers.IO) {
-        val model = generativeModel ?: return@withContext Result.failure(
-            Exception("API 키가 설정되지 않았습니다")
-        )
+        AppLogger.apiStart(TAG, "analyzeDuplicateTransaction", "tx1=[${transaction1.bankName}, ${transaction1.merchantName}, ${transaction1.amount}원], tx2=[${transaction2.bankName}, ${transaction2.merchantName}, ${transaction2.amount}원], timeDiff=${timeDiffMinutes}분")
+        val model = generativeModel ?: run {
+            AppLogger.w(TAG, "analyzeDuplicateTransaction: API 키 미설정 - 실패 반환")
+            return@withContext Result.failure(
+                Exception("API 키가 설정되지 않았습니다")
+            )
+        }
 
         try {
             val prompt = """
@@ -1101,6 +1203,7 @@ class GeminiService @Inject constructor() {
                 val reason = Regex("\"reason\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: ""
                 val recommendation = Regex("\"recommendation\"\\s*:\\s*\"([^\"]+)\"").find(json)?.groupValues?.get(1) ?: "ask_user"
 
+                AppLogger.apiSuccess(TAG, "analyzeDuplicateTransaction", "isDuplicate=$isDuplicate, confidence=$confidence, type=$duplicateType, recommendation=$recommendation")
                 Result.success(DuplicateAnalysis(isDuplicate, confidence, duplicateType, reason, recommendation))
             } else {
                 // 기본: 같은 금액이고 시간이 짧으면 중복 의심
@@ -1109,6 +1212,7 @@ class GeminiService @Inject constructor() {
                 val shortTime = timeDiffMinutes < 30
 
                 val isDuplicate = sameAmount && (sameMerchant || shortTime)
+                AppLogger.w(TAG, "analyzeDuplicateTransaction: JSON 파싱 실패 - 규칙 기반 판단, isDuplicate=$isDuplicate")
                 Result.success(DuplicateAnalysis(
                     isDuplicate,
                     if (isDuplicate) 0.7f else 0.3f,
@@ -1118,6 +1222,7 @@ class GeminiService @Inject constructor() {
                 ))
             }
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "analyzeDuplicateTransaction", "error=${e.message}", e)
             Result.failure(Exception("중복 분석 중 오류: ${e.message}"))
         }
     }

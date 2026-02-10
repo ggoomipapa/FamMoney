@@ -19,6 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ezcorp.fammoney.data.model.*
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "FinancialGuideScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,6 +30,19 @@ fun FinancialGuideScreen(
 ) {
     var selectedCategory by remember { mutableStateOf<GuideCategory?>(null) }
     var selectedGuide by remember { mutableStateOf<FinancialGuide?>(null) }
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 금융 가이드 화면 진입 ==========")
+    }
+
+    // 카테고리/가이드 선택 로그
+    LaunchedEffect(selectedCategory, selectedGuide) {
+        when {
+            selectedGuide != null -> AppLogger.d(TAG, "가이드 선택: ${selectedGuide!!.title}")
+            selectedCategory != null -> AppLogger.d(TAG, "카테고리 선택: ${selectedCategory!!.displayName}")
+        }
+    }
 
     Scaffold(
         topBar = {

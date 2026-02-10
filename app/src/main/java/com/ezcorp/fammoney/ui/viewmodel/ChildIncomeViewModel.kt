@@ -1,7 +1,7 @@
 package com.ezcorp.fammoney.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import androidx.lifecycle.viewModelScope
 import com.ezcorp.fammoney.data.model.Child
 import com.ezcorp.fammoney.data.model.ChildExpense
@@ -61,8 +61,16 @@ class ChildIncomeViewModel @Inject constructor(
             currentGroupId = userPreferences.getGroupId()
             currentUserId = userPreferences.getUserId()
             currentUserName = userPreferences.getUserName()
-            Log.d(TAG, "loadUserInfo: groupId=$currentGroupId, userId=$currentUserId, userName=$currentUserName")
-            currentGroupId?.let { loadChildren(it) }
+            AppLogger.d(TAG, "loadUserInfo: groupId=$currentGroupId, userId=$currentUserId, userName=$currentUserName")
+            if (currentGroupId.isNullOrBlank()) {
+                AppLogger.e(TAG, "loadUserInfo: groupId가 null이거나 비어있습니다. 자녀 용돈 관리를 사용하려면 그룹이 필요합니다.")
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = "그룹 정보가 없습니다. 설정에서 가계부를 확인해주세요."
+                )
+                return@launch
+            }
+            loadChildren(currentGroupId!!)
         }
     }
 
@@ -123,14 +131,14 @@ class ChildIncomeViewModel @Inject constructor(
 
     fun addChild(name: String) {
         viewModelScope.launch {
-            Log.d(TAG, "addChild 호출됨: name=$name")
+            AppLogger.d(TAG, "addChild 호출됨: name=$name")
             val groupId = currentGroupId
             if (groupId == null) {
-                Log.e(TAG, "addChild 실패: groupId가 null입니다")
+                AppLogger.e(TAG, "addChild 실패: groupId가 null입니다")
                 _uiState.value = _uiState.value.copy(error = "그룹 정보를 찾을 수 없습니다")
                 return@launch
             }
-            Log.d(TAG, "addChild: groupId=$groupId 로 자녀 추가 시도")
+            AppLogger.d(TAG, "addChild: groupId=$groupId 로 자녀 추가 시도")
             val child = Child(
                 groupId = groupId,
                 name = name,
@@ -139,7 +147,7 @@ class ChildIncomeViewModel @Inject constructor(
             )
             val result = childIncomeRepository.addChild(child)
             if (result.isSuccess) {
-                Log.d(TAG, "addChild 성공: ${result.getOrNull()}")
+                AppLogger.d(TAG, "addChild 성공: ${result.getOrNull()}")
                 // FIX: Manually update the state for immediate UI feedback
                 val newChildId = result.getOrNull()
                 if (newChildId != null) {
@@ -150,7 +158,7 @@ class ChildIncomeViewModel @Inject constructor(
                     )
                 }
             } else {
-                Log.e(TAG, "addChild 실패: ${result.exceptionOrNull()?.message}")
+                AppLogger.e(TAG, "addChild 실패: ${result.exceptionOrNull()?.message}")
                 _uiState.value = _uiState.value.copy(
                     error = "자녀 추가 실패: ${result.exceptionOrNull()?.message}"
                 )
@@ -308,7 +316,7 @@ class ChildIncomeViewModel @Inject constructor(
      */
     fun setAllowance(childId: String, amount: Long, frequency: String) {
         viewModelScope.launch {
-            Log.d(TAG, "setAllowance: childId=$childId, amount=$amount, frequency=$frequency")
+            AppLogger.d(TAG, "setAllowance: childId=$childId, amount=$amount, frequency=$frequency")
             val result = childIncomeRepository.setAllowance(childId, amount, frequency)
             if (result.isSuccess) {
                 refreshSelectedChild(childId)
@@ -325,7 +333,7 @@ class ChildIncomeViewModel @Inject constructor(
      */
     fun startAllowance(childId: String) {
         viewModelScope.launch {
-            Log.d(TAG, "startAllowance: childId=$childId")
+            AppLogger.d(TAG, "startAllowance: childId=$childId")
             val result = childIncomeRepository.startAllowance(childId)
             if (result.isSuccess) {
                 refreshSelectedChild(childId)
@@ -345,7 +353,7 @@ class ChildIncomeViewModel @Inject constructor(
             val userId = currentUserId ?: ""
             val userName = currentUserName ?: ""
 
-            Log.d(TAG, "giveAllowance: childId=$childId, amount=$amount")
+            AppLogger.d(TAG, "giveAllowance: childId=$childId, amount=$amount")
             val result = childIncomeRepository.giveAllowance(childId, amount, userId, userName)
             if (result.isSuccess) {
                 _uiState.value = _uiState.value.copy(saveSuccess = true)
@@ -362,7 +370,7 @@ class ChildIncomeViewModel @Inject constructor(
      */
     fun cancelAllowance(childId: String) {
         viewModelScope.launch {
-            Log.d(TAG, "cancelAllowance: childId=$childId")
+            AppLogger.d(TAG, "cancelAllowance: childId=$childId")
             val result = childIncomeRepository.cancelAllowance(childId)
             if (result.isSuccess) {
                 refreshSelectedChild(childId)

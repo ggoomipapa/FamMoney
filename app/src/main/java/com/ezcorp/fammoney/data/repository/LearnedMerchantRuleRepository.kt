@@ -1,7 +1,7 @@
 package com.ezcorp.fammoney.data.repository
 
-import android.util.Log
 import com.ezcorp.fammoney.data.local.LearnedMerchantRuleDao
+import com.ezcorp.fammoney.util.AppLogger
 import com.ezcorp.fammoney.data.model.LearnedMerchantRule
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -83,7 +83,7 @@ class LearnedMerchantRuleRepository @Inject constructor(
                 } else null
             } else null
         } catch (e: Exception) {
-            Log.w(TAG, "Failed to fetch global rule", e)
+            AppLogger.w(TAG, "Failed to fetch global rule", e)
             null
         }
     }
@@ -210,10 +210,10 @@ class LearnedMerchantRuleRepository @Inject constructor(
                 }
             }.await()
 
-            Log.d(TAG, "Global rule voted: $merchant")
+            AppLogger.d(TAG, "Global rule voted: $merchant")
         } catch (e: Exception) {
             // 글로벌 저장 실패해도 로컬은 저장됨
-            Log.w(TAG, "Failed to vote global rule", e)
+            AppLogger.w(TAG, "Failed to vote global rule", e)
         }
     }
 

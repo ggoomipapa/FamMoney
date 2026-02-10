@@ -2,6 +2,7 @@ package com.ezcorp.fammoney.data.repository
 
 import com.ezcorp.fammoney.data.model.Group
 import com.ezcorp.fammoney.data.model.User
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
@@ -12,6 +13,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
 
+private const val TAG = "UserRepository"
+
 @Singleton
 class UserRepository @Inject constructor(
     private val firestore: FirebaseFirestore
@@ -20,24 +23,31 @@ class UserRepository @Inject constructor(
     private val groupsCollection = firestore.collection("groups")
 
     suspend fun createUser(user: User): Result<String> {
+        AppLogger.apiStart(TAG, "createUser", "name=${user.name}")
         return try {
             val docRef = usersCollection.add(user.toMap()).await()
+            AppLogger.apiSuccess(TAG, "createUser", "id=${docRef.id}")
             Result.success(docRef.id)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "createUser", e.message ?: "Unknown error", e)
             Result.failure(e)
         }
     }
 
     suspend fun updateUser(user: User): Result<Unit> {
+        AppLogger.apiStart(TAG, "updateUser", "id=${user.id}")
         return try {
             usersCollection.document(user.id).set(user.toMap()).await()
+            AppLogger.apiSuccess(TAG, "updateUser")
             Result.success(Unit)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "updateUser", e.message ?: "Unknown error", e)
             Result.failure(e)
         }
     }
 
     suspend fun getUserByDeviceId(deviceId: String): User? {
+        AppLogger.apiStart(TAG, "getUserByDeviceId", "deviceId=${deviceId.take(8)}...")
         return try {
             val snapshot = usersCollection
                 .whereEqualTo("deviceId", deviceId)
@@ -45,27 +55,36 @@ class UserRepository @Inject constructor(
                 .get()
                 .await()
 
-            snapshot.documents.firstOrNull()?.let { doc ->
+            val user = snapshot.documents.firstOrNull()?.let { doc ->
                 doc.data?.let { User.fromMap(doc.id, it) }
             }
+            AppLogger.apiSuccess(TAG, "getUserByDeviceId", "found=${user != null}")
+            user
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "getUserByDeviceId", e.message ?: "Unknown error", e)
             null
         }
     }
 
     fun getUserFlow(userId: String): Flow<User?> = callbackFlow {
+        AppLogger.d(TAG, "getUserFlow 시작: userId=$userId")
         val listener = usersCollection.document(userId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
+                    AppLogger.e(TAG, "getUserFlow 에러: ${error.message}", error)
                     close(error)
                     return@addSnapshotListener
                 }
 
                 val user = snapshot?.data?.let { User.fromMap(snapshot.id, it) }
+                AppLogger.d(TAG, "getUserFlow 업데이트: user=${user?.name}")
                 trySend(user)
             }
 
-        awaitClose { listener.remove() }
+        awaitClose {
+            AppLogger.d(TAG, "getUserFlow 종료: userId=$userId")
+            listener.remove()
+        }
     }
 
     suspend fun updateSelectedBanks(userId: String, bankIds: List<String>): Result<Unit> {
@@ -80,17 +99,21 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun createGroup(group: Group): Result<String> {
+        AppLogger.apiStart(TAG, "createGroup", "name=${group.name}")
         return try {
             val inviteCode = generateInviteCode()
             val groupWithCode = group.copy(inviteCode = inviteCode)
             val docRef = groupsCollection.add(groupWithCode.toMap()).await()
+            AppLogger.apiSuccess(TAG, "createGroup", "id=${docRef.id}, inviteCode=$inviteCode")
             Result.success(docRef.id)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "createGroup", e.message ?: "Unknown error", e)
             Result.failure(e)
         }
     }
 
     suspend fun getGroupByInviteCode(inviteCode: String): Group? {
+        AppLogger.apiStart(TAG, "getGroupByInviteCode", "code=$inviteCode")
         return try {
             val snapshot = groupsCollection
                 .whereEqualTo("inviteCode", inviteCode)
@@ -98,33 +121,43 @@ class UserRepository @Inject constructor(
                 .get()
                 .await()
 
-            snapshot.documents.firstOrNull()?.let { doc ->
+            val group = snapshot.documents.firstOrNull()?.let { doc ->
                 doc.data?.let { Group.fromMap(doc.id, it) }
             }
+            AppLogger.apiSuccess(TAG, "getGroupByInviteCode", "found=${group != null}")
+            group
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "getGroupByInviteCode", e.message ?: "Unknown error", e)
             null
         }
     }
 
     fun getGroupFlow(groupId: String): Flow<Group?> = callbackFlow {
         if (groupId.isBlank()) {
+            AppLogger.w(TAG, "getGroupFlow: groupId가 비어있음")
             trySend(null)
             awaitClose { }
             return@callbackFlow
         }
 
+        AppLogger.d(TAG, "getGroupFlow 시작: groupId=$groupId")
         val listener = groupsCollection.document(groupId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
+                    AppLogger.e(TAG, "getGroupFlow 에러: ${error.message}", error)
                     close(error)
                     return@addSnapshotListener
                 }
 
                 val group = snapshot?.data?.let { Group.fromMap(snapshot.id, it) }
+                AppLogger.d(TAG, "getGroupFlow 업데이트: group=${group?.name}")
                 trySend(group)
             }
 
-        awaitClose { listener.remove() }
+        awaitClose {
+            AppLogger.d(TAG, "getGroupFlow 종료: groupId=$groupId")
+            listener.remove()
+        }
     }
 
     fun getGroupMembersFlow(groupId: String): Flow<List<User>> = callbackFlow {
@@ -134,8 +167,9 @@ class UserRepository @Inject constructor(
             return@callbackFlow
         }
 
+        // groupIds 배열에 해당 그룹이 포함된 사용자를 조회
         val listener = usersCollection
-            .whereEqualTo("groupId", groupId)
+            .whereArrayContains("groupIds", groupId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     close(error)
@@ -153,6 +187,7 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun joinGroup(userId: String, groupId: String): Result<Unit> {
+        AppLogger.apiStart(TAG, "joinGroup", "userId=$userId, groupId=$groupId")
         return try {
             firestore.runBatch { batch ->
                 batch.update(usersCollection.document(userId), "groupId", groupId)
@@ -162,13 +197,16 @@ class UserRepository @Inject constructor(
                     FieldValue.arrayUnion(userId)
                 )
             }.await()
+            AppLogger.apiSuccess(TAG, "joinGroup")
             Result.success(Unit)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "joinGroup", e.message ?: "Unknown error", e)
             Result.failure(e)
         }
     }
 
     suspend fun getUserByAuthUid(authUid: String): User? {
+        AppLogger.apiStart(TAG, "getUserByAuthUid", "authUid=${authUid.take(8)}...")
         return try {
             val snapshot = usersCollection
                 .whereEqualTo("authUid", authUid)
@@ -176,21 +214,27 @@ class UserRepository @Inject constructor(
                 .get()
                 .await()
 
-            snapshot.documents.firstOrNull()?.let { doc ->
+            val user = snapshot.documents.firstOrNull()?.let { doc ->
                 doc.data?.let { User.fromMap(doc.id, it) }
             }
+            AppLogger.apiSuccess(TAG, "getUserByAuthUid", "found=${user != null}")
+            user
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "getUserByAuthUid", e.message ?: "Unknown error", e)
             null
         }
     }
 
     suspend fun updateFcmToken(userId: String, token: String): Result<Unit> {
+        AppLogger.apiStart(TAG, "updateFcmToken", "userId=$userId")
         return try {
             usersCollection.document(userId)
                 .update("fcmToken", token)
                 .await()
+            AppLogger.apiSuccess(TAG, "updateFcmToken")
             Result.success(Unit)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "updateFcmToken", e.message ?: "Unknown error", e)
             Result.failure(e)
         }
     }
@@ -269,8 +313,10 @@ class UserRepository @Inject constructor(
         shareFromDate: com.google.firebase.Timestamp?,
         hiddenTransactionIds: List<String>,
         shareCashTransactions: Boolean = true,
-        shareAllowance: Boolean = true
+        shareAllowance: Boolean = true,
+        sharedBankIds: List<String> = emptyList()
     ): Result<Unit> {
+        AppLogger.apiStart(TAG, "updateSharingScope", "userId=$userId, hiddenCount=${hiddenTransactionIds.size}")
         return try {
             usersCollection.document(userId)
                 .update(
@@ -278,12 +324,15 @@ class UserRepository @Inject constructor(
                         "shareFromDate" to shareFromDate,
                         "hiddenTransactionIds" to hiddenTransactionIds,
                         "shareCashTransactions" to shareCashTransactions,
-                        "shareAllowance" to shareAllowance
+                        "shareAllowance" to shareAllowance,
+                        "sharedBankIds" to sharedBankIds
                     )
                 )
                 .await()
+            AppLogger.apiSuccess(TAG, "updateSharingScope")
             Result.success(Unit)
         } catch (e: Exception) {
+            AppLogger.apiError(TAG, "updateSharingScope", e.message ?: "Unknown error", e)
             Result.failure(e)
         }
     }

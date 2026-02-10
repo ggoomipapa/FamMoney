@@ -27,6 +27,9 @@ import com.ezcorp.fammoney.data.model.*
 import com.ezcorp.fammoney.ui.screen.components.EncouragementCard
 import com.ezcorp.fammoney.ui.screen.components.ProgressCard
 import com.ezcorp.fammoney.ui.viewmodel.MotivationViewModel
+import com.ezcorp.fammoney.util.AppLogger
+
+private const val TAG = "MotivationScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +39,11 @@ fun MotivationScreen(
     viewModel: MotivationViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 재정 건강 화면 진입 ==========")
+    }
 
     Scaffold(
         topBar = {

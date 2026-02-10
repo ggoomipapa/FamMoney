@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.ezcorp.fammoney.R
 import com.ezcorp.fammoney.ui.MainActivity
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,8 +33,11 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        val truncatedToken = if (token.length > 10) "${token.take(10)}..." else token
+        AppLogger.i(TAG, "새 FCM 토큰 수신 - token: $truncatedToken (${token.length}자)")
         serviceScope.launch {
             userPreferences.saveFcmToken(token)
+            AppLogger.d(TAG, "FCM 토큰 저장 완료")
         }
     }
 
@@ -42,6 +46,8 @@ class FCMService : FirebaseMessagingService() {
 
         val data = message.data
         val type = data["type"]
+
+        AppLogger.i(TAG, "FCM 메시지 수신 - type: $type, dataKeys: ${data.keys}, from: ${message.from}")
 
         when (type) {
             "transaction" -> handleTransactionNotification(data)
@@ -55,6 +61,8 @@ class FCMService : FirebaseMessagingService() {
         val transactionType = data["transactionType"]
         val amount = data["amount"] ?: "0"
         val description = data["description"] ?: ""
+
+        AppLogger.d(TAG, "거래 알림 처리 - userName: $userName, type: $transactionType, amount: $amount, description: $description")
 
         val typeText = if (transactionType == "INCOME") "수입" else "지출"
         val title = "$userName 님의 $typeText"
@@ -72,6 +80,8 @@ class FCMService : FirebaseMessagingService() {
         val userName = data["userName"] ?: "새 멤버"
         val groupName = data["groupName"] ?: "가계부"
 
+        AppLogger.d(TAG, "그룹 참여 알림 처리 - userName: $userName, groupName: $groupName")
+
         showNotification(
             channelId = CHANNEL_GROUP_UPDATE,
             notificationId = System.currentTimeMillis().toInt(),
@@ -81,7 +91,12 @@ class FCMService : FirebaseMessagingService() {
     }
 
     private fun handleDefaultNotification(notification: RemoteMessage.Notification?) {
-        notification?.let {
+        if (notification == null) {
+            AppLogger.w(TAG, "기본 알림 처리 - notification이 null, 알림 표시 생략")
+            return
+        }
+        AppLogger.d(TAG, "기본 알림 처리 - title: ${notification.title}, body: ${notification.body}")
+        notification.let {
             showNotification(
                 channelId = CHANNEL_DEFAULT,
                 notificationId = System.currentTimeMillis().toInt(),
@@ -97,6 +112,8 @@ class FCMService : FirebaseMessagingService() {
         title: String,
         body: String
     ) {
+        AppLogger.d(TAG, "알림 표시 - channelId: $channelId, notificationId: $notificationId, title: $title")
+
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -122,6 +139,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
     private fun createNotificationChannels() {
+        AppLogger.d(TAG, "알림 채널 생성 시작 - SDK: ${Build.VERSION.SDK_INT}")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = getSystemService(NotificationManager::class.java)
 
@@ -150,10 +168,12 @@ class FCMService : FirebaseMessagingService() {
             notificationManager.createNotificationChannels(
                 listOf(defaultChannel, transactionChannel, updateChannel)
             )
+            AppLogger.i(TAG, "알림 채널 생성 완료 - channels: [$CHANNEL_DEFAULT, $CHANNEL_GROUP_TRANSACTION, $CHANNEL_GROUP_UPDATE]")
         }
     }
 
     companion object {
+        private const val TAG = "FCMService"
         const val CHANNEL_DEFAULT = "default_channel"
         const val CHANNEL_GROUP_TRANSACTION = "group_transaction_channel"
         const val CHANNEL_GROUP_UPDATE = "group_update_channel"

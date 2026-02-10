@@ -21,9 +21,12 @@ import com.ezcorp.fammoney.data.model.PendingDuplicate
 import com.ezcorp.fammoney.ui.theme.ExpenseColor
 import com.ezcorp.fammoney.ui.theme.IncomeColor
 import com.ezcorp.fammoney.ui.viewmodel.PendingDuplicatesViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val TAG = "PendingDuplicatesScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +37,19 @@ fun PendingDuplicatesScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showInfoDialog by remember { mutableStateOf(false) }
 
-    // ì²ì ì§ì???ë´ ?¤ì´?¼ë¡ê·??ì
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 중복 거래 처리 화면 진입 ==========")
+    }
+
+    // 중복 거래 목록 로드 로그
+    LaunchedEffect(uiState.duplicates.size, uiState.isLoading) {
+        if (!uiState.isLoading) {
+            AppLogger.i(TAG, "중복 거래 로드 완료: ${uiState.duplicates.size}건")
+        }
+    }
+
+    // 처음 진입 시 안내 다이얼로그 표시
     LaunchedEffect(Unit) {
         if (uiState.duplicates.isNotEmpty()) {
             showInfoDialog = true
@@ -50,7 +65,7 @@ fun PendingDuplicatesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("중복 거래 주기") },
+                title = { Text("중복 거래 처리") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "뒤로")
@@ -77,7 +92,7 @@ fun PendingDuplicatesScreen(
                     CircularProgressIndicator()
                 }
             } else if (uiState.duplicates.isEmpty()) {
-                // ì²ë¦¬??중복 거래ê° ?ì
+                // 처리할 중복 거래가 없음
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -108,7 +123,7 @@ fun PendingDuplicatesScreen(
                     }
                 }
             } else {
-                // 중복 거래 ëª©ë¡
+                // 중복 거래 목록
                 Text(
                     text = "${uiState.duplicates.size}건의 중복 거래가 감지되었습니다",
                     style = MaterialTheme.typography.bodyMedium,
@@ -145,22 +160,22 @@ private fun DuplicateInfoDialog(
             Icon(Icons.Default.Info, contentDescription = null)
         },
         title = {
-            Text("중복 거래확인")
+            Text("중복 거래 확인")
         },
         text = {
             Column {
                 Text(
-                    text = "체크카드를 사용하면 카드사와 은행에서 확인되므로 알림이 올 수 있습니다.",
+                    text = "체크카드를 사용하면 카드사와 은행에서 각각 알림이 올 수 있습니다.",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "같은 금액과 거래일 기준으로 감지되면 중복으로 확인 요청합니다",
+                    text = "같은 금액과 거래일 기준으로 감지되면 중복으로 확인 요청합니다.",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "\"앞으로도 같이 적용\"??? í?ë©´ ê°ì? ì¹´ë+확인??ì¡°í©?ì???ë?¼ë¡ ì²ë¦¬?©ë",
+                    text = "\"앞으로도 같이 적용\"을 체크하면 같은 카드+은행 조합에서 자동으로 처리됩니다.",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium
                 )
@@ -168,7 +183,7 @@ private fun DuplicateInfoDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("주기")
+                Text("확인")
             }
         }
     )
@@ -197,7 +212,7 @@ private fun DuplicateCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // 금액 ?ì
+            // 금액 표시
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -251,7 +266,7 @@ private fun DuplicateCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 앞으로도 같이 적용 ì²´í¬ë°ì¤
+            // 앞으로도 같이 적용 체크박스
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -272,8 +287,8 @@ private fun DuplicateCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // ? í ë²í¼
-Row(
+            // 선택 버튼
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -317,7 +332,7 @@ private fun TransactionInfoRow(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // ë²í¸ ?ì
+        // 번호 표시
         Box(
             modifier = Modifier
                 .size(24.dp)

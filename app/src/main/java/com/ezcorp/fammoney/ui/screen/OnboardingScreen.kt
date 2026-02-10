@@ -30,7 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ezcorp.fammoney.data.model.BankConfig
 import com.ezcorp.fammoney.ui.viewmodel.MainViewModel
+import com.ezcorp.fammoney.util.AppLogger
 import kotlinx.coroutines.delay
+
+private const val TAG = "OnboardingScreen"
 
 enum class OnboardingStep {
     WELCOME,
@@ -51,6 +54,16 @@ fun OnboardingScreen(
     var currentStep by remember { mutableStateOf(OnboardingStep.WELCOME) }
     var selectedBankIds by remember { mutableStateOf(setOf<String>()) }
     var hasNotificationPermission by remember { mutableStateOf(false) }
+
+    // 화면 진입 로그
+    LaunchedEffect(Unit) {
+        AppLogger.i(TAG, "========== 온보딩 화면 진입 ==========")
+    }
+
+    // 단계 변경 로그
+    LaunchedEffect(currentStep) {
+        AppLogger.d(TAG, "온보딩 단계: ${currentStep.name}")
+    }
 
     // 알림 권한 상태 확인
     LaunchedEffect(Unit) {

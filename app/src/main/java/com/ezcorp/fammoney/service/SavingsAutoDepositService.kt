@@ -6,8 +6,11 @@ import com.ezcorp.fammoney.data.model.SavingsGoal
 import com.ezcorp.fammoney.data.model.User
 import com.ezcorp.fammoney.data.repository.LearnedPatternRepository
 import com.ezcorp.fammoney.data.repository.SavingsGoalRepository
+import com.ezcorp.fammoney.util.AppLogger
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private const val TAG = "SavingsAutoDeposit"
 
 /**
  * ëª©í ?ì¶??ë ?ê¸ ê°ì? ?ë¹?? * ?ê¸ ?ë¦¼??ë¶ì?ì¬ ëª©í ?ì¶ì ?ë?¼ë¡ ê¸°ì¬ ì¶ê?
@@ -73,20 +76,25 @@ class SavingsAutoDepositService @Inject constructor(
         groupId: String,
         groupMembers: List<User>
     ): List<DepositProcessResult> {
+        AppLogger.i(TAG, "processDepositNotification 시작: amount=$amount, senderName=$senderName, accountNumber=$accountNumber, groupId=$groupId")
         val results = mutableListOf<DepositProcessResult>()
 
         // 1. ?ë ?ê¸???ì±?ë ëª©í ì¡°í
         val autoDepositGoals = savingsGoalRepository.getAutoDepositEnabledGoals(groupId)
 
         if (autoDepositGoals.isEmpty()) {
+            AppLogger.d(TAG, "자동입금 활성화된 목표 없음, NotApplicable 반환")
             return listOf(DepositProcessResult.NotApplicable)
         }
+        AppLogger.d(TAG, "자동입금 목표: ${autoDepositGoals.size}건, goalIds=${autoDepositGoals.map { it.id }}")
 
         for (goal in autoDepositGoals) {
             // 2. ê³ì¢ë²í¸ ë§¤ì¹­ ?ì¸
             if (!matchesAccountNumber(accountNumber, originalText, goal.linkedAccountNumber)) {
+                AppLogger.d(TAG, "계좌번호 불일치: goalId=${goal.id}, linkedAccount=${goal.linkedAccountNumber}")
                 continue
             }
+            AppLogger.d(TAG, "계좌번호 일치: goalId=${goal.id}")
 
             // 3. ?ê¸???´ë¦ ë§¤ì¹­
             val matchResult = if (senderName.isNotBlank()) {
@@ -97,6 +105,7 @@ tryLearnedPatterns(originalText, goal.id, groupMembers)
             }
 
             // 4. ë§¤ì¹­ ê²°ê³¼???°ë¥¸ ì²ë¦¬
+            AppLogger.d(TAG, "매칭 결과 타입: ${matchResult::class.simpleName}, goalId=${goal.id}")
             val result = when (matchResult) {
                 is MemberMatcher.MatchResult.HighConfidence -> {
                     // ?ë ì²ë¦¬
@@ -116,6 +125,7 @@ tryLearnedPatterns(originalText, goal.id, groupMembers)
 
                     val matchedUser = groupMembers.find { it.id == matchResult.userId }
                     if (matchedUser != null) {
+                        AppLogger.i(TAG, "자동 처리: goalId=${goal.id}, userId=${matchResult.userId}, amount=$amount, confidence=${matchResult.confidence}")
                         DepositProcessResult.AutoProcessed(goal, contribution, matchedUser)
                     } else {
                         DepositProcessResult.NeedsManualInput(
@@ -126,6 +136,7 @@ tryLearnedPatterns(originalText, goal.id, groupMembers)
                 }
 
                 is MemberMatcher.MatchResult.LowConfidence -> {
+                    AppLogger.d(TAG, "확인 필요: goalId=${goal.id}, detectedName=${matchResult.detectedName}, 후보=${matchResult.candidates.size}명")
                     // ?¬ì©???ì¸ ?ì
                 DepositProcessResult.NeedsConfirmation(
                         savingsGoal = goal,
@@ -137,6 +148,7 @@ tryLearnedPatterns(originalText, goal.id, groupMembers)
                 }
 
                 is MemberMatcher.MatchResult.NoMatch -> {
+                    AppLogger.d(TAG, "매칭 실패: goalId=${goal.id}, senderName=$senderName")
                     // ?ë ?ë ¥ ?ì
                 DepositProcessResult.NeedsManualInput(
                         savingsGoal = goal,
@@ -154,6 +166,7 @@ tryLearnedPatterns(originalText, goal.id, groupMembers)
             results.add(result)
         }
 
+        AppLogger.i(TAG, "processDepositNotification 완료: 결과=${results.size}건, 유형=${results.map { it::class.simpleName }}")
         return results.ifEmpty { listOf(DepositProcessResult.NotApplicable) }
     }
 
@@ -258,6 +271,7 @@ val linkedDigits = linkedAccountNumber.filter { it.isDigit() }
     suspend fun saveAutoContribution(
         contribution: SavingsContribution
     ): Result<Unit> {
+        AppLogger.i(TAG, "saveAutoContribution: goalId=${contribution.goalId}, userId=${contribution.userId}, amount=${contribution.amount}, confidence=${contribution.matchConfidence}")
         return savingsGoalRepository.addContribution(
             goalId = contribution.goalId,
             userId = contribution.userId,
@@ -285,6 +299,7 @@ val linkedDigits = linkedAccountNumber.filter { it.isDigit() }
         groupId: String,
         bankName: String
     ): Result<Unit> {
+        AppLogger.i(TAG, "saveManualContribution: goalId=$goalId, userId=$userId, amount=$amount, learnPattern=$learnPattern, confirmedSenderName=$confirmedSenderName")
         // ê¸°ì¬ ?
 val result = savingsGoalRepository.addContribution(
             goalId = goalId,

@@ -8,6 +8,7 @@ import com.ezcorp.fammoney.data.model.TransactionType
 import com.ezcorp.fammoney.data.repository.TagRepository
 import com.ezcorp.fammoney.data.repository.TransactionRepository
 import com.ezcorp.fammoney.service.UserPreferences
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,18 +35,25 @@ class TagViewModel @Inject constructor(
     private val userPreferences: UserPreferences
 ) : ViewModel() {
 
+    companion object {
+        private const val TAG = "TagVM"
+    }
+
     private val _uiState = MutableStateFlow(TagUiState())
     val uiState: StateFlow<TagUiState> = _uiState.asStateFlow()
 
     init {
+        AppLogger.i(TAG, "ViewModel 초기화")
         loadActiveTag()
         loadTags()
     }
 
     private fun loadActiveTag() {
+        AppLogger.d(TAG, "활성 태그 로드")
         viewModelScope.launch {
             val activeTagId = userPreferences.getActiveTagId()
             val activeTagName = userPreferences.getActiveTagName()
+            AppLogger.d(TAG, "활성 태그: id=$activeTagId, name=$activeTagName")
             _uiState.value = _uiState.value.copy(
                 activeTagId = activeTagId,
                 activeTagName = activeTagName
@@ -54,10 +62,15 @@ class TagViewModel @Inject constructor(
     }
 
     private fun loadTags() {
+        AppLogger.d(TAG, "태그 목록 로드 시작")
         viewModelScope.launch {
-            val groupId = userPreferences.getGroupId() ?: return@launch
+            val groupId = userPreferences.getGroupId() ?: run {
+                AppLogger.w(TAG, "태그 로드 중단: groupId 없음")
+                return@launch
+            }
 
             tagRepository.getTagsByGroup(groupId).collect { tags ->
+                AppLogger.dataLoaded(TAG, "태그", tags.size)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     tags = tags
@@ -70,6 +83,7 @@ class TagViewModel @Inject constructor(
      * 새 태그 생성
      */
     fun createTag(name: String, color: String, icon: String) {
+        AppLogger.userAction(TAG, "태그 생성", "name=$name, color=$color, icon=$icon")
         viewModelScope.launch {
             val groupId = userPreferences.getGroupId() ?: return@launch
 
@@ -83,6 +97,7 @@ class TagViewModel @Inject constructor(
             )
 
             tagRepository.createTag(newTag)
+            AppLogger.apiSuccess(TAG, "createTag", "태그 생성 완료: $name")
         }
     }
 
@@ -90,6 +105,7 @@ class TagViewModel @Inject constructor(
      * 태그 활성화/비활성화
      */
     fun toggleTagActive(tag: TransactionTag) {
+        AppLogger.userAction(TAG, "태그 활성화 토글", "tagId=${tag.id}, name=${tag.name}, currentActive=${tag.isActive}")
         viewModelScope.launch {
             val groupId = userPreferences.getGroupId() ?: return@launch
             val newActiveState = !tag.isActive
@@ -118,6 +134,7 @@ class TagViewModel @Inject constructor(
      * 태그 삭제
      */
     fun deleteTag(tag: TransactionTag) {
+        AppLogger.userAction(TAG, "태그 삭제", "tagId=${tag.id}, name=${tag.name}")
         viewModelScope.launch {
             // 활성 태그인 경우 비활성화
             if (tag.isActive) {
@@ -129,6 +146,7 @@ class TagViewModel @Inject constructor(
             }
 
             tagRepository.deleteTag(tag.id)
+            AppLogger.apiSuccess(TAG, "deleteTag", "태그 삭제 완료: ${tag.name}")
         }
     }
 
@@ -136,6 +154,7 @@ class TagViewModel @Inject constructor(
      * 태그 상세 보기 (해당 태그의 거래내역 로드)
      */
     fun selectTag(tag: TransactionTag) {
+        AppLogger.userAction(TAG, "태그 선택", "tagId=${tag.id}, name=${tag.name}")
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(selectedTag = tag)
             loadTagTransactions(tag.id)
@@ -146,6 +165,7 @@ class TagViewModel @Inject constructor(
      * 태그 상세 닫기
      */
     fun clearSelectedTag() {
+        AppLogger.d(TAG, "태그 선택 해제")
         _uiState.value = _uiState.value.copy(
             selectedTag = null,
             tagTransactions = emptyList()
@@ -156,6 +176,7 @@ class TagViewModel @Inject constructor(
      * 태그된 거래내역 로드
      */
     private fun loadTagTransactions(tagId: String) {
+        AppLogger.d(TAG, "태그 거래내역 로드: tagId=$tagId")
         viewModelScope.launch {
             val groupId = userPreferences.getGroupId() ?: return@launch
 
@@ -163,6 +184,7 @@ class TagViewModel @Inject constructor(
             transactionRepository.getTransactionsByGroup(groupId).collect { transactions ->
                 val filtered = transactions.filter { it.tagId == tagId }
                     .sortedByDescending { it.transactionDate?.toDate()?.time ?: 0 }
+                AppLogger.dataLoaded(TAG, "태그 거래내역", filtered.size, "tagId=$tagId")
 
                 _uiState.value = _uiState.value.copy(tagTransactions = filtered)
 
@@ -196,6 +218,7 @@ class TagViewModel @Inject constructor(
      * 거래내역에 태그 추가
      */
     fun addTagToTransactions(transactionIds: List<String>, tag: TransactionTag) {
+        AppLogger.userAction(TAG, "거래에 태그 추가", "count=${transactionIds.size}, tag=${tag.name}")
         viewModelScope.launch {
             val groupId = userPreferences.getGroupId() ?: return@launch
 
@@ -218,6 +241,7 @@ class TagViewModel @Inject constructor(
      * 거래내역에서 태그 제거
      */
     fun removeTagFromTransaction(transactionId: String) {
+        AppLogger.userAction(TAG, "거래에서 태그 제거", "transactionId=$transactionId")
         viewModelScope.launch {
             val groupId = userPreferences.getGroupId() ?: return@launch
 

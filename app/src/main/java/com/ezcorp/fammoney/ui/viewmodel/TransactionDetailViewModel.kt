@@ -15,6 +15,7 @@ import com.ezcorp.fammoney.service.ParsedReceiptItem
 import com.ezcorp.fammoney.service.ReceiptOcrService
 import com.ezcorp.fammoney.service.SmartCategorizationService
 import com.ezcorp.fammoney.service.UserPreferences
+import com.ezcorp.fammoney.util.AppLogger
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,10 @@ class TransactionDetailViewModel @Inject constructor(
     private val smartCategorizationService: SmartCategorizationService,
     private val learnedMerchantRuleRepository: LearnedMerchantRuleRepository
 ) : ViewModel() {
+
+    companion object {
+        private const val TAG = "TxDetailVM"
+    }
 
     private val _transaction = MutableStateFlow<Transaction?>(null)
     val transaction: StateFlow<Transaction?> = _transaction.asStateFlow()
@@ -55,22 +60,27 @@ class TransactionDetailViewModel @Inject constructor(
     val scanError: StateFlow<String?> = _scanError.asStateFlow()
 
     init {
+        AppLogger.i(TAG, "ViewModel 초기화")
         loadMerchantSuggestions()
     }
 
     private fun loadMerchantSuggestions() {
+        AppLogger.d(TAG, "사용처 추천 목록 로드")
         viewModelScope.launch {
             val groupId = userPreferences.getGroupId() ?: return@launch
             val merchants = transactionRepository.getUniqueMerchantNames(groupId)
+            AppLogger.dataLoaded(TAG, "사용처 추천", merchants.size)
             _merchantSuggestions.value = merchants
         }
     }
 
     fun loadTransaction(transactionId: String) {
+        AppLogger.d(TAG, "거래 상세 로드: transactionId=$transactionId")
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 val result = transactionRepository.getTransactionById(transactionId)
+                AppLogger.d(TAG, "거래 상세 로드 결과: found=${result != null}, amount=${result?.amount}, merchant=${result?.merchantName}")
                 _transaction.value = result
 
                 // 저장된 영수증 항목 로드
@@ -78,7 +88,7 @@ class TransactionDetailViewModel @Inject constructor(
                     loadReceiptItems(transactionId)
                 }
             } catch (e: Exception) {
-                // Handle error
+                AppLogger.e(TAG, "거래 상세 로드 실패: ${e.message}", e)
             } finally {
                 _isLoading.value = false
             }
@@ -86,8 +96,10 @@ class TransactionDetailViewModel @Inject constructor(
     }
 
     private fun loadReceiptItems(transactionId: String) {
+        AppLogger.d(TAG, "영수증 항목 로드: transactionId=$transactionId")
         viewModelScope.launch {
             val items = receiptRepository.getReceiptItemsByTransaction(transactionId)
+            AppLogger.dataLoaded(TAG, "영수증 항목", items.size)
             _receiptItems.value = items.map { item ->
                 ParsedReceiptItem(
                     name = item.itemName,
@@ -101,6 +113,7 @@ class TransactionDetailViewModel @Inject constructor(
     }
 
     fun updateTransaction(transaction: Transaction) {
+        AppLogger.userAction(TAG, "거래 수정", "id=${transaction.id}, amount=${transaction.amount}, merchant=${transaction.merchantName}, category=${transaction.category}")
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -158,9 +171,10 @@ class TransactionDetailViewModel @Inject constructor(
                     }
                 }
 
+                AppLogger.apiSuccess(TAG, "updateTransaction", "거래 수정 완료: ${transaction.id}")
                 _isSaved.value = true
             } catch (e: Exception) {
-                // Handle error
+                AppLogger.e(TAG, "거래 수정 실패: ${e.message}", e)
             } finally {
                 _isLoading.value = false
             }
@@ -208,16 +222,20 @@ class TransactionDetailViewModel @Inject constructor(
      * 이미지 URI에서 영수증 스캔
      */
     fun scanReceiptFromUri(uri: Uri, context: Context) {
+        AppLogger.userAction(TAG, "영수증 스캔 (URI)", "uri=$uri")
         viewModelScope.launch {
             _isScanning.value = true
             _scanError.value = null
             try {
                 val result = receiptOcrService.recognizeText(uri, context)
+                AppLogger.d(TAG, "영수증 스캔 결과: items=${result.items.size}")
                 _receiptItems.value = result.items
                 if (result.items.isEmpty()) {
+                    AppLogger.w(TAG, "영수증 스캔: 항목 없음")
                     _scanError.value = "영수증에서 항목을 찾을 수 없습니다"
                 }
             } catch (e: Exception) {
+                AppLogger.e(TAG, "영수증 스캔(URI) 실패: ${e.message}", e)
                 _scanError.value = "스캔 실패: ${e.message}"
             } finally {
                 _isScanning.value = false
@@ -229,16 +247,20 @@ class TransactionDetailViewModel @Inject constructor(
      * 비트맵에서 영수증 스캔
      */
     fun scanReceiptFromBitmap(bitmap: Bitmap) {
+        AppLogger.userAction(TAG, "영수증 스캔 (Bitmap)", "size=${bitmap.width}x${bitmap.height}")
         viewModelScope.launch {
             _isScanning.value = true
             _scanError.value = null
             try {
                 val result = receiptOcrService.recognizeText(bitmap)
+                AppLogger.d(TAG, "영수증 스캔(Bitmap) 결과: items=${result.items.size}")
                 _receiptItems.value = result.items
                 if (result.items.isEmpty()) {
+                    AppLogger.w(TAG, "영수증 스캔(Bitmap): 항목 없음")
                     _scanError.value = "영수증에서 항목을 찾을 수 없습니다"
                 }
             } catch (e: Exception) {
+                AppLogger.e(TAG, "영수증 스캔(Bitmap) 실패: ${e.message}", e)
                 _scanError.value = "스캔 실패: ${e.message}"
             } finally {
                 _isScanning.value = false
@@ -247,6 +269,7 @@ class TransactionDetailViewModel @Inject constructor(
     }
 
     fun clearReceiptItems() {
+        AppLogger.d(TAG, "영수증 항목 초기화")
         _receiptItems.value = emptyList()
     }
 

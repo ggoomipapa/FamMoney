@@ -132,6 +132,9 @@ fun NavGraph(
                 onNavigateToTags = {
                     navController.navigate(Screen.Tags.route)
                 },
+                onNavigateToDebugLog = {
+                    navController.navigate(Screen.DebugLog.route)
+                },
                 mainViewModel = mainViewModel,
                 authViewModel = authViewModel
             )
@@ -271,6 +274,13 @@ fun NavGraph(
         // 태그 관리 (여행/이벤트)
         composable(Screen.Tags.route) {
             TagListScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // 디버그 로그 (Debug 빌드 전용)
+        composable(Screen.DebugLog.route) {
+            DebugLogScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
         }
